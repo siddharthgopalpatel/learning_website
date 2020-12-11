@@ -6,6 +6,8 @@ list1 = ['harry', 'ram', 'Aakash', 'shyam', 5, 4.85]
 
 The above list contains strings, an integer, and even an element of type float. A list can contain any kind of data i.e. it’s not mandatory to form a list of only one data type. The list can contain any kind of data in it.
 
+<mark><u>List is a collection which is ordered and changeable. Allows duplicate members. </u></mark>
+
 Remember we saw indexing in strings? List elements can also be accessed by using Indices i.e. first element of the list has 0 index and the second element has 1 as its index and so on.
 
 <mark>Note: If you put an index which isn’t in the list then you will get an error. i.e. if a list named list1 contains 4 elements, list1[4] will throw an error because the list index starts 
@@ -42,6 +44,21 @@ list1.insert(3,8)		# This will add 8 at 3rd index in list
 list1.remove(1)         # This will remove 1 from the list
 
 list1.pop(2)			# This will delete and return index 2 value.
+
+<u>List of List methods</u> - 
+1. Append
+2. Clear
+3. Copy
+4. Count
+5. Extend
+6. Index
+7. Insert
+8. Pop
+9. Remove
+10. Reverse
+11. Sort
+
+<p class="w3-medium"><a href="programs/list_function.html" target="_blank">Click here for example of List methods</a></p>
  
 <u>List Slicing:</u>
 List slices, like string slices, returns a part of a list extracted out of it. Let me explain, you can use indices to get elements and create list slices as per the following format:
@@ -51,36 +68,7 @@ seq = list1[start:stop]
 Just like we saw in strings, slicing will go from a start index to stop_index-1. It means the seq list which is a slice of list1 contains elements from the specified start index to specified stop_index – 1.
 
 <img src="picture/list2.JPG" alt="HTML5 Icon" style="width:800px;height:400px;">
- 
-<u>Tuples in Python:</u>
-A tuple is an immutable data type in Python. A tuple in python is a collection of elements enclosed in () (parentheses). Tuple once defined can’t be changed i.e. its elements or values can’t be altered or manipulated.
 
-#Tuples in Python:
-
-a=()   	# It's an example of empty tuple
-
-x=(1,) 	# Tuple with single value i.e. 1
-
-tup1 = (1,2,3,4,5)
-
-tup2 = ('sidd', 5, 'demo' 5.8) 
- 
-<mark>Note: To create a tuple of one element it is necessary to put a comma  ‘,’ after that one element like this tup=(1,) because if we have only 1 element inside the parenthesis, the python interpreter will interpret 
-it as a single entity which is why it’s important to use a ‘,’ after the element while creating tuples of a single element. </mark>
-
-<u>Swapping of two numbers :-</u>
-Python provides a very handy way of swapping two numbers like below:
-
-# Swapping of two numbers:
-
-a = 10
-b = 15
-print(a,b)			# It will give output as: 10 15
-
-a,b = b,a 
-
-print(a,b) # It will give output as: 15 10
- 
 Program:
 
 grocery = ["Harpic", "vim bar", "deodrant", "Bhindi",
@@ -112,4 +100,6 @@ a, b = b,a
 # a = b
 # b = temp
 print(a, b)
+
+ 
 </pre></html>
