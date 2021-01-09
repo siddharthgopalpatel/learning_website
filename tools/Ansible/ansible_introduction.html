@@ -7,7 +7,7 @@ Ansible is easy to deploy because it does not use any <mark>agents </mark>or <ma
 and the output is pushed back to the Ansible server.
 
 It can easily connect to clients using <mark>SSH-Keys</mark>, simplifying though the whole process. Client details, such as <mark>hostnames</mark> or <mark>IP addresses</mark> and <mark>SSH ports</mark>, are stored in the files, which are called inventory files.
-If you created an inventory file and populated it, then Ansible can use it.
+If you have created an inventory file and populated it, then Ansible can use it.
 
 Ansible uses the playbook to describe automation jobs, and playbook, which uses simple language, i.e., <mark>YAML</mark>. YAML is a human-readable data serialization language & commonly used for configuration files, but it can be 
 used in many applications where data is being stored.
@@ -19,6 +19,8 @@ Ansible works by connecting your nodes through <mark>SSH (by default)</mark>. An
 
 Ansible pushes small programs after connecting to your nodes which are known as <mark>"Ansible Modules"</mark>. Ansible runs that module on your nodes and removes them when finished. Ansible manages the inventory in simple text files 
 (These are the host's files). Ansible uses the host file where one can group the hosts and can control the actions on a specific group in the playbooks.
+
+<img src="picture/ansible_pic_1.JPG" alt="HTML5 Icon" style="width:550px;height:350px;">
 
 <u>Why Use Ansible?</u>
 Here are some important reasons for using Ansible, such as:

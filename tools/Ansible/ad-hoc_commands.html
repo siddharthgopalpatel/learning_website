@@ -1,0 +1,15 @@
+<html><h3>Ansible Ad-hoc Commands</h3>
+<h4><pre>
+Ad-hoc Commands are commands which can be run individually to perform quick functions.
+
+=> These ad-hoc commands are not used for configuration Management and deployment, because these commands are of one time usage.
+
+=> The ansible ad-hoc commands uses the /usr/bin/ansible command line tool to automate a single task.
+
+Some ad-hoc commands - 
+1. ansible demo -a "ls"
+2. ansible demo[0:4] -a "touch file"
+3. ansible all -a "touch file4"
+4. ansible demo -a "sudo yum install httpd -y" or ansible demo -ba "yum install httpd -y"
+5. ansible demo -ba "yum remove httpd -y"
+</pre></html>

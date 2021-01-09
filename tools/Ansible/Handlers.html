@@ -1,0 +1,22 @@
+<html><h3><u>Handlers</u></h3>
+<h4><pre>
+=> A handler is exactly the same as a task, but it will run when called by another task.
+	or
+=> Handlers are just like regular task in an ansible playbook, but are only run if the task contains a notify directive and also indicates that it changed something.
+
+---
+- name: Example of handlers
+  hosts: server
+  user: ansible
+  become: yes
+  connection: ssh
+  tasks:
+          - name: install httpd server on centos
+            action: yum name=httpd state=installed
+            notify: restart httpd
+
+  handlers:
+          - name: restart httpd
+            action: service name=httpd state=restarted
+</pre>			
+</h4></html>

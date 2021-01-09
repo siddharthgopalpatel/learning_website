@@ -1,0 +1,20 @@
+<html><h3>Ansible Inventory and Host Patterns<h3>
+<pre><h4>
+=> vi /etc/ansible/hosts
+
+=> "all" pattern refers to all the machines in an inventory
+
+=> ansible all --list-hosts
+=> ansible [group-name] --list-hosts
+=> ansible [group-name][0] --list-hosts 
+
+groupname[0] -> picks first machine of group
+groupname[1] -> picks second machine of group
+groupname[-1] -> picks last machine of the group
+groupname[0:1] -> picks first two machine in the group
+groupname[2:5] -> picks 3,4,5 and 6 machine in the group
+
+Group separated by a colon can be used to use hosts from multiple groups
+=> groupname1:groupname2
+</pre></h4>
+</html>

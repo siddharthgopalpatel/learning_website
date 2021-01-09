@@ -1,0 +1,43 @@
+<html><h3>Ansible Intallation and setup steps</h3>
+<pre><h4>
+1. Go to AWS account -> Create 3 EC2 instances in same AZ.
+
+2. Take access of all the machines via CLI(eg. putty  etc.). 
+
+3. Now go inside ansible server and download ansible package.
+<mark>=> wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm </mark> 
+
+4. Check the downloaded package after running ls commmand.
+
+5. yum install epel-release-latest-7.noarch.rpm -y
+
+6. yum update -y
+
+7. Have to install all the packages one by one
+<mark>=> yum install git python python-level python-pip openssl ansible -y</mark>
+
+8. Go to hosts file and paste private ip of all the nodes
+
+9. Now the hosts file is only working after updating the ansible configuration file,
+<mark=> uncomment below mentioned lines 
+a. inventory = /etc/ansible/hosts
+b. sudo-user = root </mark>
+
+10. Now create one user, in all the three instances.
+<mark>=> adduser ansible</mark>
+
+11. Set password the created user
+<mark>=> passwd ansible</mark>
+
+12. This ansible user doesn't have sudo priviledge right now, if you want to give sudo priviledge to ansible user
+<mark>=> visudo
+=> root ALL = (ALL) ALL
+=> ansible ALL = (ALL) NOPASSED:ALL </mark>
+
+14. Now do this thing in other nodes also. To test, Go to ansible server and try to install httpd package as a ansible user.
+<mark>=> [ansible@ip] sudo yum install htppd -y</mark>
+
+15. Now to establish connection b/w ansible server and node do some changes in sshd-config file and restart sshd service.
+
+16. At the last generate the ssh keys on ansible server and copy the public key on all the nodes.
+</pre></h4></html>
