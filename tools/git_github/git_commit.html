@@ -1,4 +1,5 @@
-<html><h3><pre><u>Git Commit - </u>
+<html><h2><u>Git Commit</u></h2>
+<h4><pre>
 It is used to record the changes in the repository. It is the next command after the git add. Every commit contains the index data and the commit message. Every commit forms a parent-child relationship. When we add a file in Git,
 it will take place in the staging area. A commit command is used to fetch updates from the staging area to the repository.
 
@@ -10,7 +11,7 @@ each commit has its own commit-id. This commit-id is a cryptographic number crea
 
 Let's see the different kinds of commits.
 
-<u>The git commit command </u>
+<u><h3>The git commit command - </u></h3>
 The commit command will commit the changes and generate a commit-id. The commit command without any argument will open the default text editor and ask for the commit message. We can specify our commit message in this text editor. It will run as follows:
 
 <mark>$ git commit </mark> 
@@ -22,7 +23,7 @@ from the editor. Hence, we have successfully made a commit.
 
 We can check the commit by git log command (git log)
 
-<u>Git commit -a :-</u>
+<u><h3>Git commit - </u></h3>
 The commit command also provides -a option to specify some commits. It is used to commit the snapshots of all changes. This option only consider already added files in Git. It will not commit the newly created files. 
 
 <mark> $ git commit -a </mark>  
@@ -39,11 +40,11 @@ We can also use the -am option for already staged files. This command will immed
 
 <mark>$ git commit -am "Commit message." </mark> 
 
-<u>Git Commit Amend (Change commit message) </u>
+<u><h3>Git Commit Amend (Change commit message) - </u></h3>
 <mark>The amend option lets us to edit the last commit. If accidentally, we have committed a wrong commit message, then this feature is a savage option for us. It will run as follows:
 
  $ git commit -amend </mark>  
 The above command will prompt the default text editor and allow us to edit the commit message.
 
 
-</pre></h3></html>
+</pre></h4></html>
