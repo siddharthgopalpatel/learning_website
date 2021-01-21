@@ -1,0 +1,70 @@
+<html><h2>Git Terminology</h2>
+<pre><h3>
+<h2><u>Repository:-</u></h2>
+-> Repository is a place where you have all your codes or kind of folder on server.
+-> It is a kind of folder releated to one product.
+-> Changes are personal to that particular Repository.
+
+<h2><u>Server:-</u></h2>
+-> It Stores all the Repositories.
+-> It contains metadata also.
+
+<h2><u>Working Directory/Workspace:-</u></h2>
+-> Where you see files physically and do modification.
+-> <mark>At a time, you can work on particular Branch.</mark>
+
+<mark> In other CVCs, developers generally makes modifications and commit their changes directly to the Repository. But git uses different strategy.
+Whenever you do commit an operation, git looks for the file present in the staging area. Only those files present in the staging area are considered
+for commit and not all the modified files.</mark>
+
+<h2><u>Commit:-</u></h2>
+-> Store changes in the repository. You will get one Commit-ID.
+-> It is 40 alpa-numeric characters.
+-> It uses SHA-1 checksum concept.
+-> Even if you change one dot, Commit-ID will get change.
+-> It actullay helps you to track the changes.
+-> Commit is also names as SHA1 hash.
+
+<h2><u>Commit ID/ Version-ID/ Version:-</u></h2>
+-> Reference to identify each change.
+-> To identify who changed the file.
+
+<h2><u>Tags:-</u></h2>
+Tags assign a meaningful name with a specific version in the repository. Once a tag is created for a particular save, even if you create a new commit,
+it will not be updated.  
+
+<h2><u>Snapshots:-</u></h2>
+-> Represents some data of particular time.
+-> <mark>It is always incremental i.e. It stores the changes (appended data) only. Not entire copy.</mark>
+
+<h2><u>Push:-</u></h2> Push operations copies changes from local repository instances to a remote or central repo. This is used to store the changes permanently into the
+git repository.
+
+<h2><u>Pull:-</u></h2> Pull operation copies the changes from a remote repository to a local machine. The pull operation is used for synchronisation between two repo.
+
+<h2><u>Branch:-</u></h2> Product is some, so one repository but different task.
+-> Each task has one separate Branch.
+-> Finally merges(code) all Branches.
+-> Useful when you want to work paralley.
+-> Can create one branch on the basis of another Branch.
+-> Default Branch is 'Master'.
+-> File created in workspace will be visible in any of the branch workspace untill you commit. Once you commit, then that file belongs to that particular Branch.
+
+<h2><u>Advantages of Git:-</u></h2>
+-> Free and Open Source.
+-> Fast and Small (as most of the operations are performed locally, therefore it is fast.
+-> Security (Git uses a common Cryptographic hash function called Secure hash function (SHA-1) to name and identify objects within its database.
+-> No need of powerful hardware.
+-> Easier Branching (If we create a new branch, it will copy all the codes to the new branch. 
+
+<h2><u>Types of Repositories:-</u></h2>
+
+<u>1. Bare Repositories (Central Repo.)</u>
+-> Store and share only.
+-> All central repositories are Bare Repo.
+
+<u>2. Non-Bare Repositories (Local Repo)</u>
+-> Where you can modify the files.
+-> All local repositories are non-bare repositories.
+
+</h3></pre></html>
