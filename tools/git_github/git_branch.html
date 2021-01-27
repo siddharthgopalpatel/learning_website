@@ -1,0 +1,42 @@
+<html><h2><u>Git Branch</u></h2>
+<h4><pre>
+A branch is a version of the repository that diverges from the main working project. It is a feature available in most modern version control systems. <u>A Git
+project can have more than one branch. These branches are pointer to a snapshot of your changes.</u>
+When you want to add a new feature or fix a bug, you spawn a new branch to summarize your changes. <mark>So, it is complex to merge the unstable code with the main
+code base and also facilitates you to clean up your future history before merging with the main branch.</mark>
+
+<img src="picture/branch.JPG" alt="HTML5 Icon" style="width:450px;height:250px;">
+
+<h3><u>Git Master Branch</u></h3>
+The master branch is a default branch in Git. <u>It is instantiated when first commit made on the project.</u> When you make the first commit, you're given a master
+branch to the starting commit point. When you start making a commit, then master branch pointer automatically moves forward. A repository can have only one master
+branch.
+<mark>Master branch is the branch in which all the changes eventually get merged back. It can be called as an official working verison of your project.</mark>
+
+<h3><u>Some points to remember:-</u></h3>
+1. Each task has one separate Branch.
+2. After done with the code, merge other branches with master.
+3. This concept is useful for parallel development.
+4. You can create any number of branches.
+5. <mark>Changes are personal to that particular branch.</mark>
+6. Default Branch is master.
+7. <mark>Files created in workspace will be visible in any of the branch workspace untill you commit. Once you commit, then that files belongs to that particular branch.</mark>
+8. When created new Branch, data of the existing branch will be copied to new branch.
+
+<h3>Operations on Branches:-</h3>
+<u>To create Branch - </u>
+<mark> $ git branch branch_name </mark>
+
+<u>To List Branch - </u>
+<mark> $ git branch --list or $ git branch </mark>
+
+<u>To delete Branch - </u>
+<mark> $ git branch -d branch_name or $ git branch -D branch_name </mark> 
+
+<u>To switch Branch - </u>
+<mark> $ git checkout branch_name </mark>
+ 
+<u>To rename Branch - </u>
+<mark> $ git checkout -n old_branch_name new_branch_name </mark>
+
+</pre></h4></html>
