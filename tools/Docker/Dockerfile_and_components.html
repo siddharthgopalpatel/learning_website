@@ -1,0 +1,27 @@
+<html><h2><center><u>Dockerfile and it's components</u></center></h2>
+<pre><h4>
+<h2><u>Dockerfile -</u></h2>
+-> Dockerfile is basically a text file. It contains some set of instruction.
+-> Automation of Docker image creation.
+
+<h2><u>Docker Components -</u></h2>
+<u>FROM</u> -> For base image. This command must be on top of the dockerfile.
+
+<u>RUN</u> -> To execute commands, it will create a layer in image.
+
+<u>MAINTAINER</u> -> Author/ Owner/ Description
+
+<u>COPY</u> -> Copy files from local system (docker VM). We need to provide source, destination (we can't download files from internet and any remote
+              repo).
+			  
+<u>ADD</u> -> Simlar to COPY but, it provides a feature to download files from internet, also extract file at docker image side.
+
+<u>EXPOSE</u> -> To expose ports such as 8080 for tomcat, port 80 for nginx etc.
+
+<u>CMD</u> -> Execute commands but during container creation.
+
+<u>ENTRYPOINT</u> -> Similar to CMD, but has higher priority over CMD, first commands will be executed by ENTRYPOINT only.
+
+<u>ENV</u> - Environmental Variables
+</h4></pre>
+</html>

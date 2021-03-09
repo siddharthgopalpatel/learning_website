@@ -1,10 +1,10 @@
-<html><h3>Ansible Intallation and setup steps</h3>
+<html><h2>Ansible Intallation and setup steps</h2>
 <pre><h4>
 1. Go to AWS account -> Create 3 EC2 instances in same AZ.
 
 2. Take access of all the machines via CLI(eg. putty  etc.). 
 
-3. Now go inside ansible server and download ansible package (For RedHat servers etc.).
+3. Now go inside ansible server and download ansible package (For Amazon Linux).
 <mark>=> wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm </mark> 
 
 4. Check the downloaded package after running ls commmand.
@@ -40,4 +40,15 @@ b. sudo-user = root </mark>
 15. Now to establish connection b/w ansible server and node do some changes in sshd-config file and restart sshd service.
 
 16. At the last generate the ssh keys on ansible server and copy the public key on all the nodes.
+
+<h3><u>How to Install Ansible on AWS EC2 Instance RHEL 8</u></h3>
+
+yum install python3 -y
+alternatives --set python /usr/bin/python3
+yum -y install python3-pip
+useradd ansible
+passwd ansible
+echo "ansible ALL = (ALL) NOPASSWD:ALL" >> /etc/sudoers
+su - ansible
+pip3 install ansible --user
 </pre></h4></html>

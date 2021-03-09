@@ -1,0 +1,86 @@
+<html><h2><center>Docker and its comparison to Virtual Machine</center></h2>
+<h4><pre>
+<h2>What is Docker? </h2>
+-> Docker is an open-source Centralised Platform designed to create, deploy and run applications.
+
+-> Docker uses container on the host O.S. to run applications. It allows applications to use the same linux kernel as a system on the host computer,
+   rather than creating a whole virtual O.S.
+   
+-> We can install docker on any O.S. but Docker engine runs natively on linux distribution.
+
+-> Docker written in 'go' language.
+
+-> Docker is a tool that performs O.S. level virtualization, also knowns as Containerization.
+
+-> Before Docker, many users faces the problem that a particular code is running in the developer's system but not in the user's system.
+
+-> So, the main reason to develop docker to help developers to develop applications easily, ship them into containers, and can be deployed anywhere.
+
+-> Docker was first release in March 2013. It is developed by Solomon Hykes and Sebastian Paul.
+
+-> Docker is a set of platform as a service that uses O.S. level virtualization whereas VMware uses Hardware level virtualization.
+
+-> Containers ensure that our application works in any environment like development, test or production.
+
+-> Docker includes components such as Docker client, Docker server, Docker machine, Docker hub, Docker composes etc. 
+
+<h2>Let's understand the Docker containers and Virtual Machine</h2>
+
+<u>Docker Containers -</u> 
+Docker Containers are lightweight alternatives of the virtual machine. It allows developers to package up the application with all its libraries and
+dependencies, and ship it as a single package. The advantage of using docker container is that you don't need to allocate any RAM and disk space for
+the applications. It automatically generates storage and space according to the application requirement.
+
+<u>Virtual Machine -</u>
+A Virtual Machine is a software that allows us to install ans use other operating systems (Windows, Linux, and Debian) simultaneously on our machine.
+The operating system in which virtual runs are called virtualized operating systems. These virtualized operating systems can run programs and performs
+tasks that we perform in a real operating system.
+
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<table>
+  <tr>
+        <th>Sr. No.</th>
+    <th>Containers</th>
+    <th>Virtual Machine</th>
+
+  </tr>
+  <tr>
+    <td>1. </td>
+    <td>Integration in a container is faster and cheap.</td>
+    <td>Integration in virtual is slow and costly.</td>
+
+  </tr>
+  <tr>
+    <td>2. </td>
+    <td>No wastage of memory.</td>
+    <td>Wastage of memory.</td>
+
+  </tr>
+  <tr>
+    <td>3. </td>
+    <td>It uses the same kernel, but different distribution.</td>
+    <td>It uses multiple independent operating systems.</td>
+ </tr>
+</table>
+</body>
+</pre></h4></html>
