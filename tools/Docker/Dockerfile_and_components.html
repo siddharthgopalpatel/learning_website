@@ -23,5 +23,15 @@
 <u>ENTRYPOINT</u> -> Similar to CMD, but has higher priority over CMD, first commands will be executed by ENTRYPOINT only.
 
 <u>ENV</u> - Environmental Variables
+
+<h2><u>Example of the Dockerfile</u></h2>
+FROM ubuntu
+ENV DEBIAN_FRONTEND=noninteractive
+MAINTAINER sidd sidd@gmail.com
+RUN apt-get update
+RUN apt-get -y install apache2
+RUN echo "Hello Apache server on ubuntu Docker" > /var/www/html/index.html
+EXPOSE 80
+CMD /usr/sbin/apache2ctl -D FOREGROUND
 </h4></pre>
 </html>
