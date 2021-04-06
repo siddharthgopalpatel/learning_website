@@ -37,8 +37,8 @@ The following image shows the standard and traditional architecture of virtualiz
 
 1. The server is the physical server that is used to to host multiple virtual machines.
 2. The Host OS is the base machine such as Linux or Windows.
-3. The Hypervisor is either VMWare or Windows Hyper V that is used to host virtual machines.
-4. You would then install mutltiple operating systems as virtual machines on top of the existing hypervisor as Guest OS.
+3. The Hypervisor is either VMWare server and workstation, Oracle VM VirtualBox or Microsoft Virtual PC that is used to host virtual machines.
+4. You would then install multiple operating systems as virtual machines on top of the existing hypervisor as Guest OS.
 5. You would the host your applications on top of each Guest OS.
 
 <u>Docker Containers -</u>
@@ -60,10 +60,10 @@ The clear advantage is this architecture is that you don't need to have extra ha
 
 While both virtual machines and containers enable application portability, containers are significantly lighter and thus, more portable. The main reason 
 is that, unlike VMs, containers no longer include an OS and its associated kernel (i.e. the part of OS that gets loaded first upon boot up and eventually
-takes charge of memory, disk, process and task management. In containerization, a single kernel resides in the host OS and is simply shared among containers.
+takes charge of memory, disk, process and task management). In containerization, a single kernel resides in the host OS and is simply shared among containers.
 All that's housed in a container is the applicaton code and its dependencies. 
 
-The absence of a kernel benefits containers in severl ways.
+The absence of a kernel benefits containers in several ways.
 
 1. Container sizes can be as small as 10 megabytes, whereas virtual machines can easily exceed 10 gigabytes (a windows server 2016 VM, for instance, could
    be about 32 GB).
