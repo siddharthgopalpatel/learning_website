@@ -1,6 +1,6 @@
 <html><h2><u><center>Networking in Docker</center></u>
 <h4><pre>
-Docker Networking is to connect the docker containers to each other and outside world so they can communicate with each other also they can talk to Docker Host. You can connect
+Docker Networking is used to connect the docker containers to each other and outside world so they can communicate with each other also they can talk to Docker Host. You can connect
 docker containers to non-docker workloads. Docker uses CNM (container network model) for networking. This model standardizes the steps required to provide networking for 
 containers using multiple network drivers.
 
@@ -12,7 +12,7 @@ file produces docker images. So, whatever dependencies are required for a partic
 			Now, Docker containers are nothing but the runtime instance of docker image. These images are upoaded onto the Docker hub (repository for docker images) which
 contains public/private repositories.
 			
-			So, from public public repositories, you can pull your image as well and you can upload your own images onto the docker hub. Then, from docker hub, various team
+			So, from public repositories, you can pull your image as well and you can upload your own images onto the docker hub. Then, from docker hub, various team
 such as Quality Assurance or Production team will pull that image and prepare their own containers. <u>These individual containers, communicate with each other through a network
 to perform the required actions, and this is nothing but Docker Networking.</u>
 				
@@ -22,7 +22,7 @@ perform the required actions.</mark>
 <h3><u>Container Network Model(CNM) -</u></h3>
 Before we go through the term called CNM, let us understand about Libnetwork.
 
- <u>Libnetwork is an open source Docker library which implements all of the key concepts the make up the CNM.</u>
+ <u>Libnetwork is an open source Docker library which implements all of the key concepts to the make up the CNM.</u>
 
 <img src="pic/docker_network1.JPG" alt="HTML5 Icon" style="width:500px;height:400px;">
 --------------------Architecture of Container Networking Model -------------------
@@ -35,7 +35,7 @@ The CNM has interfaces for IPAM plugins and network plugins.
 THE IPAM plugin APIs are used to create/delete address pools and allocate/deallocate container IP addresses, whereas the network plugin APIs are used to create/delete networks
 and add/remove contaniners from networks.
 
-The CNM ha mainly build on 5 objects: Network controller, Driver, Network, Endpoint, and Sandbox.
+The CNM has mainly build on 5 objects: Network controller, Driver, Network, Endpoint, and Sandbox.
 
 <u>Container Network Model Objects -</u>
 Netowrk Controller: Provides the entry-point into Libnetwork that exposes simple APIs for Docker Engine to allocate and manage networks. Since Libnetwork supports multiple 

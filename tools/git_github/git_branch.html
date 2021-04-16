@@ -1,9 +1,11 @@
 <html><h2><u>Git Branch</u></h2>
 <h4><pre>
-A branch is a version of the repository that diverges from the main working project. It is a feature available in most modern version control systems. <u>A Git
-project can have more than one branch. These branches are pointer to a snapshot of your changes.</u>
-When you want to add a new feature or fix a bug, you spawn a new branch to summarize your changes. <mark>So, it is complex to merge the unstable code with the main
-code base and also facilitates you to clean up your future history before merging with the main branch.</mark>
+1. A branch is a version of the repository that diverges from the main working project. 
+2. It is a feature available in most modern version control systems. 
+3. <u>A Git project can have more than one branch. 
+4. These branches are pointer to a snapshot of your changes.</u>
+5. When you want to add a new feature or fix a bug, you spawn a new branch to summarize your changes. 
+<mark>So, it is complex to merge the unstable code with the main code base and also facilitates you to clean up your future history before merging with the main branch.</mark>
 
 <img src="picture/branch.JPG" alt="HTML5 Icon" style="width:450px;height:250px;">
 
@@ -24,6 +26,7 @@ branch.
 8. When created new Branch, data of the existing branch will be copied to new branch.
 
 <h3>Operations on Branches:-</h3>
+
 <u>To create Branch - </u>
 <mark> $ git branch branch_name </mark>
 
@@ -31,12 +34,44 @@ branch.
 <mark> $ git branch --list or $ git branch </mark>
 
 <u>To delete Branch - </u>
-<mark> $ git branch -d branch_name or $ git branch -D branch_name </mark> 
+It is a safe operation. In this command, git prevents you from deleting the branch if it has unmerged changes.
+
+<mark> $ git branch -d branch_name
+
+Note: The git branch d comamnd can be used in two formats. Another format of this command is git branch D.
+
+<mark>$ git branch -D branch_name </mark> 
+
+Delete a Remote Branch
+
+You can delete a remote(GitHub) branch from Git desktop application. Below command is used to delete a remote branch.
+
+Example -> $ git push origin -delete branch_name 
 
 <u>To switch Branch - </u>
+Git allows you to switch between the branches without making a commit.
+
 <mark> $ git checkout branch_name </mark>
- 
+
+Switch from master Branch
+
+You can switch from master to any other branch available on your repository without making any commit.
+
+$ git checkout branch_name 
+
+Switch to master branch
+
+You can switch to the master branch from any other branch with the help of below command.
+
+git branch -m master
+
 <u>To rename Branch - </u>
 <mark> $ git checkout -n old_branch_name new_branch_name </mark>
+
+Merge Branch
+
+Git allows you to merge the other branch with the currently active branch. You can merge two branches with the help of git merge command.
+
+$ git merge branch_name
 
 </pre></h4></html>

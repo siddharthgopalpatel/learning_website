@@ -52,7 +52,7 @@ i. Entrypoint
 Example-> image: postgres:latest
 
 2. However, there is no restriction to using Dockerhub files alone. You can also build images from your machine through your Docker Compose file, using a Dockerfile.
-   You can use the "build", "context" and "dockerfile" directives to fo this.
+   You can use the "build", "context" and "dockerfile" directives to do this.
 
 Example -> build:
 		context: .
@@ -72,7 +72,7 @@ to fail.
 
 <u>c. Restart</u>
 1. There are many reasons for the container to fail, so the restart key tells the container to wake or not.
-2. You can different options like no, always, on-failure and unless-stopped. These options imly that a container will never restart, will always restart, only restart on 
+2. You can different options like no, always, on-failure and unless-stopped. These options imply that a container will never restart, will always restart, only restart on 
 failure or only when stopped.
 
 Example -> restart: always

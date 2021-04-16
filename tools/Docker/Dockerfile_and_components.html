@@ -7,7 +7,7 @@
 -> On building the Dockerfile, the successive actions form a new image from the base parent image.
 -> Automation of Docker image creation.
 
-<h2><u>Docker Components -</u></h2>
+<h2><u>Dockerfile Commands -</u></h2>
 <u>FROM</u> -> 
 For base image. This command must be on top of the dockerfile.
 
@@ -72,6 +72,22 @@ Author/ Owner/ Description
 3. The build parameters have the same effect as ENV, which is to set the environment variables.
 4. The difference is that the environemt variables of the build environemt set by ARG will not exist in the future when the container is running.
 5. But doesn't use ARG to save passwords and the like, because docker history can still see the values.
+
+<u>VOLUME</u> -
+1. A volume is a persistent data stored in /var/lib/docker/volumes/... location.
+2. There are three way you can create volumes = -
+   a. It can be created from dockerfile.
+   b. It can created at run time means while creating the container from "docker run" command.
+   c. And the last option is from "docker volume create". 
+
+<u>LABEL</u> -
+1. You can add lables to your image to help organize images by project, record licensing information, to aid in automation, or for the other reasons.
+2. For each label, add a line beginning with LABEL and with one or more key-value pairs.
+3. The LABEL instruction adds metadata to an image.
+
+<u>USER</u>-
+1. USER is the identity of the commands such as RUN, CMD and ENTRYPOINT.
+2. USER helps you switch to the specified user. This user must be pre-established, otherwise it cannot be switched.
 
 Note:
 1. COPY and ADD are both Dockerfile instructions that serve similar purposes. They let you copy files from specific location into a Docker image.
