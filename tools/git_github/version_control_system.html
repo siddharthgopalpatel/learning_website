@@ -1,20 +1,28 @@
-<html><h2><u>Git Version Control System</u></h2>
+<html><h2><u><center>Version Control System</center></u></h2>
 <h4><pre>
-A version control system is a software that tracks changes to a files or set of files over time so that you can recall specific versions later. It allows you to work
-together with other programmers.
+1. A version control system is a software that tracks changes to a file or set of files over time by making a version snapshot so that you can recall specific versions later. 
+   It allows you to work together with other programmers.
 
-The version control system is a collection of software tools that help a team to manage changes in a source code. It uses a special kind of database to keep track of
-every modification to the code.
+2. The version control system is a collection of software tools that help a team to manage changes in a source code. It uses a special kind of database to keep track of every 
+   modification to the code.
 
-Developers can compare earlier versions of the code with the older version to fix the mistakes.
+3. Developers can compare earlier versions of the code with the older version to fix the mistakes.
 
-Type of Version Control System :-
-1. Localized Version Control System
+<h3><u>Type of Version Control System :-</h3></u>
+1. Localized Version Control System (LVCs)
 2. Centralized Version Control System (CVCs)
 3. Distributed Version Control System (DVCs)
 
+<h3><u>Localized Version control System (LVCs):-</u></h3>
+The localized version control system is a common approach because of its simplicity. But this approach leads to a higher chance of error. In this approach, you may forget 
+which directory you're in and accidently write to the wrong file or copy over files you don't want to.
+      
+	To deal with this issue, programmers developed local VCSs that had a simple database. Such databases kept all the changes to files under revision control. A local
+version control system keeps local copies of the files. The major drawback of Local VCS is that it has single point of failure. 
+
 <h3><u>Centralized Version control System (CVCs):-</u></h3>
-The developers needed to collaborate with other developers on other system. The localized version control system failed in this case. To deal with this problem, centralized version control systems were developed.
+The developers needed to collaborate with other developers on other system. The localized version control system failed in this case. To deal with this problem, 
+centralized version control systems were developed.
 
 These systems have single server that contains the versioned files, and some clients to check out files from a central place.
 
@@ -29,23 +37,25 @@ Centralized Version Control Systems have many benefits, especially over local VC
 
 <h3><u>Distributed Version Control System</u></h3>
 
-Centralized Version Control System uses a central server to store all the database and team collaboration. But due to single point failure, which means the failure of the central server, developers do not prefer it.
-Next, the Distributed Version Control System is developed.
+Centralized Version Control System uses a central server to store all the database and team collaboration. But due to single point failure, which means the failure of the 
+central server, developers do not prefer it. Next, the Distributed Version Control System is developed.
 
-In a Distributed Version Control System (such as Git, Mercurial, Bazar or Darcs), the user has a local copy of a repository. So, the clients don't just check out latest snapshot of the files even they can fully mirror
-the repository. The local repository contains all the files and metadata present in the repository.
+In a Distributed Version Control System (such as Git, Mercurial, Bazar or Darcs), the user has a local copy of a repository. So, the clients don't just check out latest 
+snapshot of the files even they can fully mirror the repository. The local repository contains all the files and metadata present in the repository.
 
-DVCS allows automatic management branching and merging. It speeds up of most operations except pushing and pulling. DVCS enhances the ability to work offline and does not rely on a single location for backups. If any 
-server stops and other systems were collaborating via it, then any of the client repositories could be restored by that server. Every checkout is a full backup of all the data.
+DVCS allows automatic management branching and merging. It speeds up of most operations except pushing and pulling. DVCS enhances the ability to work offline and does 
+not rely on a single location for backups. If any server stops and other systems were collaborating via it, then any of the client repositories could be restored by that 
+server. Every checkout is a full backup of all the data.
 
 These systems do not necessarilly depend on a central server to store all the versions of a project file.
 
 <h3><u>Difference between Centralized Version Control System and Distributed Version Control System</u></h3>
 
-Centralized Version Control Systems are systems that use clinet/server architecture. In a Centralized Version Control System, one or more client systems are directly connected to a central server. Contrarily the 
-Distributed Version Control Systems that use peer-to-peer architecture.
+Centralized Version Control Systems are systems that use clinet/server architecture. In a Centralized Version Control System, one or more client systems are directly 
+connected to a central server. Contrarily the Distributed Version Control Systems that use peer-to-peer architecture.
 
-There are many benefits and drawbacks of using both the version control systems. Let's have a look at some signficant differences between Centralized and Distributed version control system.
+There are many benefits and drawbacks of using both the version control systems. Let's have a look at some signficant differences between Centralized and Distributed 
+version control system.
 
 <head>
 <style>
