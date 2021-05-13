@@ -1,5 +1,7 @@
-<html><h2>Ansible Intallation and setup steps</h2>
+<html><h2><u><center>Ansible Intallation and setup steps</u></center></h2>
 <pre><h4>
+<u><h3>1. Installation steps for Amazon Linux</u></h3>
+
 1. Go to AWS account -> Create 3 EC2 instances in same AZ.
 
 2. Take access of all the machines via CLI(eg. putty  etc.). 
@@ -41,7 +43,7 @@ b. sudo-user = root </mark>
 
 16. At the last generate the ssh keys on ansible server and copy the public key on all the nodes.
 
-<h3><u>How to Install Ansible on AWS EC2 Instance RHEL 8</u></h3>
+<h3><u>2. Installation steps on RHEL 8</u></h3>
 
 yum install python3 -y
 alternatives --set python /usr/bin/python3
@@ -51,4 +53,10 @@ passwd ansible
 echo "ansible ALL = (ALL) NOPASSWD:ALL" >> /etc/sudoers
 su - ansible
 pip3 install ansible --user
+
+<h3><u>3. Installation steps on ubuntu in Docker environment</u></h3>
+<p class="w3-medium">Get the git repository <a href="https://github.com/siddharthpatel1993/ansible_practice" target="_blank"> here</a></p>
+cd ansible_practice && docker-compose up -d
+Once it is done, then execute docker exec -it ansibleserver /bin/bash
+And you're in Ansible server, execute Ansible commands now.
 </pre></h4></html>

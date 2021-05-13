@@ -1,0 +1,17 @@
+Ansible names came from the sc-fie book where it was a device which communicates to another universe without any time delay.
+Snowflake servers -> A snow flake server is a server that  is something that you set up by hand oor you have manual processes invloved in managing
+that server, and you can't get the server back to a clean state with a click of a button or running one command.
+
+Ansible allows you to run some commnads in background.
+-B = How long you allow the job to run in sec (if the job will run more than specified time, then Ansible will kill it. Just to make sure the job sould not run forever)
+-P = Gives the pulling time in seconds. This is how often Ansible will check if job is completed or not.
+Example -> ansible -i inventory multi -b -B 3600 -P 0 -a "yum -y update"
+After running this command you will get result file. In the result filem you will job id. The job id can be used to check the status of the command later.
+Example -> ansible -i inventory multi -b -m async_status -a "jid=...."
+It good to log the above task somewhere, because ansible will not let you know in case if it fails, you have to do it manually.
+
+For idempotence, what if you want to use a task like update_cache on Debian/Ubuntu?
+
+<u>ansible-doc service</u>
+
+How to get the better result or representation of setup output.
