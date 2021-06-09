@@ -34,21 +34,11 @@
 11. We can connect the instances. To connect an instance, move over to the public subnet and then it SSH to the private subnet. This is known as jump boxes. 
 12. In this way, we can connect an instance in public subnet to an instance in private subnet.
 
-<h3><u>Components of VPC</u></h3>
--> CIDR and IP address Subnets
--> Implied Router and Routing table
--> Internet Gateway
--> Security Groups
--> Network ACL
--> Virtual Private Gateway
--> Peering Connections
--> Elastic IP
-
 <h3><u>Some Extra points to Remember -</u></h3>
 1. Once the VPC is created, you cannot change its CIDR Block Range.
 2. If you need a different CIDR size, create a new VPC.
 3. The different subnets within VPC cannot overlap.
-4. You can however expand your vpc CIDR by adding new/extra IP address ranges by adding secondary subnet (Except GovCloud & AWS China).
+4. You can however expand your vpc CIDR by adding secondary subnet (Except GovCloud & AWS China).
 5. NAT Gateways always created in public subnet but used in private subnet.
 
 <h3><u>Types of VPC -</u></h3>
@@ -67,7 +57,18 @@ There are two types of VPC.
 -> Has it's own default Security Group, Network ACL and Route Tables.
 -> Does not have Internet Gateway by default, one needs to be created if needed.
 
-Note: You have to create VPC, subnet, Internet gateway and Route Table in order to create any type of VPC.
+Note: You have to create VPC, subnet, Internet gateway and Route Table in sequence to create any type of VPC.
+
+<h3><u>Components of VPC</u></h3>
+-> CIDR and IP address Subnets
+-> Implied Router and Routing table
+-> Internet Gateway
+-> Security Groups
+-> Network ACL
+-> Virtual Private Gateway
+-> Peering Connections
+-> Elastic IP
+
 
 </pre></h4>
 </html>
