@@ -1,0 +1,32 @@
+<html><h2><u><center>EBS Snapshot of Root Volume and Non Root Volume</center></u></h2>
+<h4><pre>
+-> EBS Snapshots are point-in-time images/copies of your EBS volume.
+-> Any data written to the volume after the snapshot process is initiated, will not be included in the resulting snapshot (but will be included in future, incremental update)
+-> Per AWS account, upto 5000 EBS volumes can be created.
+-> Per account, upto 10,000 EBS snapshots can be created.
+-> EBS snapshots are stored in S3, however you cannot access them directly. You can only access them through EC2 APIs.
+-> While EBS volumes are AZ specific, snapshots are Region specific.  
+-> Any AZ in Region can use Snapshot to create EBS Volume.
+-> To migrate an EBS from one AZ to another, create snapshot (region specific) and create EBS volume from the snapshot in the intended AZ.
+-> You can create a snapshot to an EBS volume of the same or larger size than the original volume size. from which the snapshot was initially created. 
+-> You can take a snaphsot of non-root EBS volume while the volume is in use on running EC2 instance.
+-> This means, you can still access it while the snapshot is being processsed.
+-> However the snaphsot will only include data that is alreday written to your volume.
+-> The snaphsot is created immediately, but it may stay pending status until the full snapshot is completed. This may take dew hours to complete, specially for the first time
+snapshot of a volume.
+-> During the period, when the snaphsot status is pending, you can still access the volume (non-root/non-boot), but I/O might be slower because of the snapshot activity.
+-> While in pending state, an in-process snapshot will not include data from ongoing reads and writes to the volume.
+-> To take complete snapshot of your non-root EBS volume - stop or unmount the volume.
+-> To create a snaphsot for root EBS volume, you must stop the instance first then take the snaphsot. 
+
+<h3><u>Incremental Snapshot</u></h3>
+-> EBS snaphsots are stored incrementally.
+-> For low cost storage on S3 and a guarantee to be able to fully restore data from snaphsots.
+-> What you need is a single snaphsot, then further snaphsots will only carry the changed blocks (incremental updates)
+-> Therefore you do not need to have multiple full/complete copies of the snapshot.
+-> You are charged for data transfer to S3 from your EBS volume you are taking snaphsot.
+-> Snapshot stored in S3.
+-> First snaphsot is a clone, subsequent snaphsots are incremental.
+-> Deleting snapshot will only remove data exclusive to the snapshot.    
+</pre></h4>
+</html>
