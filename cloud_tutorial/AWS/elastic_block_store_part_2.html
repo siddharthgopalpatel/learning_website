@@ -8,12 +8,12 @@
 -> While EBS volumes are AZ specific, snapshots are Region specific.  
 -> Any AZ in Region can use Snapshot to create EBS Volume.
 -> To migrate an EBS from one AZ to another, create snapshot (region specific) and create EBS volume from the snapshot in the intended AZ.
--> You can create a snapshot to an EBS volume of the same or larger size than the original volume size. from which the snapshot was initially created. 
+-> You can create a snapshot to an EBS volume of the same or larger size than the original volume size from which the snapshot was initially created. 
 -> You can take a snaphsot of non-root EBS volume while the volume is in use on running EC2 instance.
 -> This means, you can still access it while the snapshot is being processsed.
 -> However the snaphsot will only include data that is alreday written to your volume.
--> The snaphsot is created immediately, but it may stay pending status until the full snapshot is completed. This may take dew hours to complete, specially for the first time
-snapshot of a volume.
+-> The snaphsot is created immediately, but it may stay pending status until the full snapshot is completed. This may take few hours to complete, specially for the first time
+   snapshot of a volume.
 -> During the period, when the snaphsot status is pending, you can still access the volume (non-root/non-boot), but I/O might be slower because of the snapshot activity.
 -> While in pending state, an in-process snapshot will not include data from ongoing reads and writes to the volume.
 -> To take complete snapshot of your non-root EBS volume - stop or unmount the volume.
