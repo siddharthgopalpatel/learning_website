@@ -27,6 +27,8 @@
 -> You are charged for data transfer to S3 from your EBS volume you are taking snaphsot.
 -> Snapshot stored in S3.
 -> First snaphsot is a clone, subsequent snaphsots are incremental.
--> Deleting snapshot will only remove data exclusive to the snapshot.    
+-> Deleting snapshot will only remove data exclusive to the snapshot. 
+-> If you delete the first snapshot then, AWS automatically shift the content of first snapshot data to its successive snapshot ( i.e. snapshots2).
+-> If snapshot2 has to be get deleted, then it shift the data to snapshot3 and so on.     
 </pre></h4>
 </html>

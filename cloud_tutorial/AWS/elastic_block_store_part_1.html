@@ -10,14 +10,20 @@ There are two types of storages are available for EC2 -
    - Ephemeral Storage (Non-Persistent Storage)
    - The EC2 instance can't be stopped, can only be rebooted. Stop or termination will delete the data.   
    
-Note: Root/Boot volume are the storages where EC2 instance O.S. get installed and kept.
-
+Note: 
+-> Root/Boot volume are the storages where EC2 instance O.S. get installed and kept.
+-> Bootable volumes are volumes where you can install O.S. ( Example C drive in windows O.S.)
+-> Non-Bootable volumes are volumes where you can't install O.S. and it is used for other storages ( D,E drives in windows)
 -> EBS volumes behave like RAW, unformatted, external block storage devices that you can attach to your EC2 instance.
 -> EBS volumes are block storage devices suitable for database style data that requires frequent reads and write 
 -> EBS volumes are attached to your EC2 instance through the AWS network, like Virtual hard drives
 -> An EBS volume can attach to a single EC2 instance only at a time
 -> Both EBS volume and EC2 instance must be in the same AZ.
 -> An EBS volume data is replicated by AWS across multiple servers in the same AZ to prevent data loss resulting from any single AWS component failure.
+-> Extra Volume will not get deleted by default after termination.
+-> Throughput is the way to check how fast the data can transfer.
+-> IOPS (Input Output per Second) is a way to check how fast the data will read and write per second i.e. transaction per second.
+-> SSD measured in IOPS and HDD measured in througput MB/S. 
 
 There are 3 types of EBS Volumes
 1. SSD(Solid State Drive) Backed Volume
