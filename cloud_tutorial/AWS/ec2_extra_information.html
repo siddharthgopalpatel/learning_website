@@ -8,15 +8,15 @@
 -> There is 20 EC2 instances soft limit per region, you can submit a request to AWS to increase it. 
 
 <h3><u>EC2 Status Check -</u></h3>
--> By default AWS EC2 service peforms automated status checks every one minute.
+-> By default AWS EC2 service performs automated status checks every one minute.
 -> This is done on every running EC2 instances to identify any H/W or software issue.
 -> Status check is inbuilt into the AWS EC2 instance.
 -> They cannot be configured, deleted or disable.
 -> EC2 services can send its metric data to AWS cloudwatch every 5 minutes (enabled by default).
--> Enabled detailed monitoring is chargable and sends metric is very 1 minute.
--> You are not charged for EC2 instances, if they are stopped, however atatched EBS volumes incur charges. 
+-> Enabled detailed monitoring is chargeable and sends metric is very 1 minute.
+-> You are not charged for EC2 instances, if they are stopped, however attached EBS volumes incur charges. 
 
-Note: 1. EBS Backed EC2 instance means the root volumne of EC2 instance where O.S has been placed is EBS.
+Note: 1. EBS Backed EC2 instance means the root volume of EC2 instance where O.S has been placed is EBS.
       2. Instance Store Backed EC2 means the root volume of EC2 instance is Instance Store.
 
 <h3><u>When you stop an EBS Backed EC2 instance</u></h3>
@@ -30,11 +30,11 @@ Note: 1. EBS Backed EC2 instance means the root volumne of EC2 instance where O.
 
 <h3><u>EC2 Termination</u></h3>
 -> When you terminate a running instance the instance state changes from Running to Shutting down to Terminated.
--> Durning the shutdown down and terminated state, you do not incur charges.
+-> During the shutdown down and terminated state, you do not incur charges.
 -> By default, EBS Root Devices volumes are deleted automatically when the EC2 instances are terminated.
 -> Any additional (non boot/boot) volumes, attached to the instances by default, persist after the instance is terminated.
 -> That means the root volume only will be get deleted by default, the additional volume will still there after termination.
--> You can modify both behaviours by modifing the 'Delete on Termination' attribute of any EBS Volumes during instances launch or while running.
+-> You can modify both behaviors by modified the 'Delete on Termination' attribute of any EBS Volumes during instances launch or while running.
 -> Enable 'EC2 Termination Protection' against accidental termination.   
 
 <h3><u>EC2 Metadata</u></h3>
@@ -51,7 +51,7 @@ Note: 1. EBS Backed EC2 instance means the root volumne of EC2 instance where O.
 -> User data is not encrypted.
 
 <h3><u>EC2 Bare Metal Instances</u></h3>
--> Non virtualised Enviroment.
+-> Non visualized Environment.
 -> Operating System runs directly on Hardware.
 -> Suitable for Licensing Restricted tier-1 business critical application.
 -> i3 metal, i5-metal,r-5 metal, Z1d metal, U-6tb1 metal are some examples.

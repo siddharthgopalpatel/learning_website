@@ -7,7 +7,7 @@
 -> AutoScaling is region specific.
 
 <h3><u>AutoScaling Components</u></h3>
-<u>1. Lanuch Configuration</u>
+<u>1. Launch Configuration</u>
 -> Like Instance type, AMI, keypair, Security Group
 <u>2. AutoScaling Group</u>
 -> Group Name, Group Size, VPC, subnet, Health Check Period
@@ -15,14 +15,14 @@
 -> Metric type, Target Value
 
 -> If AutoScaling finds that the number of EC2 instances launched by ASG into subject AZs is not balanced (EC2 instances are not evenly distributed), AutoScaling
-   do rebalancing activity of itself.
+   do re-balancing activity of itself.
 -> AS always tries to balance the instances distribution across AZs.
--> While rebalancing, ASG launches new EC2 instances where there are less EC2 at present, and then terminates the instances from the AZ, that has more instances.
+-> While re-balancing, ASG launches new EC2 instances where there are less EC2 at present, and then terminates the instances from the AZ, that has more instances.
 
 <h3><u>What causes Imbalance of EC2</u></h3>
--> If we add or remove some subnets/AZ from autoscaling group.
+-> If we add or remove some subnets/AZ from auto-scaling group.
 -> If we manually request for EC2 termination from our ASG.
--> An AZ that did not have enough EC2 capacity now has enough capacity and it is one of our autoscaling group AZ.   
+-> An AZ that did not have enough EC2 capacity now has enough capacity and it is one of our auto-scaling group AZ.   
 
 -> We can attach a running EC2 instances to an ASG by using AWS console or CLI, if the below conditions are met -
    - Instances must be in running state (not terminated or stopped)
@@ -37,13 +37,13 @@
 -> You can then manage the detached instances independently or attach it to another AutoScaling Group.
 -> When you detach an instance, you have the option to decrement the AutoScaling Group desired capacity.
    - If you don't, the AutoScaling Group will launch another instance to replace the one detached.
--> When you delete the AutoScaling Group, its parametes like maximum, minimum and desired capacity are all set to Zero. Hence, it terminates all its EC2 instances.
+-> When you delete the AutoScaling Group, its parameters like maximum, minimum and desired capacity are all set to Zero. Hence, it terminates all its EC2 instances.
 -> If you want to keep the EC2 instances and manage them independently, you can manually detach them first, then delete the ASG.
 
 <h3><u>How ELB will work with ASG</u></h3>
 -> We can attach one or more Elastic Load Balancer to our AutoScaling Group.
 -> The Elastic Load Balancer must be in the same region as the AutoScaling Group.
--> Once you do this, any EC2 instance existing or added by the AutoScaling Group will be automatically registred with the AutoScaling Group defined ELB.
+-> Once you do this, any EC2 instance existing or added by the AutoScaling Group will be automatically registered with the AutoScaling Group defined ELB.
 -> Instances and the ELB must be in the same VPC.
 
 <h3><u>Health-checks on EC2 instances</u></h3>
@@ -53,11 +53,11 @@
    to determine the instances health check.
 -> Health check grace period is 300 sec.
 -> If we set 'zero' in grace period, then the instance health is checked once it is in service.
--> Untill the grace period time expires, any unhealthy status reported by EC2 status check, or the ELB attached to the AutoScaling Group, will not be acted upon. 
+-> Until the grace period time expires, any unhealthy status reported by EC2 status check, or the ELB attached to the AutoScaling Group, will not be acted upon. 
 -> After Grace period expires, AutoScaling Group would consider an instance unhealthy in any of the following cases -
    - EC2 status check report to AutoScaling Group about an instance status other than running.
    - If ELB health check are configured to be used by the AutoScaling, then if the ELB report the instance as "out of Service".
--> Unlike AZ rebalancing, termination of unhealthy instances happen first, then AutoScaling attempt to launch new instance to replace the ones terminated. 
+-> Unlike AZ re-balancing, termination of unhealthy instances happen first, then AutoScaling attempt to launch new instance to replace the ones terminated. 
 -> Elastic IP and EBS volumes gets detached from the terminated instances, you need to manually attach them to the new instances.  
 </h4>
 </pre></html>

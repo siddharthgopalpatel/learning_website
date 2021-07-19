@@ -1,6 +1,6 @@
 <html><h2><u><center>Simple Storage Service</center></u></h2>
 <h4><pre>
--> S3 is a storage for the internet. It has a simple webservice interface for the simple storing and retrieving of any amount of data, anytime from anywhere on the internet.
+-> S3 is a storage for the internet. It has a simple web service interface for the simple storing and retrieving of any amount of data, anytime from anywhere on the internet.
 -> S3 is a object based storage.
 -> You cannot install operating system on S3.
 -> S3 has a distributed data-store architecture where objects are redundantly stored in multiple locations (min 3 locations in same region)
@@ -9,7 +9,7 @@
 -> Max. capacity of a bucket is 5 TB.
 -> You can create folders in your bucket (available through console)
 -> You cannot create nested buckets.
--> Bucket ownership is Non-transferrable.
+-> Bucket ownership is Non-transferable.
 -> S3 bucket is a region specific.
 -> You can have upto 100 buckets per account (May expand on request) 
 
@@ -17,10 +17,10 @@
 -> S3 Bucket names(keys) are globally unique across all AWS regions.
 -> Bucket names cannot be changed after they are created.
 -> If a bucket is deleted, its name becomes available again to you or other account to use.
--> Bucket names must be atleast 3 and no more than 63 characters long.
+-> Bucket names must be at least 3 and no more than 63 characters long.
 -> Bucket names are part of the URL used to access buckets.
 -> Bucket name must be a series of one or more labels (xyz.bucket)
--> Bucket names can contain lowercase, numbers and hyphen. Cannot use upercase letter.
+-> Bucket names can contain lowercase, numbers and hyphen. Cannot use uppercase letter.
 -> Bucket name should not be an IP address (10.10.20.20)
 -> Each lable must start and end with a lowercase letter or a number i.e. you cannot start or end the bucket name with hyphen. 
 -> By default, bucket and its objects are private. By default, only owner can access the bucket. 
@@ -29,9 +29,9 @@ Note: The name is simply two parts - Bucket region's endpoint and bucket name
 For example - For S3 bucket named mybucket in Europe West Region
 -> https://s3-eu-west1.amazonaws.com/mybucket 
 
-<h3><u>S3 Buckets - Subresources</u></h3>
+<h3><u>S3 Buckets - Sub resources</u></h3>
 Sub-resources for S3 bucket includes -
-1. Lifecycle - To decide on object's lifecycle management
+1. Life-cycle - To decide on object's life-cycle management
 2. Website - To hold configurations related to static website hosted in S3 bucket.
 3. Versioning - Keep object versions as it changes (get updated). You can enable or suspend it, but cannot disable it.
 4. Access Control List - Bucket Policies
@@ -54,7 +54,7 @@ Sub-resources for S3 bucket includes -
    
 <h3><u>S3 Bucket Versioning</u></h3>
 -> Bucket Versioning is a S3 Bucket sub-resource used to protect against accidental object/data deleting and overwrite.
--> Versioning can also be used for data retention and archieve.
+-> Versioning can also be used for data retention and archive.
 -> Once you enable versioning on a bucket, it cannot be disabled, however it can be suspended.
 -> When enabled, Bucket Versioning will protect existing and new objects, and maintain their versions as thay updated.
 -> Updating objects refers to PUT, POST, COPY. DELETE actions on objects.
