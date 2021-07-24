@@ -33,7 +33,7 @@
 <h3><u>Root EBS Volume Encryption</u></h3>
 -> You will get option to encrypt the root volume at the launch time.
 -> There is no direct way to change the encryption state of a volume.
--> There is an indirect workaround ti this -
+-> There is an indirect workaround to this -
    - Launch the instance with the EBS volume required
    - Do whatever patching or install application
    - Create an AMI from the EC2 instance
@@ -62,7 +62,7 @@
 -> You cannot make a snapshot of an encrypted EBS volume public on AWS.    
 -> You can share your encrypted snapshot with specific AWS accounts as follows -
 -> Make sure that you use a non-default/ custom CMK key to encrypt the snapshot, not the default CMK key (AWS will not allow the sharing if default CMK is used)
--> Configure cross account Permission in order to give the accounts(s) with which you want to share the snapshot, access to the custom CMK key used to to encrypt the 
+-> Configure cross account Permission in order to give the accounts(s) with which you want to share the snapshot, access to the custom CMK key used to encrypt the 
    snapshot.
 -> Without this, the other accounts will not be able to copy the snapshot, nor will be able to create volumes of the snapshot.
 -> AWS will not allow you to share snapshots encrypted using your default CMK key.
