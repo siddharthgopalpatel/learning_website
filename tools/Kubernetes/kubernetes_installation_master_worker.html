@@ -1,0 +1,36 @@
+<html><h2><u><center>Kubernetes Installation</center></u></h2>
+<h4><pre>
+-> Login into AWS account and launch 3 instances (ubuntu 16.04, t2.medium)
+-> Master mush have 2 vCPU and 4 GB RAM
+
+<h3><u>Command for all the three nodes</u></h3>
+-> sudo su
+-> apt-get update
+-> Install https package (apt-get install apt-transport-https)
+   - This https is needed for intra cluster communication (particular from control plane to individual pods)
+-> apt install docker.io -y
+-> Check the docker version ( docker --version)
+-> Start the docker and enable it (systemctl start docker and systemctl enable docker)
+-> Setup open GPG key. This is required for intra cluster communication. It will be added to the source key on this node i.e. when K8s sends signed info to our host, it is going 
+   to accept those information because this open GPG key is present in the source key.
+   - sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
+-> vi /etc/apt/source.list.d/kubernetes.list (deb http://apt.kubernetes.io/kubernetes-xenial main)
+-> apt-get update
+-> apt-get install -y kubelet kubeadm kubectl kubernetes-cni
+
+<u>Bootstrapping the Master Node (In master)</u>
+-> kubeadm init (copy the kubeadm join command)
+-> mkdir -p $HOME/.kube
+-> cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+-> chown $(id -u):$(id -g) $HOME/.kube/config
+-> Deploy flannel node network for its repository path. Flannel is going to place a binary in each node.
+   - kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+   - kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml   
+   
+<u>Configuration of worker node</u>
+-> kubeadm join command
+
+-> Now go to master node and run the command (kubectl get nodes to see the nodes)
+
+</h4>
+</pre></html>  
