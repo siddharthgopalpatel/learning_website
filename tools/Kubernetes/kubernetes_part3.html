@@ -8,10 +8,11 @@
 -> Multiple labels can be added to a single object.
 
 <u>Label - Selectors</u>
--> Unlike name/UIDs, labels do not provide uniqueness, as in general, we can expect many objects to carry the same level.
+-> Unlike name/UIDs, labels do not provide uniqueness, as in general, we can expect many objects to carry the same label.
 -> Once labels are attached to an object we would need filters to narrow down and these are called as label selectors.
 -> The api currently supports two types of selectors - Equality based and set based.
--> A label selector selector can be made of multiple requirements which are comma-separated.
+-> A label selector can be made of multiple requirements which are comma-separated.
+
 Equality based: (=,!=)
 name: bhupinder
 class: nodes
@@ -31,7 +32,7 @@ kubectl delete pods -l 'env in (development,testing)'
 -> One use case for selecting labels is to constrain the set of nodes onto which a pod can schedule i.e. you can tell a pod to only be able to run on particular nodes.
 -> Generally such constraints are unnecessary, as the scheduler will automatically do a reasonable placement, but on certain circumstances we might need it.
 -> We can use labels to tag nodes.
--> You the nodes are tagged, you can use the label selectors to specify the pods run only of specific nodes.
+-> Once the nodes are tagged, you can use the label selectors to specify the pods run only of specific nodes.
 -> First we give label to the node
 -> Then use node selector to the pod configuration.  
 

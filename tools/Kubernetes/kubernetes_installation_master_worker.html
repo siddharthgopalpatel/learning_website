@@ -14,7 +14,7 @@
 -> Setup open GPG key. This is required for intra cluster communication. It will be added to the source key on this node i.e. when K8s sends signed info to our host, it is going 
    to accept those information because this open GPG key is present in the source key.
    - sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
--> vi /etc/apt/source.list.d/kubernetes.list (deb http://apt.kubernetes.io/kubernetes-xenial main)
+-> vi /etc/apt/sources.list.d/kubernetes.list (deb http://apt.kubernetes.io/ kubernetes-xenial main)
 -> apt-get update
 -> apt-get install -y kubelet kubeadm kubectl kubernetes-cni
 
