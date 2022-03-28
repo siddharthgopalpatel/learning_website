@@ -1,5 +1,21 @@
 <html><h2><u><center>Kubernetes Installation</center></u></h2>
 <h4><pre>
+
+<h3><u>Setup of Kubernetes Cluster</u></h3>
+1. All-in-one Single Node Installation
+-> With all-in-one, all the master and worker components are installed on a single node.
+-> This is very useful for learning, development and testing.
+-> This type should not be used in production.
+-> Minikube is one such example.
+
+2. Single-Node etcd, single-Master and Multi-worker installation
+-> In this setup, we have a single master node, which also runs a single-node etcd instance.
+-> Multiple worker nodes are connected to the master node.
+
+3. Single-Node etcd, Multi-Master and Multi-worker installation
+-> In this setup, we have multiple master nodes, which works in an HA mode, but we have a single-node etcd instance.
+-> Multiple worker nodes are connected to the master node.
+
 -> Login into AWS account and launch 3 instances (ubuntu 16.04, t2.medium)
 -> Master mush have 2 vCPU and 4 GB RAM
 

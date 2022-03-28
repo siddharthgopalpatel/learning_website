@@ -41,6 +41,78 @@
 -> Health Monitoring of containers
 -> Batch Execution (one time, sequential, parallel) 
 
+<h3><u>Difference between Kubernetes and Docker Swarm</u></h3>
+
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+<table>
+  <tr>
+        <th>FEATURES</th>
+    <th>KUBERNETES</th>
+    <th>DOCKER SWARM</th>
+
+  </tr>
+  <tr>
+    <td>Installation and Cluster Configuration </td>
+    <td>Complicated and time consuming.</td>
+    <td>Fast and Easy</td>
+
+  </tr>
+  <tr>
+    <td>Supports </td>
+    <td>K8s can work with almost all container types like Rocket, Docker, ContainerD</td>
+    <td>Works with Docker only.</td>
+
+  </tr>
+  <tr>
+    <td>GUI </td>
+    <td>GUI available</td>
+    <td>GUI not available.</td>
+ </tr>
+   <tr>
+    <td>Data Volumes </td>
+    <td>Only shared with containers in same pod.</td>
+    <td>Can be shared with any other container.</td>
+ </tr>
+   <tr>
+    <td>Updates and Rollback </td>
+    <td>Process scheduling to maintain services while updating.</td>
+    <td>Progressive updates and service health monitoring throughout the update.</td>
+ </tr>
+   <tr>
+    <td>Autoscaling </td>
+    <td>Support vertical and horizontal scaling.</td>
+    <td>Not support autoscaling.</td>
+ </tr>
+   <tr>
+    <td>Logging and Monitoring </td>
+    <td>Inbuilt tool present for monitoring.</td>
+    <td>Use 3rd party tools like splunk.</td>
+ </tr>
+</table>
+
+</body>
+
+
 <h3><u>Architecture of Kubernetes</u></h3>
 
 <img src="pic/kubernetes_architecture.JPG" alt="HTML5 Icon" style="width:1000px;height:700px;">

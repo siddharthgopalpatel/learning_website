@@ -46,28 +46,7 @@
 -> Declarative is about describing what you are trying to achieve, without instructing how to do it.
 -> Imperative, explicitly tells "how to accomplish it".
 
-<h3><u>Fundamental of Pods</u></h3>
--> When a pod gets created, it is scheduled to run on a node in your cluster.
--> The pod remains on that node until the process is terminated, the pod object is deleted, the pod is evicted for lack of resources, or the node fails.
--> If a pod is scheduled to a node that fails, or if the scheduling operation itself fails, the pod is deleted.
--> If a node dies, the pod scheduled to that node are scheduled for deletion after a time period.
--> A given pod (UID) is not "rescheduled" to a new node, instead it will be replaced by an identical Pod, with even the same name if desired, but with the new UID.
--> Volume in a POD will exists as long as that POD (with that UID) exist. If that POD is deleted for any reason, volume is also destroyed and created as new on new POD.
--> A controller can create and manage multiple pods, handling replication, roll-out and providing self-healing capabilities.
+Example: kubectl api-resources
 
-<h3><u>Setup of Kubernetes Cluster</u></h3>
-1. All-in-one Single Node Installation
--> With all-in-one, all the master and worker components are installed on a single node.
--> This is very useful for learning, development and testing.
--> This type should not be used in production.
--> Minikube is one such example.
-
-2. Single-Node etcd, single-Master and Multi-worker installation
--> In this setup, we have a single master node, which also runs a single-node etcd instance.
--> Multiple worker nodes are connected to the master node.
-
-3. Single-Node etcd, Multi-Master and Multi-worker installation
--> In this setup, we have multiple master nodes, which works in an HA mode, but we have a single-node etcd instance.
--> Multiple worker nodes are connected to the master node.
 </h4>
 </pre></html>  
