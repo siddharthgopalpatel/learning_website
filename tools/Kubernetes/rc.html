@@ -34,6 +34,7 @@ spec:
          image: ubuntu
          command: ["/bin/bash", "-c", "while true; do echo Hello-Bhupinder; sleep 5 ; done"]
 
+-> kubectl scale --replicas=8 rc -l myname=bhupinder
 
 </pre></h4>
 </html>

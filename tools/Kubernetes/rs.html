@@ -2,7 +2,7 @@
 <h4><pre>
 <u>Replica Set</u>
 -> Replica Set is a next generation replication controller.
--> The replication controller only supports equality-based selector whereas the replica set supports set-based selector i.e. filtering according to set of values.
+-> The replication controller only supports equality-based selector whereas the replica set supports equality-based and set-based selectors i.e. filtering according to set of values.
 -> Replica set rather than the replication controller is used by other objects like deployment.
 
 kind: ReplicaSet                                    
@@ -25,6 +25,8 @@ spec:
        - name: c00
          image: ubuntu
          command: ["/bin/bash", "-c", "while true; do echo Technical-Guftgu; sleep 5 ; done"]
+		 
+-> kubectl scale --replicas=1 rs/myrs
 
 </pre></h4>
 </html>
