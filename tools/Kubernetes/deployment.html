@@ -18,7 +18,7 @@ The following are typical use cases of Deployments -
 
 No of pods will remain the same in v2 after roll back. Even though it has more pods in the next version.
 Previous relica set is never get deleted by default. It will be stored and recoverable. Only pods get deleted and not recoverable.
-Recently deleted pod would always be deleted first.  
+Recently created pod would always be deleted first.  
 
 -> If there are problems in the deployment, Kubernetes will automatically roll back to the previous version, however you can also explicitly roll back to a specific revision,
    as in our case to Revision 1 (the original Pod version)
@@ -65,18 +65,24 @@ spec:
         - name: c00
           image: ubuntu
           command: ["/bin/bash", "-c", "while true; do echo Technical-Guftgu; sleep 5; done"]  
-		  
-kubectl get deploy
-kubectl describe deploy mydeployments
-kubectl get rs
-To scale up or scale down kubectl scale --replicas=1 deploy mydeployments
-kubectl logs -f podname 
--------
-Make some changes in the file and then apply it.
+	
+-> To check deployment was created or not	  
+   kubectl get deploy
 
-kubectl rollout status deployment mydeployments
-kubectl rollout history deployment mydeployments
-kubectl rollout undo deploy/mydeployments  
+-> To check, how deployment create RS and pods 	
+   kubectl describe deploy mydeployments
+   kubectl get rs
+
+-> To scale up or scale down 
+   kubectl scale --replicas=1 deploy mydeployments
+
+-> To check, what is running inside containers
+   kubectl logs -f podname 
+
+-> Make some changes in the file and then apply it.
+   kubectl rollout status deployment mydeployments
+   kubectl rollout history deployment mydeployments
+   kubectl rollout undo deploy/mydeployments  
  
 
      
