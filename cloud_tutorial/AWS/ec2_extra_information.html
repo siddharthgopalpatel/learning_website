@@ -38,11 +38,11 @@ Note: 1. EBS Backed EC2 instance means the root volume of EC2 instance where O.S
 -> Enable 'EC2 Termination Protection' against accidental termination.   
 
 <h3><u>EC2 Metadata</u></h3>
--> The is instance data that you can use to configure or manage the instance.
+-> The instance data that you can use to configure or manage the instance.
    eg -> IPv4 addresses, IPv6 addresses, DNS hostname, AMI-id, Instance ID, Instance Type, local hostname, public keys, security groups.
 -> Metadata can be only viewed from within the instance itself i.e. you have to login to the instance.
 -> Metadata is not protected by encryption, anyone that has access to the instance can view the data.
--> To view the instance metadata, GET http://169.254.169.254/latest/Metadata 
+-> To view the instance metadata, execute the command -> curl http://169.254.169.254/latest/meta-data/
 
 <h3><u>Instances User Data</u></h3>
 -> Data supplied by the user at the instance launch in the form of a script to be executed during the instance boot.

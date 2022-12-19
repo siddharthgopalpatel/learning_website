@@ -26,7 +26,7 @@
 -> FIFO queues are limited to 300 transactions per seconds(TPS), but have all the capabilities of standard queue.
 
 <h3><u>SQS Pricing</u></h3>
--> The first 1 million monthly requests are free, after that pricing is according to regions.
+-> In free-tier account, the first 1 million monthly requests are free, after that pricing is according to regions.
 -> For eg - in Mumbai region
    standard queue - $0.40/million request
    FIFO queue - $0.50/million request
@@ -59,6 +59,7 @@
 -> SQS messages can remain in the queue for upto 14 days (SQS retention period).
 -> Range is 1 minute to 14 days(Default is 4 days).
 -> Once the maximum retention period of a message is reached, it will be deleted automatically from the queue.
+-> Messages can be sent to the queue and read from the queue simultaneously.
 -> SQS can be used with DynamoDB, EC2, ECS, Redshift, RDS, Lambda, S3 to make distributed/decoupled applications.
 -> You can have multiple queues with different priorities.
 

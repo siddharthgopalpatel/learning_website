@@ -4,10 +4,12 @@
 -> Any data written to the volume after the snapshot process is initiated, will not be included in the resulting snapshot (but will be included in future, incremental update)
 -> Per AWS account, upto 5000 EBS volumes can be created.
 -> Per account, upto 10,000 EBS snapshots can be created.
--> EBS snapshots are stored in S3, however you cannot access them directly. You can only access them through EC2 APIs.
+-> EBS snapshots are stored in S3, however you cannot access them directly. You can only access them through management console, CLI or EC2 APIs.
 -> While EBS volumes are AZ specific, snapshots are Region specific.  
 -> Any AZ in Region can use Snapshot to create EBS Volume.
 -> To migrate an EBS from one AZ to another, create snapshot (region specific) and create EBS volume from the snapshot in the intended AZ.
+-> To migrate an EBS volume from one region to another, create a snapshot and copy the snapshot to different region and then create EBS from that EC2 instance.
+-> Only used block space from EBS will be saved in the snapshot, not the unused one. But once you create new EBS from snapshot you will see same storage as old one.
 -> You can create a snapshot to an EBS volume of the same or larger size than the original volume size from which the snapshot was initially created. 
 -> You can take a snapshot of non-root EBS volume while the volume is in use on running EC2 instance.
 -> This means, you can still access it while the snapshot is being processed.
@@ -27,7 +29,7 @@
 -> You are charged for data transfer to S3 from your EBS volume you are taking snapshot.
 -> Snapshot stored in S3.
 -> First snapshot is a clone, subsequent snapshots are incremental.
--> Deleting snapshot will only remove data exclusive to the snapshot. 
+-> Deleting snapshot will only remove data exclusive to that snapshot. 
 -> If you delete the first snapshot then, AWS automatically shift the content of first snapshot data to its successive snapshot ( i.e. snapshots2).
 -> If snapshot2 has to be get deleted, then it shift the data to snapshot3 and so on.     
 </pre></h4>

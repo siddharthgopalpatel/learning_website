@@ -21,6 +21,7 @@ Note:
 -> Both EBS volume and EC2 instance must be in the same AZ.
 -> An EBS volume data is replicated by AWS across multiple servers in the same AZ to prevent data loss resulting from any single AWS component failure.
 -> Extra Volume will not get deleted by default after termination.
+-> Speed using Instance Storage is far better than EBS, because IS is directly attached storage where as EBS is network attached storage. 
 -> Throughput is the way to check how fast the data can transfer.
 -> IOPS (Input Output per Second) is a way to check how fast the data will read and write per second i.e. transaction per second.
 -> SSD measured in IOPS and HDD measured in througput MB/S. 

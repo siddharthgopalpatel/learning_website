@@ -3,6 +3,8 @@
 -> You can use Amazon Route53 to register new domains, transfer existing domains, route traffic for your domains to your AWS and external resources and monitor the health of 
    your resources.
 -> DNS(Domain Name Server) uses TCP port 53, this is why it's called as Route53.  
+-> It is global service liks S3. S3 will get created in a region, but route53 will be created globally.
+-> Route53 supports IPv6.
 -> There are two type of top level domains in AWS - Generic Level Domain(.com, .org, .net)  and Geographic Level Domain (.cn, .us, .in).
 
  <h3><u>Route53 Functions</h3></u>
@@ -69,6 +71,7 @@ NOTE:- Each Amazon Route53 account is limited to a maximum of 500 hosted zones a
 -> You create a hosted zone for a domain, and then you create records to tell the domain name system how you want traffic to be routed for that domain.
 -> Basically a hosted zone is a container that holds information about how you want to route traffic for a domain and its sub-domains.
 -> You can create public (internet) hosted zones or private (internal DNS) hosted zones.
+-> Private hosted zone will work same as public but within your VPC. It will not work outside of it.
 -> For each public hosted zone that you create, Amazon Route53 automatically creates a Name Server (NS) record and a Start of Authority (SOA) record. Don't change these 
    records.
 -> Route53 automatically creates a Name Server(NS) record with the same name as your hosted zone.
@@ -78,9 +81,9 @@ NOTE:- Each Amazon Route53 account is limited to a maximum of 500 hosted zones a
 -> The NS record identifies the four name servers that you give to your registrar or your DNS service, so that DNS queries are routed to Route53 name services.
 -> By default, Route53 assigns a unique set of four Name Servers (known collectively as a Delegation Set) to each hosted zone that you create.
    eg -> ns-1337.awsdns-39.com
-         ns-895.awsdns-47.com
-         ns-428.awsdns-53.com
-	 ns-1597.awsdns-07.com
+         ns-895.awsdns-47.net
+         ns-428.awsdns-53.org
+	 ns-1597.awsdns-07.co.uk
 		 
 <h3><u>Route53 as Authoritative DNS</u></h3>
 -> Once you update the Route53 NS settings with your domain registrar to include the Route53 name servers, Route53 will be responsible to respond to DNS queries for the 

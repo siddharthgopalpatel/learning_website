@@ -117,8 +117,9 @@
 -> Each AWS service defines a set of actions that can be performed on each resource.
 -> After AWS approves the actions on your request, those actions can be performed on the related resource within your account.
 -> If you create a request to perform an unrelated action on resource, that request is denied.
--> When you provide permissions using an identity based policy in IAM, then you provide permissions to access resources only within the same account.   
-   
+-> When you provide permissions using an identity/User based policy in IAM, then you provide permissions to access resources only within the same account.   
+-> When you have to create/edit/delete resource from some other account, you apply for resource based policy. Example is cross-account-permission.  
+
 -> You can create a new IAM policy in the AWS management console using one of the following ways -
 1. Json 
    - You can create your own JSON syntax.

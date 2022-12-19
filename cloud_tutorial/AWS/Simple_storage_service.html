@@ -39,7 +39,7 @@ Sub-resources for S3 bucket includes -
 <h3><u>S3 Objects</u></h3>
 -> An object size stored in an S3 bucket can be 0 byte to 5 TB.
 -> Each object is stored and retrieved by a unique key (ID or name)
--> An object is AWS S3 is uniquely identified and addressed through
+-> An object in AWS S3 is uniquely identified and addressed through
    - Service endpoint
    - Bucket name
    - Object key (name)
@@ -61,14 +61,14 @@ Sub-resources for S3 bucket includes -
 -> When versioning is enabled, and you try to delete an object, a delete marker is placed on the object.
    - You can still view the object and the delete marker.
 -> If you reconsider deleting the objects, you can delete the "Delete Marker" and the object will be available again.
--> You will be charged for all S3 storage cost for all object versions stored.
+-> You will be charged for all S3 storage cost for all object versions stored. It is incremental.
 -> You can use versioning with S3 lifecycle policies to delete older versions, or you can move them to a cheaper S3 storage (or Glacier).
 -> Bucket Versioning state -
    - Enabled
    - Suspended
    - Un-versioned
 -> Versioning applies to all objects in a bucket and not partially applied.
--> Object existing before enabling versioning will have a version id or "NULL".
+-> Object existing before enabling versioning will have a version id "NULL".
 -> If you have a bucket that is already versioned then you suspend versioning, existing objects and their versions remain as it is.
 -> However, they will not be updated/versioned further with future updates while the bucket versioning is suspended.
 -> New objects (uploaded after suspension) they will have a version ID "null". If the same key (name) is used to store another objects, then it will override the existing one.

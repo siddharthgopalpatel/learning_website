@@ -5,14 +5,30 @@
 -> An internet facing load balancer has a publicly resolvable DNS name.
 -> Domain names for content on the EC2 instances served by the ELB, is resolved by the internet DNS servers to the ELB DNS name (and hence IP address). 
 -> This is how traffic from internet is directed to the ELB front end.
--> Classic Load Balancer service support 
+-> Classic Load Balancer(Previous Generation, works on 7th layer of OSI,) service support 
    - HTTP, HTTPS, TCP, SSL protocols 
    - protocols ports supported are 1-65535 
    - It support IPv4, IPv6 and Dual Stack.
--> Application Load Balancer distributes incoming application traffic across multiple targets such as EC2 instances in multiple availability Zone.
+-> Application Load Balancer (works on 7th layer of OSI, it supports HTTP/HTTPS protocols, used for best application expericence i.e. mobile and destop)distributes incoming application traffic across multiple 
+   targets such as EC2 instances in multiple availability Zone.
    - This increase the availability of your application.
--> Network Load Balancer has ability to handle volatile workloads and scale to millions of request per seconds.
+-> Network Load Balancer (works on 4th layer of OSI which is for trasport, it support TCP/UDP/TLS, used for low-latency) has ability to handle volatile workloads and scale to millions of request per seconds.
 
+Extra Point /Important point
+-> It's not important to have public IP for all EC2, within VPC ELB can send the traffic using private IP address.
+-> ELB is connected to EC2 instance, but not all incoming or outgoing traffic will go through ELB. When HTTP/HTTPS traffic is coming and application Load
+   Balancer is configured, then its incoming and outgoing traffic will go through ELB. Not the ping command as it uses ICMP protocol. Same goes to Network 
+   Load Balancer (TCP/UDP/TLS). 
+-> ELB is comprimised of three things (Listeners, Target Group, Target). 
+   Listeners - It is just listening all the requests and finds out what the request need and where it want to go.
+   Target Group - This is combination of target/ec2 servers.
+   Target - Individual EC2 server. (Target can be IP based, Lamnda based or instance based). 
+-> When target type is IP, you can use only following CIDR. You cannot specify public IP address as target IP.
+   - 10.0.0.0/8
+   - 100.64.0.0/10
+   - 172.16.0.0/12
+   - 192.168.0.0/16
+   
 <h3><u>Listeners in ELB</u></h3>
 -> An ELB listener, is the process that checks for connection request.
 -> You can configure the protocol/port on which your ELB listener listen for connection request.
@@ -48,7 +64,7 @@
 -> Unhealthy Threshold
    - Number of consecutive failed health check that should occur before the instance is declared unhealthy. (Range is 2-10, Default is 2).
 -> Healthy Threshold
-   - Number of consecutive successful health checks that must occur before the instance considered unhealthy. (Range is 2-10, default is 10).   
+   - Number of consecutive successful health checks that must occur before the instance considered healthy. (Range is 2-10, default is 10).   
    
 -> By default, the ELB distributes traffic evenly between the AZ it is defined in, without consideration to the number of registered EC2 instances in each AZ.    
 
@@ -57,6 +73,7 @@
 -> When enabled, the ELB will distribute traffic evenly between registered EC2 instances.
 -> If you have 7 EC2 instances in one AZ, and 3 in another AZ, and you enabled Cross Zone Load Balancing, each registered EC2 instance will be getting around the same amount 
    of traffic load from the ELB.
+-> ELB name you choose must be unique within the account.
 -> ELB is region specific, So all registered EC2 instances must be in same region, but can be in different AZ's.  
 -> To define your ELB in an AZ, you can select one subnet in that AZ. Subnet can be Public or Private.
 -> Only one subnet can be defined for the ELB in an AZ.
@@ -73,7 +90,7 @@
 -> Format of the public ELB DNS name of internet facing ELB -
    - name-1234567890.region.elb.amazonaws.com
 -> Format for internal ELB
-   - internal-name.123456789.region.elb.amazon.aws.com
+   - internal-name.123456789.region.elb.amazonaws.com
 -> An ELB listener is the process to checks for connection request.
 -> Each Network Load Balancer needs at least one listener to accept traffic.
 -> You must assign a Security Group to your ELB. This will control traffic that can reach your ELB front end listeners.

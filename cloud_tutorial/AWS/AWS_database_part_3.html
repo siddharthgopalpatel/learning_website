@@ -5,6 +5,7 @@
 -> Even, you can use CLI to view last 14 days events.
 -> Using AWS console, you can view only last one day events.
 -> In case of OS patching, System upgrades, DB scaling these things happen on standby first and then on primary to avoid outage.  
+-> In Multi-AZ, snapshots and automated backups are done on standby instance to avoid I/O suspension on primary.
 
 <h3><u>RDS Multi-AZ Deployment Maintenance</u></h3>
 -> Firstly, perform maintenance on standby.
@@ -46,6 +47,7 @@
 -> They are not deleted automatically, if you delete RDS instance.
 -> Take a final snapshot before deleting your RDS DB instance.
 -> You can share manual snapshot directly with other AWS account.
+-> You can't share automated backed up snapshot to other AWS account, you need to make a copy of it amd share.
 -> When you restore a DB instance, only the default DB parameters and security groups are associated with the restored instance.
 -> You cannot restore a DB snapshot into an existing DB instance, rather it has to create a new DB instance. It has new endpoint.
 -> Restoring from a backup or a DB snapshot changes the RDS instance endpoint.
@@ -58,10 +60,10 @@
    - You can restore from a Backup/snapshot into a new encrypted RDS instance.
 -> RDS supports encryption-at-rest for all DB engines using KMS.
 -> What actually encrypted when data at rest.
-1. All its snapshots
-2. Backups of DB (S3 storage)
-3. Data on EBS volumes
-4. Read Replica created from the snapshot.
+   1. All its snapshots 
+   2. Backups of DB (S3 storage)
+   3. Data on EBS volumes
+   4. Read Replica created from the snapshot.
 
 <h3><u>Some Points related to RDS Billing</h3></u>
 -> No upfront cost.

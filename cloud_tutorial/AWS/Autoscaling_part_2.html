@@ -20,7 +20,7 @@
 -> When the launch configuration is done by AWS CLI, detailed monitoring for EC2 instances is enabled by default.
 -> When the launch configuration is done by AWS console, basic monitoring for EC2 instances is enabled by default.
 
-<h3><u>Standby State</u></h3>
+<h3><u>Standby State (For server update, to do install or pathches)</u></h3>
 -> You can manually move an instance from ASG and put it in standby state.
 -> Instances in standby state are still managed by AutoScaling.
 -> Instances in standby state are charged as normal, in-service instances.
@@ -53,5 +53,7 @@ Schedule Scaling
 -> A schedule action must have a unique data/time. You cannot config two schedule activities at the same time/date.
 
 What is cool-down period and warm-up period?
+Cool-Down Period => is same as grace period.
+Warm-up Period => You wait for your EC2 instance to get started, ready and running.
 </h4>
 </pre></html>
