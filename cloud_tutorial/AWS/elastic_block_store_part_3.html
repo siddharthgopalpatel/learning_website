@@ -69,7 +69,7 @@
 -> For the AWS account(s) with whom an encrypted snapshot is shared -
    - They must first create their own copies of the snapshot and change the key
    - Then they use that copy to restore/ create EBS volume.    
--> You can only make a copy of the snapshot when it has been fully saved to S3 (its status show as complete) and not during the snapshot's pending status (when data blocks)
+-> You can only make a copy of the snapshot when it has been fully saved to S3 (its status show as complete) and not during the snapshot's pending status (when data blocks
    are being moved to S3).
 -> Amazon S3 server side encryption (SSE) protect the snapshot data-in-transit while copying.
 -> You can have upto 5 snapshot copy request running in a single destination per account. 

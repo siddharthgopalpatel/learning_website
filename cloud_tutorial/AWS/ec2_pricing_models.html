@@ -15,12 +15,11 @@
 -> Dedicated Host and Dedicated Instance usually billed on-demand.
 -> You can also pay for Dedicated Host which provides you with EC2 instance capacity on physical servers dedicated for your use.
 -> Spot Instance comes with cheapest rate, then Reserved and other.
--> You can also pay for Dedicated Host, which provide you with EC2 instance capacity on physical servers dedicated for your use.
 -> By default, we select t2.micro free tier comes with on-demend.
     
 <u>1. On Demend</u>:
--> AWS on demand instances are Virtual Servers that run in AWS or AWS Relational Database Service (RDS) and it allows you to pay a fixed rate by the hour (or by the second) 
-   with no commitments.
+-> AWS on demand instances are Virtual Servers that run in AWS EC2 or AWS Relational Database Service (RDS) and it allows you to pay a fixed rate by the hour (or by the 
+   second) with no commitments.
 
 <h3><u>On Demand Pricing is useful for:-></u></h3>
 -> Users that want low cost and flexibility of Amazon EC2 without any upfront payment or long term commitment.
@@ -87,13 +86,10 @@ No, however you need to pay for the delta.
 -> You can request spot instances upto your spot limit for each region.
 -> Enables you to bid whatever price you want for instance capacity, providing for even greater savings if your application have flexible start and end times.
 -> Spot instances are spare EC2 capacity that can save you up to 90% off of On-Demand prices that AWS can interrupt with a 2-minute notification.
--> Spot uses the same underlying EC2 instances as on-demand and reserved instances and is best suited for flexible workloads.
--> You can request spt instances up to your spot limit for each region.
--> You can determine the status of your spot request via spot request status code and message. You can access spot request status information on the spot instance page of the EC2 console of the AWS Management Console.
 -> You can determine the status of your spot request via spot request status code and message. You can access spot request status information on the spot instance page of the 
-   EC2 console of the AWS management console.
+   EC2 console of the AWS Management Console.
 
-Q -> When would my spot ins get interrupts?
+Q -> When would my spot instance get interrupts?
 
 Primary Reason would be Amazon EC2 capacity requirement (eg - On-demend or Reserved instances)
 Secondary, if you have chosen to set a 'max spot price' and the spot price rises above that.
@@ -113,7 +109,8 @@ Secondary, if you have chosen to set a 'max spot price' and the spot price rises
 -> Dedicated Host can help you address compliance requirement and reduce costs by allowing you to use your exising server bound software licenses. 
 -> Pay for a physical host that is fully dedicated to run your instances, and bring your existing per-socket, per-core or per-VM software license to Reduce cost.
 -> Only BYOL, Amazon Linux and AWS Marketplace AMIs can be launched onto Dedicated Hosts.
-<u>4. Dedicated Instance</u>:
+
+<u>5. Dedicated Instance</u>:
 -> Dedicated instances are run in a VPC on Hardware that is dedicated to a single customer.
 -> Your dedicated instances are physically isolated at the host hardware level from instances that belong to other AWS account.
 -> Dedicated instances may share Hardware with other instances from the same AWS account that are not dedicated instance.
@@ -126,9 +123,6 @@ Secondary, if you have chosen to set a 'max spot price' and the spot price rises
 -> can be purchased as a Reservation for up to 70% off on demand price.
 
 <mark>Note: If the spot instance is terminated by Amazon EC2, you will not be charged for partial hour of usage.
-However, if you terminate the instance yourself, you will be charged for any hour in which the instance ran.</mark>
-
-<h2><u> EC2 Instance Types:-></u></h2>
-F I G H T D R M C P X Z A U (Mnemonic)        
+However, if you terminate the instance yourself, you will be charged for any hour in which the instance ran.</mark>       
 </pre></h4>
 </html>

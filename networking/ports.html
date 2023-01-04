@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>  
+
+<h2><u><center>Ports</center></u></h2>
+
+<h4><pre>
+-> A port can be defined as a logical entity in computer networking and software terms.
+-> It acts as a communication endpoint for identifying a given process or application on the Linux operating system. 
+-> A port is a 16-bit (0 to 65535) number that differentiates a single application from others on various end systems.
+-> Two of the most famous Internet transport protocols, User Datagram Protocol (UDP) and Transmission Control Protocol (TCP) and other protocols apply 
+   port numbers for many sessions of communication (destination and source port numbers in conjunction with the destination and source IP addresses).
+-> A combination of a protocol, port, and IP address like TCP/UDP is called a socket. 
+-> It is necessary that all the services should have a specific socket.
+
+Categories of Port
+-> These ports are divided into three categories for ease of use because the variety of ports is large. 
+-> All the categories are labeled as the port value range:
+   0-1023: These ports are well-known and called "System" ports. They are reserved for the processes of the system that provide a huge range of network 
+           services. A process should have the privileges of a superuser for binding with any "Well-known" port.
+
+   1024-49151: These ports are "Registered" and called the "User" ports. They are designated via IANA for unique services. A process might have 
+               authentication to them upon request. It does not need any privilege of a superuser for using these ports in the most systems case.
+
+   49152-65535: These ports are "Dynamic" and called the "Private" ports. They can not be registered with IANA. These types of ports are open for using 
+                for customized and private services and may also be allocated as the ephemeral ports (known as short-lived ports applied by IP) 
+                automatically.
+			   
+</pre></h4></body>
+</html>
