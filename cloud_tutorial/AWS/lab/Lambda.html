@@ -1,0 +1,37 @@
+<html><h2><u><center>AWS Lambda</center></u></h2>
+<h4><pre>
+1. Go to IAM -> Click on Roles -> create role (AWS services, select Lambda as use case) -> Next -> Permissions (Search for AmazonDynamoDBFullAccess) -> Next -> 
+   Name, review, and create (Role Name=lambda-for-dynamodb) -> Create role
+2. Go to Lambda -> Create function -> Author from scratch (Function Name = lambda1, Runtime=Python 3.6), under Change default execution role
+   select "use an existing role"(select the role created) -> Create function.
+3. Go to newly create lambda function and upload the code. -> Save
+4. Go to S3 -> Create bucket (Bucket Name = sidd56, remove block access) -> create bucket. 
+5. Go to Lambda again -> Select the lambda function -> Click on Add trigger (select a trigger=search for s3{Select the bucket, Event type=All object 
+    create events, enable trigger}) -> Add. 
+6. Go to DynamoDB -> create table (Table Name=newtable, Primary Key=unique) -> Create. Click on items, it should be empty right now.
+7. Select the bucket in S3 -> Upload any file in the bucket.
+8. Go to DynamoDB and check if any items got added in the table. 
+
+
+
+Code used in this Lab
+**********************
+
+import boto3
+from uuid import uuid4
+def lambda_handler(event, context):
+    s3 = boto3.client("s3")
+    dynamodb = boto3.resource('dynamodb')
+    for record in event['Records']:
+        bucket_name = record['s3']['bucket']['name']
+        object_key = record['s3']['object']['key']
+        size = record['s3']['object'].get('size', -1)
+        event_name = record ['eventName']
+        event_time = record['eventTime']
+        dynamoTable = dynamodb.Table('newtable')
+        dynamoTable.put_item(
+            Item={'unique': str(uuid4()), 'Bucket': bucket_name, 'Object': object_key,'Size': size, 'Event': event_name, 'EventTime': event_time})
+
+*************************************
+</pre></h4>
+</html>

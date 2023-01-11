@@ -31,13 +31,13 @@
 -> It supports only limited languages like Node.js, Python, Java, C#, Ruby, Go and Powershell.
 -> Write your code and push the code into AWS Lambda.
 -> You cannot log into compute instances, choose customized O.S. or language platform.
--> If you code took 250 ms to run, then you have to pay for 300 ms. 
+-> If your code took 250 ms to run, then you have to pay for 300 ms i.e. you have to pay in multiple of 100 ms. Eg for 90 ms you need to pay for 100ms.
 
 <u>AWS EC2</u>
 -> AWS EC2 is a Infrastructure-as-a-Service.
 -> No Environment Restrictions, you can run any code or language.
--> For the first time in EC2, you have to chose the O.S. and install all the software required and then push your code in EC2.
--> You can selected variety of O.S. instance type, network and security patches, RAM & CPU etc.
+-> For the first time in EC2, you have to choose the O.S. and install all the software required and then push your code in EC2.
+-> You can select variety of O.S. instance type, network and security patches, RAM & CPU etc.
 -> Pay per second or hourly, but the bill will come up on monthly basis.
 
 <h3><u>Important terms used in Lambda</u></h3>   
@@ -66,7 +66,7 @@
    - Events such as changes to data in an Amazon S3 bucket or an Amazon DynamoDB table.
    - To run your code in response to HTTP request using Amazon API Gateway.
    - With these capabilities, you can use Lambda to easily build data processing triggers for AWS services like Amazon S3 and Amazon DynamoDB, process streaming data stored 
-     in kinesis or create your own backed that operates at AWS scale, performance and security.
+     in kinesis or create your own backend that operates at AWS scale, performance and security.
    
 <u>Examples of S3</u>
 -> The user create an object in a bucket.
@@ -129,7 +129,7 @@
 -> Here is a list of service that invoke Lambda Function asynchronously
    - Amazon S3
    - Amazon SNS
-   - SES
+   - Simple Email Service
    - Cloudformation
    - Cloudwatch logs
    - Cloudwatch events
