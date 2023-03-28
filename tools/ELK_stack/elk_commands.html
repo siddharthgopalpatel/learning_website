@@ -1,0 +1,28 @@
+<html><u><center><h2>Elastic Stack Extra Points</h2></center></u>
+<h4><pre>
+Extra commands 
+-> Once you are done with configurations, run the command below to verify the Logstash configuration before you can start it.
+sudo -u logstash /usr/share/logstash/bin/logstash --path.settings /etc/logstash -t
+
+-> Once the installation is done, you can verify the version by running;
+apt-cache policy filebeat
+
+-> Testing Filebeat Output connection
+filebeat -e test output
+
+-> Testing the Config for any errors
+filebeat -e test config
+
+-> Next, perform successful and failed login on the system with Filebeat installed.
+-> After that login to Elastic Stack server and verify if Elasticsearch is receiving data.
+curl -X GET 192.168.0.101:9200/_cat/indices?v
+
+-> Check ssh_auth-2019.05 index
+curl -X GET 192.168.0.101:9200/ssh_auth-*/_search?pretty
+
+-> To test this, perform a failed ssh login to the host machine with Filebeat installed and search for keyword failed, on Kibana the dashboard.
+
+Logstash is having several links
+
+</pre></h4>
+</html>
