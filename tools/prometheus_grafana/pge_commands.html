@@ -1,0 +1,39 @@
+<html><u><center><h2>Project - 2</h2></center></u>
+<h4><pre>
+
+ss -altnp | grep grafana
+ss -tunlp|egrep '9115|9090|9093'
+ss -tunlp|egrep '9115|9090'
+netstat -tunlp|egrep '9115|9090'
+===
+As we have made changes in prometheus.yml file.  It is always recommended to validate it before and restarting or reloading Prometheus
+Prometheus comes with a tool named promtool which is available on the same directory where you have installed Prometheus
+you can run the promtool check config command to validate the file.
+In case of no errors found. you will see SUCCESS a message like above.
+
+
+====
+https://www.middlewareinventory.com/blog/ssl-expiry-and-uptime-monitor-for-urls-prometheus-blackbox-grafana/
+====
+
+Project 2 
+
+https://kifarunix.com/monitor-ssl-tls-certificate-expiry-with-prometheus-and-grafana/
+https://docs.influxdata.com/telegraf/v1.21/introduction/installation/?t=curl
+
+
+
+cd /etc/ssl/; sudo openssl req -config openssl.cnf -x509 -days 3650 -batch -nodes -newkey rsa:2048 -keyout private/logstash-forwarder.key -out certs/logstash-forwarder.crt
+
+============
+
+Alertng 
+
+https://fitdevops.in/setup-monitoring-and-alerting-using-prometheus-grafana/
+
+Intro 
+https://geekflare.com/prometheus-grafana-intro/
+
+</pre></h4>
+</html>
+

@@ -2,34 +2,34 @@
 <h4><pre>
 -> Elastic Stack, previously known as ELK stack, comprises of four opensource major components, Elasticsearch, Kibana, Logstash and Beats. 
 -> These components can be used to collect, parse, store, search, analyze and visualize different types of logs collected from different types sources. To break down a bit -
--> Elasticsearch is an open source, distributed, RESTful, JSON-based search and analytics engine based on the Lucene library. It is one of the major components of Elastic (ELK) stack. 
--> Kibana is a data visualization and dash-boarding tool that enables you to analyze data stored on Elasticsearch.
--> Logstash is a server-side data processing pipeline that ingests data from multiple sources simultaneously, transforms it, and then stashes it on search analytics engine like Elasticsearch
--> Beats on the other hand are the log shippers that collects logs from different endpoints and sends them to either Logstash or directly to Elasticsearch.
+    - Elasticsearch is an open source, distributed, RESTful, JSON-based search and analytics engine based on the Lucene library. It is one of the major components of Elastic (ELK) stack. 
+    - Kibana is a data visualization and dash-boarding tool that enables you to analyze data stored on Elasticsearch.
+    - Logstash is a server-side data processing pipeline that ingests data from multiple sources simultaneously, transforms it, and then stashes it on search analytics engine like Elasticsearch
+    - Beats on the other hand are the log shippers that collects logs from different endpoints and sends them to either Logstash or directly to Elasticsearch.
+-> Kibana 7 comes bundled with Grok Debugger which is similar to herokuapp grokdebugger. You can access Kibana Grok debugger under Dev Tools > Grok Debugger. You can utilize this to generate the correct grok patterns. 
 -> Logstash data processing pipeline has three sections;
      INPUT: input section is used to ingest data from different endpoints into Logstash. (Plugin: Beats)
      FILTERS: which processes and transform the data received. (Plugin: Grook)
      OUTPUT: which stashes processed data into a specified destination, which can be Elasticsearch. (Plugin: Elasticsearch)
+-> Read more about plugins here - 
+     Filter Plugin - https://www.elastic.co/guide/en/logstash/current/filter-plugins.html
+     Grok Filter Plugin - https://www.elastic.co/guide/en/logstash/current/plugins-filters-grok.html
+     Output plugin = https://www.elastic.co/guide/en/logstash/current/output-plugins.html
+
 -> You can read more about Logstash Pipeline here(https://www.elastic.co/guide/en/logstash/7.0/pipeline.html)
 -> While configuring Logstash, you can have separate configuration files each for INPUT, FILTERS and OUTPUT. You can as well have single configuration file for all the sections.
 -> Filebeat is a lightweight shipper for collecting, forwarding and centralizing event log data. It is installed as an agent on the servers you are collecting logs from. 
 -> It can forward the logs it is collecting to either Elasticsearch or Logstash for indexing.
 -> There are other types of Beats as described here(https://www.elastic.co/beats/)
-
-1. https://kifarunix.com/install-elasticsearch-7-x-on-ubuntu-18-04-debian-9-8/
-2. https://kifarunix.com/install-elastic-stack-7-on-ubuntu-18-04-debian-9-8/
-3. https://kifarunix.com/install-and-configure-logstash-7-on-ubuntu-18-debian-9-8/
-4. https://kifarunix.com/install-and-configure-filebeat-7-on-ubuntu-18-04-debian-9-8/
-5. https://kifarunix.com/how-to-debug-logstash-grok-filters/
-
-https://kifarunix.com/create-custom-elk-ingest-pipeline-for-custom-log-processing/
-
+-> Auditbeat is one of the elastic beats that according to Elastic page, collects Linux audit framework data and monitor the integrity of the files. It ships these events in real time to the rest of the Elastic Stack for further analysis. It enables you to find out who was the actor? What action did they perform and when?
 -> Auditbeat is a lightweight data shipper that is used to collect audit events for users and system processes. 
 -> It can also be used to detect changes to critical files, like binaries and configuration files, and identify potential security policy violations.
 -> Auditbeat supports different modules including;
    System modules which collects various security related information about a system.
    Audit module which collect system audit events.
    File integrity module which collects system file changes that contain metadata and hashes.
+
+https://kifarunix.com/create-custom-elk-ingest-pipeline-for-custom-log-processing/
 
 </pre></h4>
 </html>

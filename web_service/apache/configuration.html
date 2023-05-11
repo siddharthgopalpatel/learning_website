@@ -1,0 +1,113 @@
+<html><u><center><h2>Apache</h2></center></u>
+<h4><pre>
+-> The Apache HTTP Server is configured by placing directives in plain text configuration files. 
+-> The location of the configuration files depends on the operating system version. 
+-> Historically, the main Apache configuration file was called httpd.conf. 
+-> However, on Ubuntu, the main configuration file is apache2.conf. 
+-> In this section we will describe the main configuration files found in Ubuntu.
+-> In Ubuntu, the Apache configuration files are stored in the /etc/apache2 directory.
+-> Here is a brief description of the files in this directory:
+   apache2.conf – the main Apache2 configuration file that contains settings global to Apache.
+   conf-available – a directory that contains available configuration files.
+   conf-enabled – a directory that holds symlinks to the files in /etc/apache2/conf-available.
+   envvars – a file where Apache environment variables are set.
+   magic – a text file that instructions for determining MIME type based on the first few bytes of a file. 
+   mods-available – a directory that contains configuration files to both load modules and configure them.
+   mods-enabled – a directory that holds symlinks to the files in /etc/apache2/mods-available.
+   ports.conf – a configuration file that houses the directives that determine the TCP ports Apache is listening on.
+   sites-available – a directory that has configuration files for Apache Virtual Hosts. Virtual Hosts allow Apache2 to be configured for multiple sites that have separate configurations.
+   sites-enabled – a directory that contains symlinks to the /etc/apache2/sites-available directory.
+   
+<h3>apache2.conf file</h3> 
+
+-> In Ubuntu, the main Apache2 configuration file that contains settings global to Apache is /etc/apache2/apache2.conf. 
+-> This file contains a set of directives, which are instructions that tell Apache what to do. 
+-> Most directives are followed by an argument, which is the data passed to the directive. 
+-> Here is a description of the directives found in this file:
+     ServerRoot – specifies where Apache configuration files and modules are kept. This server root directory is then used as a prefix to other directory entries.
+     Mutex file – sets the mechanism and the lock file location, that httpd and modules use to serialize access to resources.
+     PidFile – specifies the server’s process ID (PID) file. On Ubuntu, the PID is defined by the APACHE_PID_FILE variable in the /etc/apache2/envvars file.
+     Timeout – specifies the number of seconds before the web server times out a send or receive request.
+     KeepAlive – if set to On, this option will allow each connection to remain open to handle multiple requests from the same client. If set to Off (which is the default), each request will have to establish a new connection.
+     MaxKeepAliveRequests – specifies the maximum number of requests on a persistent connection.
+     KeepAliveTimeout – specifies the time that a given connection to a client is kept open to receive more requests from that client.
+     User – specifies the user that run Apache. The user is defined by the APACHE_RUN_USERS variable in the /etc/apache2/envvars file (by default it is www-data).
+     Group – specifies the group that run Apache. The group is defined by the APACHE_RUN_GROUP variable in the /etc/apache2/envvars file (by default it is www-data).
+     HostnameLookups – specifies whether the DNS lookups should be enabled so that host names can be logged. Turned off by default.
+     ErrorLog – specifies the location of the error log file. The location is defined by the APACHE_LOG_DIR variable in the /etc/apache2/envvars file.
+     LogLevel – specifies the level at which messages will be logged. The warn level is the default, but you can choose others like notice, info, debug, crit, alert, and emerg.
+     IncludeOptional & Include – enable inclusion of other configuration files. such as module, port, and site configuration files.
+     <Directory />…</Directory> – enables you to define a block of directives that apply only to a particular directory. The first directory definition applies rules for the root directory (/).
+     AccessFileName – specifies the name of the file to look for in each directory for additional configuration directives. The default value of this directive is .htaccess.
+     <FilesMatch “^\.ht”> Require all denied </FilesMatch> – denies access to the .htaccess files by Web clients.
+     LogFormat – defines some nicknames to be used with the CustomLog directive, such as host_combined, common, and referrer. The CustomLog directive defines a default log for virtual hosts that don’t define one.
+ 
+<h3>conf-available directory</h3>
+-> The /etc/apache2/conf-available directory contains additional configuration files that not associated with a particular module. 
+-> This directory holds specialized and local configuration files, and links to configuration files set up by other applications.
+-> The configuration files in the conf-available directory are not active unless enabled. 
+-> The enabled configuration files are listed in the /etc/apache2/conf-enabled directory as links to the corresponding modules in the conf-available directory. 
+-> To enable a configuration file, the a2enconf command is used, while the a2disconf command is used to disable one.
+
+<h3>conf-enabled directory</h3>
+
+-> The /etc/apache2/conf-enabled directory holds symlinks to the files in /etc/apache2/conf-available. 
+-> When a configuration file is symlinked, it will be enabled the next time Apache is restarted.
+-> As already mentioned in the previous article, the a2enconf command will enable a configuration file (add its link to the /etc/apache2/conf-enabled directory), 
+   and the a2disconf command will disable a configuration file (removes its link in the /etc/apache2/conf-enabled directory).
+-> For example, to disable the serve-cgi-bin.conf configuration file, you would use the sudo a2disconf serve-cgi-bin.conf command. This would remove the symlink in the /etc/apache2/conf-enabled directory.
+-> To re-enable that configuration file, run the sudo a2enconf serve-cgi-bin.conf command.
+
+<h3>envvars file</h3>
+-> The Apache2 environment variables are set in the /etc/apache2/envvars file. 
+-> These variables are not the same as the environment variables of your Linux system, they are stored and manipulated in an internal Apache structure.
+-> The /etc/apache2/envvars file holds variable definitions such as APACHE_LOG_DIR (the location of Apache log files), APACHE_PID_FILE (the Apache process ID), APACHE_RUN_USERS (the user that run Apache, by default www-data), etc.
+
+<h3>magic file</h3>
+-> The /etc/apache2/magic file is a text file that contains instructions for determining MIME type based on the first few bytes of a file. 
+-> MIME types are used by web servers and web clients to determine the type of a file. 
+-> For example, video/mpeg is the MIME type for a mpeg file.
+
+<h3>mods-available directory</h3>
+-> The /etc/apache2/mods-available directory contains configuration files to both load modules and configure them. 
+-> The .load files inside this directory contain the Apache Load directives to load the modules into the web server, and the .conf files contain additional configuration directives necessary for the operation of the modules.
+-> Modules are enabled using the a2enmod command. 
+-> The enabled modules are listed in the /etc/apache2/mods-enabled directory as links to the corresponding modules in the /etc/apache2/mods-available directory. 
+-> To disable a module, the a2dismod command is used.
+-> Not all modules have specific configuration files located in the mods-available directory.
+
+<h3>mods-enabled directory</h3>
+-> The /etc/apache2/mods-enabled directory holds symlinks to the files in /etc/apache2/mods-available. 
+-> When a module configuration file is symlinked, it will be enabled the next time Apache is restarted.
+-> Installing a module makes it available to your server, but does not automatically activate the module in your Apache server. 
+-> To activate the module, the a2enmod command is used. 
+-> To disable a module, the a2dismod command is used. 
+-> These commands work by adding or removing links for available modules in the /etc/apache2/mods-enabled directory.
+-> Here is an example. Let’s install a new module for our web server (the MySQL Authentication module). We can do this using the sudo apt-get install libapache2-mod-auth-mysql command.
+-> We can use the a2enmod command to enable the module (a2enmod auth_mysql)
+-> Notice how the symlink to the auth_mysql module was created inside the mods-enabled directory.
+
+<h3>ports.conf file</h3>
+-> The /etc/apache2/ports.conf configuration file stores the directives that determine the TCP ports Apache is listening on. 
+-> The Listen directive determines the port Apache will bind to. 
+-> By default this is the port 80. You can change this value to the port of your choice. Just make sure to restart Apache (sudo service apache2 restart) to apply the changes.
+-> The section in the ports.conf file is executed if the module named ssl_module is included.
+
+<h3>sites-available directory</h3>
+-> The /etc/apache2/sites-available directory holds configuration files for Apache Virtual Hosts. 
+-> Virtual Hosts allow Apache to be configured for multiple sites that have separate configurations.
+-> Configuration files will contain the Directory directives specifying the location of the site and features you have set up for it. 
+-> The 000-default.conf file contains configuration directives for the default Web server, such as the directory directives locating the default site at /var/www/html.
+-> To make a site accessible, a link to its configuration file must be created in the /etc/apache2/sites-enabled directory. 
+-> This is done using the a2ensite command. 
+-> To disable a web site, the a2dissite command is used.
+
+<h3>sites-enabled directory</h3>
+-> The /etc/apache2/sites-enabled directory contains symlinks to the /etc/apache2/sites-available directory. 
+-> When a configuration file in sites-available is symlinked, the site configured by it will be active once Apache is restarted.
+-> As we’ve already mentioned, to make a site accessible, a link to its configuration file must be created in this directory. 
+-> This can be done using the a2ensite command. 
+-> To disable a web site, the a2dissite command is used. 
+-> For example, here is how we would enable newWebsite.conf (sudo a2ensite newWebsite.conf)
+</pre></h4>
+</html>

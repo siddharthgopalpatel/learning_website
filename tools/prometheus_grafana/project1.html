@@ -1,0 +1,35 @@
+<html><u><center><h2>Project - 1 (Linux Monitoring system)</h2></center></u>
+<h4><pre>
+
+-> Our Linux monitoring system consists of 3 components — Prometheus, Exporter & Grafana. We will use this system to monitor our Linux server metrics.
+
+<h3>What will we monitor?</h3>
+-> Using this system, we’ll monitor our Linux server metrics such as CPU, RAM, Disk, Network, etc. 
+-> These metrics will be displayed on a Grafana dashboard. 
+-> This dashboard can be set to refresh automatically after a fixed time.
+
+<h3>Steps to be followed</h3>
+1. Access the prometheus web using IP:9090, 
+   The scraped metrics can be viewed under - http://IP:9090/metrics
+   To check the status of your node, navigate to Status > Targets. (prometheus, node_exporter target should be up)
+   To view the metrics from Prometheus Web interface, and enter any expression for a specific metric you want to see. For example, to check the target’s available memory, you would just type, node_memory_MemAvailable_bytes and click execute. 
+   Ensure that the times in both Prometheus server and target are synchronized. To see the Graphical view, click on the Graph tab.
+
+2. Access Node Exporter on http://IP:9100. You should be able to see the collected metrics by executing curl http://IP:9100/metrics
+   To check for the system metrics, you can grep for the metrics prefixed with node_. For example;
+   curl http://IP:9100/metrics | grep node_ | grep filesystem
+
+3. Grafana container is not starting the grafana service by default on bootup. Need to execute the below command -
+   docker exec -it grafana service grafana-server status
+   docker exec -it grafana service grafana-server start
+   
+   Access the grafana web using IP:3000
+
+4. Configure Grafana.
+   Add Prometheus data source in Grafana. Go to http://localhost:3000/datasources and click the Add data source button.
+
+5. Load Linux metrics dashboard.
+   To import it, go to http://localhost:3000/dashboard/import & enter (1860, 159, 3662, 10204, 10180) in the text box. Click the Load button. Choose Prometheus data store & click Import.
+
+</pre></h4>
+</html>

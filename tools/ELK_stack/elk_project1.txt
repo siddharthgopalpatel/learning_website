@@ -1,0 +1,84 @@
+Project 1 
+
+1. Check the elasticsearch server is running, 
+curl -XGET "localhost:9200/"
+
+Filebeat 
+-> Once the installation is done, you can verify the version by running;
+for i in `docker ps -q`; do docker exec -it $i \
+bash -c ' echo "========="; echo "Server IP : " $(hostname -i); apt-cache policy elasticsearch kibana logstash filebeat | egrep -i "elasticsearch|kibana|logstash|filebeat|installed|candidate"'; \
+done
+
+-> On filebeat server, start the sshd and rsyslog service
+service sshd start
+service rsyslog start
+
+-> Next, perform successful and failed login on the system with Filebeat installed.
+
+
+-> After that login to Elastic Stack server and verify if Elasticsearch is receiving data.
+curl -X GET elasticsearch:9200/_cat/indices?v
+
+-> Check ssh_auth-2019.05 index
+curl -X GET elasticsearch:9200/ssh_auth-*/_search?pretty
+
+-> To test this, perform a failed ssh login to the host machine with Filebeat installed and search for keyword failed, on Kibana the dashboard.
+
+Extra feature
+1. To add some layer of security, you can install and configure Nginx to proxy the connection to Kibana via a publicly accessible interface IP
+2. You can then proceed to create Kibana dashiboards once you get all the data you need.
+
+
+========
+Debug Steps
+
+Logstash 
+-> If you're changing the configurations, run the command below to verify the Logstash configuration.
+sudo -u logstash /usr/share/logstash/bin/logstash --path.settings /etc/logstash -t
+
+-> To run Logstash and load a specific configuration file for debugging, you can execute the command below;
+sudo -u logstash /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/config-file.conf
+
+-> If you need to sent the event data to standard output as well for the purposes of debugging plugin configurations, then you would add the line, stdout { codec => rubydebug } to the output configuration section.
+
+output {
+  elasticsearch {
+    hosts => ["localhost:9200"]
+    index => "ssh_auth-%{+YYYY.MM}"
+}
+  stdout { codec => rubydebug }
+}
+
+Filebeat
+
+Enable Filebeat System Module
+-> If you remember, our Logstash Filter was configured to parse system auth events. System module collects and parses logs created by the system logging service of common Unix/Linux based distributions. 
+   This module is disabled by default. You can list the modules as shown below. From the output, no module is enabled.
+filebeat modules list
+ls /etc/filebeat/modules.d/
+
+-> To enable system module, run the command below;
+filebeat modules enable system
+
+-> To verify that system module has been enabled;
+filebeat modules list
+This will remove the disabled suffix from the system module.
+
+-> Testing Filebeat Output connection
+filebeat -e test output
+
+-> Testing the Config for any errors
+filebeat -e test config
+
+==================
+Doubt 
+-> Do we need to run the "Load the Index Template" in the filebeat server, check the documents count on elasticsearch server 
+filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["elasticsearch:9200"]'
+curl -X GET elasticsearch:9200/_cat/indices?v
+
+======
+Next Step 
+
+Logstash
+
+How to debug Logstash Grok filters = https://kifarunix.com/how-to-debug-logstash-grok-filters/

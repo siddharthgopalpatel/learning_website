@@ -1,0 +1,102 @@
+Project 6 - https://kifarunix.com/visualize-wordpress-user-activity-logs-on-elk-stack/
+
+apt update
+apt upgrade -y
+
+apt install -y apache2
+systemctl enable --now apache2
+
+apt show mysql-server
+apt install -y mysql-server
+mysql -V
+service mysql status
+service mysql start
+service mysql status
+sudo mysql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Nidhi12345@';
+exit
+sudo mysql_secure_installation
+mysql -u root -p
+
+apt install php
+php -v
+apt install php7.4-extension (Where extension is the name of the module/extension you are trying to install.)
+echo "<?php phpinfo(); ?>" > /var/www/html/index.php
+Then navigate to the address, http://your-server/index.php on you browser.
+apt install php7.4-mysql
+echo "<?php phpinfo(); ?>" > /var/www/html/info.php
+service apache2 restart
+
+Wordpress
+apt install -y php7.4-{mysql,cli,json,opcache,xml,gd,curl}
+mysql -u root -p
+create database wpdb;
+create user wpadmin@localhost identified by 'Nidhi12345@';
+grant all on wpdb.* to wpadmin@localhost;
+flush privileges;
+quit
+wget https://wordpress.org/latest.tar.gz
+mkdir /var/www/html/wp.kifarunix-demo.com
+tar xzf latest.tar.gz -C /var/www/html/wp.kifarunix-demo.com --strip-components=1
+ls -l /var/www/html/wp.kifarunix-demo.com
+cp /var/www/html/wp.kifarunix-demo.com/wp-config{-sample,}.php
+vim /var/www/html/wp.kifarunix-demo.com/wp-config.php
+
+// ** Database settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define( 'DB_NAME', 'wpdb' );
+
+/** Database username */
+define( 'DB_USER', 'wpadmin' );
+
+/** Database password */
+define( 'DB_PASSWORD', 'Nidhi12345@' );
+
+curl -s https://api.wordpress.org/secret-key/1.1/salt/
+
+vim /var/www/html/wp.kifarunix-demo.com/wp-config.php
+
+ * @since 2.6.0
+ */
+/**
+ * define( 'AUTH_KEY',         'put your unique phrase here' );
+ * define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
+ * define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
+ * define( 'NONCE_KEY',        'put your unique phrase here' );
+ * define( 'AUTH_SALT',        'put your unique phrase here' );
+ * define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
+ * define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
+ * define( 'NONCE_SALT',       'put your unique phrase here' );
+ */
+define('AUTH_KEY',         '>0w9(-Kj_UOG/XvX3m9{}[9Z#nIH+StF^s3bro`X.!-NVFK5rNc[+-m5Ly*LW4k1');
+define('SECURE_AUTH_KEY',  'Bo|p-T9xXo&DV4*h@NY7+zUQJdvCeq6]rmt]y{`BuR.S+rc];nVA>9RpFfPdg4Q%');
+define('LOGGED_IN_KEY',    '5^C!sq+^B6Xiw@{%k a%~2 q@Nsl#PR^$h2T<%b%BjllAiF^mXgm68L&=ju0N~/l');
+define('NONCE_KEY',        '.|*C;z{*z8d_J:#_8Fz=Un}7TK.!mc(+DGX,$#-_nivMZBl|?$YeoMPAZv)nO@A$');
+define('AUTH_SALT',        'RYk;FElH|u7!#=W6Zi]:RiMB(6|1r773Sl^$7XhRlUHe(g >&-+9eHCG!5V8=KOK');
+define('SECURE_AUTH_SALT', '| X1atDvWgx>mioJOQ]H(!Tuv08Q@Oi;m!,U|hd1$/||>1qm-=A@}Sd^{8t=amy)');
+define('LOGGED_IN_SALT',   ';E.Ty]p[^ 27~n:Vg`NN^g}ZCngxO<QP=K;|!EiG2StbAP2q>hG %#a6@&+ckgZ(');
+define('NONCE_SALT',       'EUTm-*+:M:A(hEhV=Y++bb|H<[l-<O4.%gi6Aj#qs K{gvj+8n+|Ki!H}|I!?*+L');
+/**#@-*/
+
+vim /etc/apache2/sites-available/wordpress.conf
+
+<VirtualHost *:80>
+    ServerAdmin webmaster@kifarunix-demo.com
+    ServerName wp.kifarunix-demo.com
+    DocumentRoot /var/www/html/wp.kifarunix-demo.com
+
+    <Directory /var/www/html/wp.kifarunix-demo.com>
+       AllowOverride All
+    </Directory>
+
+    ErrorLog /var/log/apache2/wp.error.log
+    CustomLog /var/log/apache2/wp.access.log combined
+</VirtualHost>
+
+chown -R www-data:www-data /var/www/html/wp.kifarunix-demo.com
+apachectl -t
+
+a2ensite wordpress.conf
+a2dissite 000-default.conf
+systemctl reload apache2
+systemctl restart apache2

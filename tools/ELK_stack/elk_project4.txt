@@ -1,0 +1,37 @@
+Project 4
+
+Auditbeat
+
+-> Run the command below to load Auditbeat index template
+auditbeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["elasticsearch:9200"]' -E setup.kibana.host=kibana:5601
+
+-> Run this command to load visualization dashboards to Elasticsearch.
+-> You can run these command only once on a single system. No need to run on other hosts running audibeat.
+auditbeat setup -e -E output.logstash.enabled=false -E output.elasticsearch.hosts=['elasticsearch:9200'] -E setup.kibana.host=kibana:5601
+
+-> Start the auditbeat service 
+service auditbeat start
+
+==================
+Debug
+-> Next, test the Auditbeat connection to Elasticsearch.
+auditbeat test output
+
+-> Whenever you make changes to Auditbeat configuration, ensure that you validate the config.
+auditbeat test config
+
+==================
+Theory 
+
+-> You need to configure Auditbeat to collect system audit data that needs to be shipped to Elasticsearch.
+-> Auditbeat supports different modules that simplifies the collection, parsing, and visualization of various audit data.
+-> These modules include:-
+   - Auditd: defined by module: auditd. The module receives audit events from the Linux Audit Framework that is a part of the Linux kernel.
+   - File Integrity: defined by module: file_integrity in the Auditbeat config file. This module sends events when a file is changed (created, updated, or deleted) on disk. The events contain file metadata and hashes. By default, it monitors the following directories;
+     /bin
+     /usr/bin
+     /sbin
+     /usr/sbin
+     /etc
+   - System: defined by module: system in the config file. This module collects various security related information about a system.
+-> If you want to monitor another file/directory, for integrity changes, add it under the file_integrity module.

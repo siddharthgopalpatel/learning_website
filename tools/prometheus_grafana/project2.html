@@ -1,0 +1,23 @@
+<html><u><center><h2>Project - 2</h2></center></u>
+<h4><pre>
+
+1. Access Prometheus on port 9090. check the targets by going to http://server_name:9090/targets
+2. In Prometheus UI, click on graph menu and choose any of the probes on the query block. for example probe_http_duration_seconds and click on Execute.
+3. Go to http://serverip:9090/rules to validate the rules
+4. Go to http://serverip:9090/alerts to see the alerts triggering
+5. Go to http://serverip:9090/metrics to see the metrics (curl http://serverip:9090/metrics)
+
+5. Access Blackbox Exporter on port 9115.
+   For some reason, if the black box exporter not able to reach the target, the result would be marked as "Failure".
+   You can use the corresponding Logs to investigate the Failure.
+
+6. Open your web browser and go to http://localhost:3000/ to access Grafana. 
+   Grafana container is not starting the grafana service by default on bootup. Need to execute the below command -
+   docker exec -it grafana service grafana-server status
+   docker exec -it grafana service grafana-server start
+7. Add Prometheus data source in Grafana. Go to http://localhost:3000/datasources and click the Add data source button.
+7. Go to dashboards by clicking on the Dashboards option on the left navigation menu -> Click on Manage -> Click on Import -> 
+   Enter the number 7587 on the text box under import via grafana.com and click on Load. Choose the default  prometheus as the data source
+
+</pre></h4>
+</html>

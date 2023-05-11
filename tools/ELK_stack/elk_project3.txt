@@ -1,0 +1,53 @@
+Project 3 -
+
+In this setup, we are using the Metricbeat system module, which is already enabled.
+
+Load Metric Kibana Dashboards/Elasticsearch Index Template
+You can load the recommended index template for writing to Elasticsearch and deploy the sample dashboards for visualizing the Metricbeat data in Kibana by executing the command below;
+metricbeat setup -e -E setup.kibana.host=kibana:5601
+
+-> Start the metricbeat service
+service metricbeat start
+
+====
+Metricbeat
+
+Theory
+-> Elastic stack can be used to monitor Linux system metrics with the aid of the Metricbeat. 
+-> Metricbeat is a lightweight shipper for system metrics. 
+-> It can collect system-level CPU usage, memory, file system, disk IO, and network IO statistics, as well as top-like statistics for every process running on your systems and 
+   ship them to Elasticsearch for indexing to enable visualization through the visualization tools like Kibana.
+-> This Metricbeat system module collects the following metricsets;
+   - cpu
+   - load
+   - memory
+   - network
+   - process
+   - process_summary
+   - socket_summary
+   - entropy
+   - core
+   - diskio
+   - socket
+   - service
+   - users
+-> If you want to modify the module, simply open the file, /etc/metricbeat/modules.d/system.yml, for editing. 
+=====
+Debug 
+-> Metricbeat ships with a dozen modules that enabled it to collect specific service metrics. You can list modules by running the command below;
+metricbeat modules list (The command shows enabled and disabled modules)
+
+-> To enable a module, simply run (Where a module-name you can obtain from the list above)
+metricbeat modules enable <module-name>
+
+-> Similarly, to disable a module
+metricbeat modules disable <module-name>
+
+-> Test Metricbeat configuration syntax;
+metricbeat test config
+
+-> Test Modules settings;
+metricbeat test modules
+
+-> Also, test Metricbeat output connection;
+metricbeat test output
