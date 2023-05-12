@@ -1,0 +1,20 @@
+<html><u><center><h2>Apache Logs</h2></center></u>
+<h4><pre>
+-> Apache is quite good in logging everything that happens on your webserver, from the initial request, through the URL mapping process, to the final resolution of the connection. 
+-> Two types of log files are available: access.log and error.log. 
+-> By default, Apache writes the transfer log to the /var/log/apache2/access.log file, and the error log file to /var/log/apache2/error.log. 
+-> You can change the locations in your virtual host configuration files.
+-> Apache also allows you to specify the level at which messages will be logged. 
+-> The warn level is the default, but you can choose others like notice, info, debug, crit, alert, and emerg. 
+-> To change the log level, the LogLevel directive can be used.
+-> Here is an example event from the access.log file:
+access log example
+-> Perhaps you can guess what some fields in the output above mean. 
+-> For example, the first field (192.168.198.153) represents the IP address of the web client that requsted the list.html web page. 
+-> You can also recognize the date, the browser and operating system used, and such.
+-> error.log contains error events that Apache encounters in processing requests. 
+-> This is the first place you should look when a problem occurs with starting the web server or with the operation of the server.
+error log example 
+
+</pre></h4>
+</html>

@@ -1,0 +1,22 @@
+<html><u><center><h2>Display server statistics</h2></center></u>
+<h4><pre>
+-> You can use the Apache’s mod_status module to display a web page containing statistics about the web server’s current state. 
+-> Some of the information included in the report are:
+   - active connections.
+   - the number of worker serving requests.
+   - the number of idle worker.
+   - the status of each worker, the number of requests that worker has performed and the total number of bytes served by the worker.
+   - the total number of accesses and byte count served.
+   - the time the server was started/restarted and the time it has been running for.
+-> The mod_status module is usually enabled by default. 
+-> If not, enable it using the sudo a2enmod status command.
+-> To enable access to the server status page, you need to add a Location directive entry within the VirtualHost section in the /etc/apache2/sites-available/000-default.conf file.
+	&lt;Location "/server-status"&gt;
+	SetHandler server-status
+	Require ip 192.168
+	&lt;/Location&gt;
+-> The Location directive listed above specifies that the server statistics page will be displayed when you browse to the /server-status URL. 
+-> The Require directive specifies the hosts that will be allowed to access the webpage (in this case, all hosts from the 192.168.0.0 – 192.168.255.255) range.
+-> We can get the information by browsing to http://URL/server-status
+</pre></h4>
+</html>

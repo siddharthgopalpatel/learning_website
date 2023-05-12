@@ -1,0 +1,35 @@
+<html><u><center><h2>Proxy</h2></center></u>
+<h4><pre>
+<h3>Configure Apache as a forward proxy</h3>
+-> Apache can be configured as both a forward and a reverse proxy. 
+-> An ordinary proxy (also called a forward proxy) is an intermediate server that sits between the client and the origin server. 
+-> The client is configured to use the forward proxy to access other sites. 
+-> When a client want to get the content from the origin server, it sends a request to the proxy naming the origin server as the target. 
+-> The proxy then requests the content from the origin server and returns it to the client.
+
+<h3>Configure Apache as a Reverse Proxy</h3>
+-> Apache can also be configured to serve as a reverse proxy. 
+-> A reverse proxy appears to the client just like an ordinary web server and no special configuration on the client is necessary. 
+-> The client makes ordinary requests for content. 
+-> The reverse proxy then decides where to send those requests and returns the content as if it were itself the origin. 
+-> Reverse proxies are usually used to provide Internet users access to a server that is behind a firewall or to balance load among several back-end servers.
+-> Here is how we can configure Apache as a reverse proxy:
+-> First, we need to enable the proxy, proxy_http, and proxy_connect modules. 
+-> We can do that using the a2enmod command:
+   a2enmod proxy proxy_http proxy_connect
+-> Next, go to the /etc/apache2/mods-enabled directory and open the file proxy.conf in a text editor of your choice. 
+-> Uncomment the ProxyRequests On line, the &lt;Proxy *&gt; block, and the ProxyVia Off line. Change the ProxyRequests to Off and ProxyVia to On.
+-> Now, create a new file in the /etc/apache2/sites-available directory. We will call our file reverse_proxy.conf. 
+-> This is the configuration of the file:
+&lt;VirtualHost *:80&gt;
+     ServerName msn.local
+     ProxyPass / http://www.msn.com
+  &lt;Proxy "*"&gt;
+     Require ip 192.168
+  &lt;/Proxy&gt;
+&lt;/VirtualHost&gt;
+-> Enable the website using the sudo a2ensite reverse_proxy.conf command and restart Apache. 
+-> When the internal client requests the website msn.local, he or she will be redirected to www.msn.com, as specified by the ProxyPass directive.
+
+</pre></h4>
+</html>

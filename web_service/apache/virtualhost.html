@@ -1,0 +1,55 @@
+<html><u><center><h2>Apache Virtual Host</h2></center></u>
+<h4><pre>
+<h3>Default virtual host</h3>
+-> By default, Apache is configured with a single default virtual host which can be modified or used as-is if you have a single site, or used as a template for additional virtual hosts if you want to have multiple sites. 
+-> The configuration file that contains configuration directives for the default Web server is /etc/apache2/sites-available/000-default.conf.
+-> You can see from the above file, this configuration file contains the VirtualHost block with several directives:
+   &lt;VirtualHost *:80&gt; – specifies that the web server will listen on the port 80 for all IP addresses on the system.
+   ServerAdmin webmaster@localhost – specifies the email address to be displayed for the server’s administrator. If your website has a problem, Apache will display an error message with this email listed as contact.
+   DocumentRoot /var/www/html – specifies where Apache will look for the files that make up the website.
+   ErrorLog ${APACHE_LOG_DIR}/error.log – specifies the location of the error log.
+   CustomLog ${APACHE_LOG_DIR}/access.log combined – specifies the location of the access log and the log display format.
+   &lt;/VirtualHost&gt; – specifies the end of the VirtualHost block.
+-> The default Document root is set to /var/www/html/. In Ubuntu, this directory contains an example HTML file.
+-> If your Apache web server is running with the default settings, you can launch your browser and go to http://localhost:80 to dispay the content of this file.
+
+<h3>Create new virtual host</h3>
+-> You can create your own virtual hosts to run multiple websites off of one web server. 
+-> The simplest way to create a new virtual host is to copy and rename the default file (/etc/apache2/sites-available/000-default.conf), and then modify the directives to point to your new website. 
+-> Here are the required steps:
+   1. Create a new configuration file by copying and renaming the default configuration file.
+   2. Open the new file in a text editor of your choice. 
+   3. Change the ServerAdmin directive to an email that the site administrator can receive emails through.
+   4. Add a new directive called ServerName. This directive will specify the domain name your site will answer to. This will most likely be your domain.
+   5. Change the DocumentRoot directive to specify the directory that will contain the webpage files. Make sure that the directory already exists.
+   6. Activate the website with the a2ensite command.
+   7. Restart Apache in order for the changes to take effect.
+   
+-> Here is an example procedure:
+   1. We will first create a new directory that will contain files that make up our new website. 
+      cd /var/www && mkdir website1
+
+   2. We will then create a simple HTML page that will be displayed when the user access our website. We will create this file under the /var/www/website1/ directory and name it index.html
+      echo "this is test" > /var/www/website1/index.html
+
+   3. We will then create a new virtual host file by copying and renaming the default virtual host file (000-default.conf):
+      cd /etc/apache2/sites-available && cp 000-default.conf website1.conf
+
+   4. We will now open our new file and edit it to suit our new website. We will configure the ServerName directive to our domain name, which is website1. We will also set the new log files.
+&lt;VirtualHost *:80&gt;
+		ServerAdmin webmaster@website1
+		ServerName website1
+		DocumentRoot /var/www/website1
+		ErrorLog ${APACHE_LOG_DIR}/errorwebsite1.log
+		CustomLog ${APACHE_LOG_DIR}/accesswebsite1.log combined
+&lt;/VirtualHost&gt;
+      
+   5. Enable the website using the a2ensite website1.conf command and restart the Apache service service apache2 restart
+   
+   6. Add the entry of website1 on /etc/hosts file 
+      echo "$(hostname -i) website1" >> /etc/hosts
+
+   7. Now we can browse to our new website using the domain name we’ve specified.
+      curl website1
+</pre></h4>
+</html>
