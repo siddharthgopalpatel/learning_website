@@ -1,0 +1,53 @@
+<html><u><center><h2>Project - 5</h2></center></u>
+<h4><pre>
+
+https://medium.com/techbull/deploying-elk-stack-for-apache-logs-analysis-3d23648dafa6
+https://medium.com/techbull/deploying-elk-stack-for-apache-logs-analysis-283d0b222c24
+
+===
+elasticsearch.yml for configuring Elasticsearch
+jvm.options for configuring Elasticsearch JVM settings
+log4j2.properties for configuring Elasticsearch logging
+=======
+Update the ELK config file for this deployment.
+
+# vi /elk/elasticsearch-7.3.1/config/elasticsearch.yml
+network.host: 0.0.0.0
+discovery.seed_hosts: ["127.0.0.1", "[::1]"]
+cluster.initial_master_nodes: ["elkstack"]
+Update the system settings to keep Elasticsearch happy.
+
+# sudo vi /etc/sysctl.conf
+vm.max_map_count=262144
+fs.file-max = 10000
+# sudo vi /etc/security/limits.conf
+ubuntu    soft  nofile  6000
+ubuntu    hard  nofile  65536
+
+============
+To proceed further we need Apache Setup as well. Please update apache config file to capture trace data in logs. Following setting will force Apache to log client IP addresses.
+
+# In /etc/apache2/apache2.conf
+LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\" %{ms}T %p %{Host}i" vhost_combined
+
+===
+# to delete all the indexes
+curl -X DELETE 'http://localhost:9200/_all'
+# to check the stats
+curl http://localhost:9200/_stats/
+# list all index:
+curl -XGET http://localhost:9200/_cat/indices?v
+#delete index:         
+curl -XDELETE 'localhost:9200/index_name'
+#delete all indices:   
+curl -XDELETE 'localhost:9200/_all'
+#delete document
+curl -XDELETE 'localhost:9200/index_name/type_name/document_id'
+=======
+#RUN filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["elasticsearch:9200"]'
+#RUN filebeat setup -e -E output.logstash.enabled=false -E output.elasticsearch.hosts=['elasticsearch:9200'] -E setup.kibana.host=kibana:5601
+RUN service apache2 start
+
+</pre></h4>
+</html>
+
