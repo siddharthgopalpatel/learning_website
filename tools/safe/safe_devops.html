@@ -1,0 +1,183 @@
+<html><h2><u><center>SAFe DevOps</u></center>
+<h4><pre>
+-> What is DevOps?
+   - DevOps is a mindset, a culture, and a set of technical practices.
+   - It provides communication, integration, automation, and close cooperation among all the people needed to plan, develop, test, deploy, release, and maintain a Solution.
+   
+-> SAFe helps bridge the gap between Agile and DevOps
+   - SAFe® 5 for Lean Enterprises is a knowledge base of proven, integrated principles, practices, and competencies for achieving Business Agility by implementing Lean, Agile, and DevOps at scale.
+
+-> The Continuous Delivery Pipeline (CDP) accelerates value flow 
+-> It consists of - 
+   - Continuous Exploration
+   - Continuous Integration
+   - Continuous Deployment
+   - Release On Demand
+   
+-> The DevOps Health Radar is a more detailed view of the CDP
+-> It consists of 4 aspects - 
+   • Continuous Exploration
+   • Continuous Integration
+   • Continuous Deployment
+   • Release on Demand
+-> It consists of 16 activities 
+   - Hypothesize
+   - Collaborate & Research
+   - Architect
+   - Synthesize
+   - Develop
+   - Build
+   - Test-End to End
+   - Stage
+   - Deploy
+   - Verify
+   - Monitor
+   - Respond
+   - Release
+   - Stablize
+   - Measure
+   - Learn
+
+-> A CALMR approach to DevOps
+   - C (Culture - Culture of shared responsibility) = Establish a culture of shared responsibility for development, deployment, and operations.
+     ► Adopt a culture of shared responsibility for development and deployment 
+     ► Tolerate failure and rapid recovery
+     ► Share discoveries, practices, tools, and learning across silos
+	 
+   - A (Automation - Automation of Continuous Delivery Pipeline) = Automate the Continuous Delivery Pipeline.
+     ► Manual steps reduce quality and result in slow delivery. 
+     ► Automate as much of the CDP as possible with an integrated toolchain. 
+     ► Automate healthy processes. If the underlying process is broken, fix it before automating it.
+
+   - L (Lean flow - Lean Flow accelerates delivery) - Keep batch sizes small, limit WIP, and provide extreme visibility.
+     ► Identify bottlenecks to the flow of value
+     ► Decrease the batch sizes of the work
+     ► Manage and reduce queue lengths  
+ 
+   - M (Measurement - Measurement of flow, quality & value) - Measure the flow through the pipeline. Implement full-stack telemetry.
+     ► Collect data on business, application, infrastructure, and client layers
+     ► Collect data about the deployment pipeline
+     ► Maintain different telemetry for different stakeholders
+     ► Broadcast measurements
+     ► Continuously improve telemetry during and after problem solving
+
+   - R (Recovery - Recovery reduces risk & preserves value) - Architect and enable low-risk releases. Establish fast recovery, fast reversion, and fast fix-forward
+     ► Adopt a stop-the-line mentality
+     ► Plan for failures and rehearse failures
+     ► Build the environment for roll-back and fix-forward
+
+-> What is a development value stream?
+   - Development value streams contain all the activities, people, systems, information, and material necessary to deliver value.
+   
+-> Why map your development value stream?
+   ► Understand how work flows through the organization from concept to cash
+   ► Measure process quality and organizational efficiency
+   ► Identify bottlenecks to the flow of value
+   ► Understand how we can improve the flow of value
+
+-> Measure each step
+   - Process Time (PT) - Actual value-added work
+   - Lead Time (LT) - Time from ‘ready for next step’ to ‘step complete.’ 
+   - Percent Complete and accurate (%C&A) - Percent of work that the next step can process as-is. 
+   - Activity Ratio: PT/LT
+   - Rolled %C&A: (%C&A 1) * (%C&A 2) * (%C&A n) * 100
+   
+-> Continuous Delivery Pipeline (CDP)
+   • Continuous Exploration {Alignment}
+       -> Hypothesize => Define a Solution hypothesis to be validated through the Continuous Delivery Pipeline
+          - Lean startup thinking
+          - Innovation accounting
+       -> Collaborate & Research => Collaborate internally and research the market to identify the minimum feature set that will test the hypothesis 
+          - Lean user experience (UX)
+          - Research
+       -> Architect =>  Define the minimum amount of architecture that will support the Solution and enable continuous delivery
+          - Architect for testability
+          - Separate deploy and release
+          - Decouple release elements
+          - Architect for operations
+          - Threat modeling
+       -> Synthesize => Synthesize insights gained through Continuous Exploration into a Vision, Roadmap, and refined Program Backlog
+          - Feature writing
+          - Behavior-driven development (BDD)
+          - Economic prioritization		  
+          - PI Planning
+		  
+   • Continuous Integration {Quality} 
+       -> Develop => Apply sound team and technical practices to implement high quality code
+          – Breaking Features into Stories
+          – Test-driven development (TDD)
+          – Implementing version control
+          – Applying engineering practices (Agile Software Engineering)
+          – Pairing work
+          – Using application telemetry
+          – Using threat modeling (see Architect)
+       -> Build => Merge changes into the codebase, test the Solution for built-in quality, and package  deployment artifacts
+          – Continuous code integration
+          – Build and test automation
+          – Trunk-based development
+          – Gated commit
+          – Application security
+       -> Test-End to End => Validate the Solution against acceptance criteria in a production-like environment 
+          – Congruence between test and production environments
+          – Test automation
+          – Test data management
+          – Service virtualization
+          – Nonfunctional requirements(NFRs)
+       -> Stage => Determine deployment readiness in a production-like environment
+          – Maintain a staging environment
+          – Blue/green deployment
+          – System demo
+ 	   
+   • Continuous Deployment {Speed}
+       -> Deploy => Migrate the Solution into production with high frequency and low risk 
+ 	      — Dark launches
+          — Feature toggles
+          — Infrastructure as code
+          — Deployment automation 
+          — Self-service deployment
+          — Selective deployment
+          — Version control (see Build)
+          — Blue/green deployment (see Stage)
+       -> Verify =>  Ensure that the Solution functions as expected in production before it is released to end users
+          — Production testing
+          — Test automation (see Build)
+          — Test data management (see Test End-to-End)
+          — Nonfunctional requirement (see Test End-to-End)
+       -> Monitor =>  Ensure that the Solution is observable in production before it is released to end users
+          — Full-stack telemetry
+          — Visual displays
+          — Federated monitoring
+          — Artificial Intelligence for IT Operations (AIOps)
+       -> Respond => Ensure that issues can quickly be detected and fixed in production before the Solution is released to end users
+          — Chaos engineering
+          — Proactive detection
+          — Cross-team collaboration
+          — Session replay
+          — Rollback and fix forward
+          — Immutable infrastructure
+          — Version control (see Build)
+	   
+   • Release on Demand {Value}
+       -> Release => Make the Solution available to end users all at once or incrementally
+          – Canary releases
+          – Feature toggles (see Deploy)
+          – Decouple release elements (see Architect)
+          – Dark launches (see Deploy)
+       -> Stablize => Assure sustainably high levels of business continuity, application service levels, and data protection
+          – Site reliability engineering (SRE)
+          – Failover/disaster recovery
+          – Continuous security monitoring
+          – Architect for operations (See Architect)
+          – Nonfunctional requirements (See Test End-to-End
+       -> Measure => Collect feedback from production to determine the Solution’s actual business value
+          – Innovation accounting (see Hypothesize)
+          – Evaluate the hypothesis
+       -> Learn => Apply knowledge gained to make decisions about how to improve the flow of value to Customers
+          – Lean startup (see Hypothesize)
+          – Relentless improvement
+          – Value stream mapping
+
+High Court Aake Samsung Data Base Team Se Delivery Volke Manga Ro Roke Sare Maje Liye	   
+</body>
+</h4></pre>
+</html>

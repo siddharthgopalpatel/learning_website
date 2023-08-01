@@ -1,0 +1,109 @@
+<html><center><h2><u> How to migrate a Django DB from SQLite to MySQL</u></center></h2>
+<h4> <pre>
+<h3>Complete process of changing database from SQLite to MySQL</h3>
+-> One of the main benefit to use django for web development is that it comes with an inbuilt database/filesystem i.e SQLITE. 
+-> Managing database and files is super easy in django. 
+-> But there are some drawbacks of using SQLITE. 
+-> If your website has a minimum traffic of about 100-200 per day OR you have 1000-2000 files (or more obviously) in your database, then the problems start rising. 
+-> SQLITE gives amazing performance if your data is upto 2GB (can vary with your file types & size). 
+-> Thus, you can not handle large traffic efficiently by using SQLITE.
+
+<u>Here are some advantages & disadvantages of using SQLITE:</u>
+Advantages :
+1) Sqlite is Lightweight.
+2) No Installation Needed.
+3) Portable & reliable
+
+Disadvantages :
+1) SQLite is used to handle low to medium traffic.
+2) Database size is restricted upto 2GB (in most cases).
+
+-> let's see how you can migrate db from SQLITE to MySQL in 6 simple steps. 
+
+<u>Step 1</u>
+-> Create the docker environment and get the access of it
+   git clone https://gitlab.com/patelsiddharthnids993/automation_devops; cd automation_devops
+   python3 test.py -T django -A create
+   python3 test.py -T django -A connect
+-> Clone one of the Django project, run it and check whether it is working good.    
+   git clone https://gitlab.com/meghachandsingh/ipl_project && cd ipl_project
+   python3 manage.py runserver 0.0.0.0:8000
+-> Access it from webpage by &lt;server-ip&gt;:8000
+
+<u>Step 2</u>
+-> You need to install mysql-server and start it. For that run the below commands -
+   apt update
+   apt install mysql-server -y
+   service mysql status
+   service mysql start 
+   service mysql status  
+-> Connect to mysql and set the root password.
+   mysql
+   ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Test12345@';
+   exit
+-> Now, do mysql secure installation(give the same password as above for root and other options as default i.e. hit enter)
+   mysql_secure_installation
+-> Connect to mysql again, and create db
+   mysql -u root -p
+   CREATE DATABASE Sidd;
+   exit
+ 
+<u>Step 3</u>
+-> First of all make a zip file of your whole website folder for backup security purpose (highly recommended).
+-> Dump all data from SQlite in a json file using the following command.
+   python3 manage.py dumpdata > datadump.json
+-> Just go to the working directory (in the virtual environment) and run the above command. The execution may takes time depends upon database size.
+-> Please try ,not to close console untill the final step.
+
+<u>Step 4</u>
+-> Now install mysqlclient and its depedencies by using following command. This is nothing but a connector for python with mysql.
+   apt-get install libmysqlclient-dev -y
+   python3 -m pip install mysqlclient
+
+<u>Step 3</u>
+-> Now you have to make some changes in settings.py file. Search for a dictionary named as "DATABASES" and replace it with the following code.
+   vi project/settings.py
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Sidd',
+        'USER': 'root',
+        'PASSWORD': 'Test12345@',
+        #'HOST': 'mysql_host_name',
+        #'PORT': '3306',
+        'OPTION': {'init_command': 'set storage_engine=InnoDB; set session transaction isolation level read committed'},
+    }
+}
+
+-> Make sure you can connect on your mysql DB (permissions,etc) i.e check the details carefully before proceeding.
+-> Note that the OPTION may have more parameters. You can check the django documentation(https://docs.djangoproject.com/en/3.0/ref/databases/) for more values, but if you keep it as it is above there will be no issue.
+
+<u>Step 4</u>
+-> Run the following command to make synchronization among the database tables and the model settings.
+   python3 manage.py migrate --run-syncdb
+-> You can ignore the warnings that pop-ups in console (if any)
+
+<u>Step 5</u>
+-> This is the main step, you have to remove old content types to save data in MySQL fields which may uses different content types.
+-> Exclude contentype data with this snippet in shell.
+python3 manage.py shell
+from django.contrib.contenttypes.models import ContentType
+ContentType.objects.all().delete()
+quit()
+
+<u>Step 6</u>
+-> This is the final step. Everything now all set , the database ,settingse etc. 
+-> Now we have to write or store the data from the json file which we saved in our very first step. 
+-> For this purpose run the following command :
+   python3 manage.py loaddata datadump.json
+-> Now run the Django program again, and check whether data from the user is getting updated in mysql table.
+   python3 manage.py runserver 0.0.0.0:8000
+
+<u>Tips</u>
+-> If you face any problem for example if you have any app like sorl-thumbnail or easy-thumbnail in your INSTALLED_APPS ,sometimes a file(thumbnail) is not present in media files which makes the last step incomplete. 
+-> The point is if you face any issue just read the error location and the app/module which is causing error. 
+-> Then replace the website data from our back-up file(that is why i recommended to make a backup zip file of whole website) and remove that app from INSTALLED_APPS (run migrate command if required).
+-> Now you have to perform all the steps again.
+</pre></h4>
+</html>
