@@ -1,0 +1,38 @@
+<html><h2><u><center>Respond</u></center>
+<h4><pre>
+1. Chaos engineering
+   -> Step 1: Read the blog post in your workbook.
+   -> Step 2: Discuss as a team:
+      — How did Netflix prepare for the AWS outage? 
+      — Would your systems be prepared for a similar event? 
+      — How might your organization apply chaos engineering? 
+
+2. Proactive detection
+   -> Decoupling deployment from release allows problem detection before problems are exposed to Customers
+   -> Proactively looking for problems and practice disaster recovery (DR) procedures
+   -> Coordinating DR simulation events with failure modes and effect analysis (FMEA) during architecture and design
+
+3. Cross-team collaboration
+   -> Responding to production failures is a cross-functional responsibility
+   -> Developers should be able to support their own code in production
+   -> Teams across the Value Stream should work together to detect, resolve, and learn from production incidents
+
+4. Immutable infrastructure
+   -> Prohibits changes from being made directly on production systems
+   -> Forces all changes to be deployed through the Continuous Delivery Pipeline
+   -> Minimizes configuration drift between production and non-production environments
+
+5. Session replay
+   -> Records Customer sessions and replays them on demand
+   -> Aids in reproducing, analyzing, and fixing production issues
+   -> Can be performed in production, testing, and development environments
+   -> Requires careful attention to data security, privacy, and retention policies
+
+6. Rollback and fix forward
+   -> Rolling back removes production issues by restoring the production environment to a previous, stable state
+   -> Fixing forward resolves production issues by deploying ‘fixes’ to the production environment
+   -> Each must be done quickly to minimize service disruption and mean time to restore (MTTR) 
+   -> Each is performed via the pipeline, not directly against production systems
+</body>
+</h4></pre>
+</html>

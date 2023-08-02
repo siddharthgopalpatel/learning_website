@@ -1,0 +1,22 @@
+<html><h2><u><center>Stage</u></center>
+<h4><pre>
+1. Maintain a staging environment
+   -> Maintain a staging environment to prepare for moving to production
+   -> Deploy to staging at least every Iteration and run your System Demos from there
+   -> Ideally, deploy to staging automatically after all builds and end-to-end tests have passed 
+   
+2. Blue/green deployment
+   -> Maintain two identical environments: idle and live.
+   -> New features are deployed to the idle environment on a continuous basis. While staged, the features can be tested and showcased in preparation for release.
+   -> New code is released to the idle environment where it is thoroughly tested. When the code is ready to be released, the team makes the idle environment live.
+   -> If problems are discovered after the switch, the active environment is switched back to idle, restoring the previously active environment.
+   -> Switching between environments is typically done by redirecting traffic at the load balancer.
+   
+3. System Demo
+   -> Demo working, integrated systems every two weeks
+   -> Show new features working together and with existing functionality
+   -> Demo from a staging environment that resembles production
+   -> Receive feedback from program stakeholders 
+</body>
+</h4></pre>
+</html>

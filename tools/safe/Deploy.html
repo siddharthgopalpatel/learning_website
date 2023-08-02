@@ -1,0 +1,39 @@
+<html><h2><u><center>Deploy</u></center>
+<h4><pre>
+1. Dark launches
+   -> Separates deployment from release
+   -> Enables testing and monitoring system behavior in the production environment before exposing new functionality to users
+
+2. Feature toggles 
+   -> Dynamically show and hide features in production
+   -> Enable separation of deploy and release
+   -> Enable rapid rollback of problem features
+   -> Should be tested in both on and off position
+   -> Be careful of toggle overload and testing complexity
+
+3. Infrastructure as code
+   -> Automates environment setup and teardown
+   -> Manages all infrastructure assets and configurations in version control 
+   -> Accelerates and de-risks deployment by provisioning gold copy environments on demand
+   -> Enables infrastructure to always be in a deployable state
+
+4. Deployment automation
+   -> Automates the migration of changes into production environments
+   -> Stores all environment information and package information in version control
+   -> Increases deployment speed and reliability
+
+5. Self service deployment
+   -> Enables Agile teams to safely deploy their own changes to production
+   -> Is sometimes called “push-button deployment” 
+   -> Often provides complete automation from code commit to production deployment
+   -> Can be done in compliance with change management controls
+
+6. Selective deployment
+   -> Enables deployment to select production targets or environments, such as:  
+      — Servers
+      — Data centers
+      — Geography
+   -> Enables more flexible and sophisticated release strategies
+</body>
+</h4></pre>
+</html>
