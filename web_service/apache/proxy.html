@@ -32,7 +32,7 @@
 -> When the internal client requests the website msn.local, he or she will be redirected to www.msn.com, as specified by the ProxyPass directive.
 ============================================================================
 
-ssh -i <path to .pem file> ubuntu@<dns name>
+ssh -i &lt;path to .pem file&gt; ubuntu@&lt;dns name&gt;
 
 sudo apt-get update
 
@@ -85,12 +85,12 @@ sudo systemctl status kibana
 
 echo "kibanaadmin:`openssl passwd -apr1`" | sudo tee -a /etc/nginx/htpasswd.users
 
-sudo nano /etc/nginx/sites-available/<public ip>
+sudo nano /etc/nginx/sites-available/&lt;public ip&gt;
 
 server {
     listen 80;
 
-    server_name <public ip>;
+    server_name &lt;public ip&gt;;
 
     auth_basic "Restricted Access";
     auth_basic_user_file /etc/nginx/htpasswd.users;
@@ -105,7 +105,7 @@ server {
     }
 }
 
-sudo ln -s /etc/nginx/sites-available/<public ip> /etc/nginx/sites-enabled/<public ip>
+sudo ln -s /etc/nginx/sites-available/&lt;public ip&gt; /etc/nginx/sites-enabled/&lt;public ip&gt;
 
 sudo nginx -t
 
@@ -113,7 +113,7 @@ sudo systemctl restart nginx
 
 sudo ufw allow 'Nginx Full'
 
-scp -i <path to .pem file> <path to sample-movies.bulk file> ubuntu@<dns name>:sample-movies.bulk
+scp -i &lt;path to .pem file&gt &lt;path to sample-movies.bulk file&gt; ubuntu@&lt;dns name&gt;:sample-movies.bulk
 
 sudo curl -XPOST http://localhost:9200/_bulk?pretty --data-binary @sample-movies.bulk -H "Content-Type: application/json"
 </pre></h4>

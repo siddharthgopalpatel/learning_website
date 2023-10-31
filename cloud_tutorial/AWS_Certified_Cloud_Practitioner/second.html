@@ -1,91 +1,101 @@
-<html><h2><u><center>AWS CERTIFIED CLOUD PRACTITIONER</center></u></h2>
+<html><h2><u><center>Technology</center></u></h2>
 <h4><pre>
-
-
-Technology Section Introduction
 
 -> Services - Cloud platforms offer a dizzying array of services; this course will help you find the signal through the noise, and point you toward how industries are using cloud today.
 
--> Compute 
-     EC2 - EC2 allows you to rent and manage virtual servers in the cloud. 
-     Lambda - Lambda is a serverless compute service that lets you run code without managing servers.
+-> <u>Compute</u> 
+     <a href="ec2.html">EC2</a> - EC2 allows you to rent and manage virtual servers in the cloud. 
+     <a href="lambda.html">Lambda</a> - Lambda is a serverless compute service that lets you run code without managing servers.
      Fargate - Fargate is a serverless compute engine for containers.
+	  - Fargate allows you to manage containers, like Docker.
+	  - Scales automatically
+	  - Serverless means you don’t worry about provisioning, configuring, or scaling servers.
      Lightsail - Lightsail allows you to quickly launch all the resources you need for small projects.
-	 Outposts - Outposts allows you to run cloud services in your internal data center.
-	 Batch - Batch allows you to process large workloads in smaller chunks (or batches).
+	  - Deploy preconfigured applications, like WordPress websites, at the click of a button
+	  - Simple screens for people with no cloud experience
+	  - Includes a virtual machine, SSD-based storage, data transfer, DNS management, and a static IP
+	  - Provides a low, predictable monthly fee, as low as $3.50
+	  - Similar to AWS Quick Starts
+     Outposts - Outposts allows you to run cloud services in your internal data center.
+      - Supports workloads that need to remain on-premises due to latency or data sovereignty needs
+      - AWS delivers and installs servers in your internal data center.
+      - Used for a hybrid experience
+      - Have access to the cloud services and APIs to develop apps on-premises
+     Batch - Batch allows you to process large workloads in smaller chunks (or batches).
+      - Runs hundreds and thousands of smaller batch processing jobs
+	  - Dynamically provisions instances based on volume
 	 
--> Storage
-    Simple Storage Service (S3) - S3 is an object storage service for the cloud that is highly available.
-    Elastic Block Store (EBS) - EBS is a storage device (called a volume) that can be attached to (or removed from) your instance.
-    Elastic File System (EFS) - EFS is a serverless network file system for sharing files.
-    Storage Gateway - Storage Gateway is a hybrid storage service.
-	Backup - Backup helps you manage data backups across multiple data services
-    EC2 Instance Store - An instance store is local storage that is physically attached to the host computer and cannot be removed.
+-> <u>Storage</u>
+     Simple Storage Service (S3) - S3 is an object storage service for the cloud that is highly available.
+     Elastic Block Store (EBS) - EBS is a storage device (called a volume) that can be attached to (or removed from) your instance.
+     Elastic File System (EFS) - EFS is a serverless network file system for sharing files.
+     Storage Gateway - Storage Gateway is a hybrid storage service.
+     Backup - Backup helps you manage data backups across multiple data services
+     EC2 Instance Store - An instance store is local storage that is physically attached to the host computer and cannot be removed.
 
--> Content Delivery 
-   CloudFront - CloudFront is a CDN that delivers data and applications globally with low latency.
-   Global Accelerator - Global Accelerator sends your users through the AWS global network when accessing your content, speeding up delivery.
-   S3 Transfer Acceleration - S3 Transfer Acceleration improves content uploads and downloads to and from S3 buckets.
+-> <u>Content Delivery</u> 
+     CloudFront - CloudFront is a CDN that delivers data and applications globally with low latency.
+     Global Accelerator - Global Accelerator sends your users through the AWS global network when accessing your content, speeding up delivery.
+     S3 Transfer Acceleration - S3 Transfer Acceleration improves content uploads and downloads to and from S3 buckets.
 
--> Networking
-   Route 53 - Route 53 is a DNS service that routes users to applications.
-   Virtual Private Cloud (VPC) - VPC is a foundational service that allows you to create a secure private network in the AWS Cloud where you launch your resources.
-   Direct Connect - Direct Connect is a dedicated physical network connection from your on-premises data center to AWS.
-   Virtual Private Network (VPN) - Site-to-Site VPN creates a secure connection between your internal networks and your AWS VPCs. 
-   API Gateway - API Gateway allows you to build and manage APIs.
+-> <u>Networking</u>
+     Route 53 - Route 53 is a DNS service that routes users to applications.
+     Virtual Private Cloud (VPC) - VPC is a foundational service that allows you to create a secure private network in the AWS Cloud where you launch your resources.
+     Direct Connect - Direct Connect is a dedicated physical network connection from your on-premises data center to AWS.
+     Virtual Private Network (VPN) - Site-to-Site VPN creates a secure connection between your internal networks and your AWS VPCs. 
+     API Gateway - API Gateway allows you to build and manage APIs.
 
--> Databases 
+-> <u>Databases</u> 
      Relational Database Service (RDS) - RDS is a service that makes it easy to launch and manage relational databases.
      Aurora - Aurora is a relational database compatible with MySQL and PostgreSQL that was created by AWS.
-	 DynamoDB - DynamoDB is a fully managed NoSQL key-value and document database.
+     DynamoDB - DynamoDB is a fully managed NoSQL key-value and document database.
      DocumentDB - DocumentDB is a fully managed document database that supports MongoDB.
      ElastiCache - ElastiCache is a fully managed in-memory datastore compatible with Redis or Memcached.
      Neptune - Neptune is a fully managed graph database that supports highly connected datasets.
 
--> Migration and Transfer 
+-> <u>Migration and Transfer</u> 
      Database Migration Service (DMS) - DMS helps you migrate databases to or within AWS.
      Server Migration Service (SMS) - SMS allows you to migrate on-premises servers to AWS.
      Snow Family - The Snow Family allows you to transfer large amounts of on-premises data to AWS using a physical device.
      DataSync - DataSync allows for online data transfer from on-premises to AWS storage services like S3 or EFS.
 
+-> <u>Analytics</u>
+     Redshift - Redshift is a scalable data warehouse solution.
+     Athena - Athena is a query service for Amazon S3.
+     Glue - Glue prepares your data for analytics.
+     Kinesis - Kinesis allows you to analyze data and video streams in real time.
+     Elastic MapReduce (EMR) - EMR helps you process large amounts of data.
+     Data Pipeline - Data Pipeline helps you move data between compute and storage services running either on AWS or on-premises.
 
--> Analytics
-    Redshift - Redshift is a scalable data warehouse solution.
-	Athena - Athena is a query service for Amazon S3.
-    Glue - Glue prepares your data for analytics.
-    Kinesis - Kinesis allows you to analyze data and video streams in real time.
-    Elastic MapReduce (EMR) - EMR helps you process large amounts of data.
-    Data Pipeline - Data Pipeline helps you move data between compute and storage services running either on AWS or on-premises.
+-> <u>Machine Learning</u>
+     Rekognition - Rekognition allows you to automate your image and video analysis.
+     Comprehend - Comprehend is a natural-language processing (NLP) service that finds relationships in text.
+     Polly - Polly turns text into speech.
+     SageMaker - SageMaker helps you build, train, and deploy machine learning models quickly.
+     Translate - Translate provides language translation.
+     Lex - Lex helps you build conversational interfaces like chatbots.
 
--> Machine Learning 
-    Rekognition - Rekognition allows you to automate your image and video analysis.
-    Comprehend - Comprehend is a natural-language processing (NLP) service that finds relationships in text.
-	Polly - Polly turns text into speech.
-    SageMaker - SageMaker helps you build, train, and deploy machine learning models quickly.
-    Translate - Translate provides language translation.
-	Lex - Lex helps you build conversational interfaces like chatbots.
+-> <u>Developer Tools</u>
+     Cloud9 - Cloud9 allows you to write code within an integrated development environment (IDE) from within your web browser.  
+     CodeCommit - CodeCommit is a source control system for private Git repositories.  
+     CodeBuild - CodeBuild allows you to build and test your application source code. 
+     CodeDeploy - CodeDeploy manages the deployment of code to compute services in the cloud or on-premises.
+     CodePipeline - CodePipeline automates the software release process.
+     X-Ray - X-Ray helps you debug production applications.
 
--> Developer Tools 
-    Cloud9 - Cloud9 allows you to write code within an integrated development environment (IDE) from within your web browser.  
-    CodeCommit - CodeCommit is a source control system for private Git repositories.  
-    CodeBuild - CodeBuild allows you to build and test your application source code. 
-    CodeDeploy - CodeDeploy manages the deployment of code to compute services in the cloud or on-premises.
-    CodePipeline - CodePipeline automates the software release process.
-    X-Ray - X-Ray helps you debug production applications.
+-> <u>Deployment and Infrastructure Management</u>
+     CloudFormation - CloudFormation allows you to provision AWS resources using Infrastructure as Code (IaC).
+     Elastic Beanstalk - Elastic Beanstalk allows you to deploy your web applications and web services to AWS. 
+     OpsWorks - OpsWorks allows you to use Chef or Puppet to automate the configuration of your servers and deploy code.
 
--> Deployment and Infrastructure Management
-    CloudFormation - CloudFormation allows you to provision AWS resources using Infrastructure as Code (IaC).
-    Elastic Beanstalk - Elastic Beanstalk allows you to deploy your web applications and web services to AWS. 
-    OpsWorks - OpsWorks allows you to use Chef or Puppet to automate the configuration of your servers and deploy code.
-
--> Messaging and Integration
-    Simple Queue Service (SQS) - SQS is a message queuing service that allows you to build loosely coupled systems.
-    Simple Notification Service (SNS) - SNS allows you to send emails and text messages from your applications.
-    Simple Email Service (SES) - SES is an email service that allows you to send richly formatted HTML emails from your applications.
+-> <u>Messaging and Integration</u>
+     Simple Queue Service (SQS) - SQS is a message queuing service that allows you to build loosely coupled systems.
+     Simple Notification Service (SNS) - SNS allows you to send emails and text messages from your applications.
+     Simple Email Service (SES) - SES is an email service that allows you to send richly formatted HTML emails from your applications.
    
--> Auditing, Monitoring, and Logging
-	CloudWatch - CloudWatch is a collection of services that help you monitor and observe your cloud resources.
-    CloudTrail - CloudTrail tracks user activity and API calls within your account.
+-> <u>Auditing, Monitoring, and Logging</u>
+     CloudWatch - CloudWatch is a collection of services that help you monitor and observe your cloud resources.
+     CloudTrail - CloudTrail tracks user activity and API calls within your account.
 	
 </pre></h4>
 </html>
