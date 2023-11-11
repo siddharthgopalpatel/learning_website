@@ -1,0 +1,181 @@
+<html><h2><u><center>Security and Compliance</center></u></h2>
+<h4><pre>
+
+-> Shared Responsibility Model
+   - In the public cloud, there is a shared security responsibility between you and AWS.
+     1. AWS Responsibility - Security of the Cloud
+	 2. Your Responsibility - Security in the Cloud
+
+   - Security of the Cloud = AWS is responsible for protecting and securing their infrastructure.
+     1. AWS Global Infrastructure - AWS is responsible for its global infrastructure elements: Regions, edge locations, and Availability Zones.
+     2. Building Security - AWS controls access to its data centers where your data resides.
+     3. Networking Components - AWS maintains networking components: generators, uninterruptible power supply (UPS) systems, computer room air conditioning (CRAC) units, fire suppression systems, and more.
+     4. Software - AWS is responsible for any managed service like RDS, S3, ECS, or Lambda, patching of host operating systems, and data access endpoints.
+
+    - Security in the Cloud = You are responsible for how the services are implemented and managing your application data.
+      1. Application Data - You are responsible for managing your application data, which includes encryption options.
+      2. Security Configuration - You are responsible for securing your account and API calls, rotating credentials, restricting internet access from your VPCs, and more. 
+      3. Patching - You are responsible for the guest operating system (OS), which includes updates and security patches.
+      4. Identity and Access Management - You are responsible for application security and identity and access management.
+      5. Network Traffic - You are responsible for network traffic protection, which includes security group firewall configuration.
+      6. Installed Software - You are responsible for your application code, installed software, and more. You should frequently scan for and patch vulnerabilities in your code.  	  
+	  
+    - Who is responsible for what?
+	  1. Firewall Configuration - Your
+      2. Data center security for the physical building - AWS 
+      3. Encryption of EBS volumes - Your
+      4. Language versions of Lambda - AWS
+      5. Taking DB backups in RDS - Your
+      6. Updating the firmware on the underlying EC2 hosts - AWS
+      7. Ensuring data is encrypted at rest - Your
+      8. Managing the network infrastructure - AWS
+      9. Patching the guest operating system for EC2 - Your
+     10. Physically destroying storage media at end of life - AWS
+	 
+   - EC2 Shared Responsibility Model = Let's take a closer look at the shared responsibility model for EC2
+     You - Installed applications, Patching the guest operating system, Security controls
+     AWS - EC2 service, Patching the host operating system, Security of the physical server	 
+
+   - Lambda Shared Responsibility Model = Let's take a closer look at the shared responsibility model for Lambda.
+     You = Security of code, Storage of sensitive data, IAM for permissions
+     AWS = Lambda service, Upgrading Lambda languages, Lambda endpoints, Operating system, Underlying infrastructure, Software dependencies 
+
+   - Which security responsibilities are shared?
+     1. Patch Management
+        AWS - Patching Infrastructure
+        You - Patching Guest OS and applications
+     2. Configuration Management
+        AWS - Configuring infrastructure devices 
+        You - Configuring databases and applications
+     3. Awareness and Training  
+        AWS - AWS employees
+        You - Your employees
+		
+   - How do I report abuse of AWS resources? 
+     - Contact the AWS Trust & Safety team using the Report Amazon AWS abuse form or by contacting abuse@amazonaws.com. 
+	 
+-> Well-Architected Framework = The 6 pillars of the Well-Architected Framework describe design principles and best practices for running workloads in the cloud.
+   1. Operational Excellence
+      - This pillar focuses on creating applications that effectivily support production workloads 
+	  - Plan for and anticipate failure 
+	  - Deploy smaller, reversible changes 
+	  - Script operations as code 
+	  - Learn from failure and refine
+	  - You can use AWS CodeCommit for version control to enable tracking of code changes and to version-control CloudFormation templates of your infrastructure.
+	  
+   2. Security
+      - This pillar focues on putting mechanisms in place that help protect your systems and data
+	  - Automate Security tasks
+	  - Encrypt data in transit and at rest 
+	  - Assign only the least privilages required 
+	  - Track who did what and when 
+	  - Ensure security at all application layers 
+	  - You can configure central logging of all actions performed in your account using CloudTrail.
+	  
+   3. Reliability
+      - This pillar focues on designing systems that work consistently and recover quickly
+      - Recover from failure automatically
+      - scale horizontally for resilience 
+      - Reduce idle resources 
+      - Manage change through automation
+      - Test recovery procedures
+	  - You can use Multi-AZ deployments for enhanced availability and reliability of RDS databases.
+	  
+   4. Performance Efficiency
+      - This pillar focues on the effective use of computing resources to meet system and business requirments while removing bottelnecks.
+	  - Use serverless architecturs first 
+	  - Use multi-region deployments
+	  - Delegate tasks to a cloud vendor
+	  - Experiment with Virtual resources
+	  - You can use AWS Lambda to run code with zero administration. 
+	  
+   5. Cost Optimization
+      - This pillar focues on delivering optimum and resilient solutions at the least cost of the user.
+      - Utilize consumption-based pricing 
+      - Implement cloud financial management
+      - Measure overall efficiency
+      - Pay only for resources your application requires
+	  - You can use S3 Intelligent-Tiering to automatically move your data between access tiers based on your usage patterns.
+	  
+   6. Sustainnability
+      - This pillar focues on environmental imapcts, especially energy consumption and efficiency.
+      - Understand your impact 
+      - Establish sustainablity goals 
+      - Maximize utilization 
+      - Use managed services 
+      - Reduce downstream impact 	  
+	  - You can use EC2 Auto Scaling to ensure you are maximizing utilization.
+
+-> Understanding IAM Users 
+   - Let's discuss why you should control access to your AWS services and resources.
+   - Stories about companies being hacked and customer data being stolen are rampant. Now that you have workloads running in the cloud, it is important that you take the necessary steps to keep your applications and data safe and secure.
+
+   - Identity and Access Management (IAM) = IAM allows you to control access to your AWS services and resources.   
+     - Helps you secure your cloud resources
+     - You define who has access
+     - You define what they can do
+     - A free global service
+
+   - Identities = Who can access your resources. Eg - Root user, Individual users, Groups, Roles
+   - Access = What resources they can access. Eg - Policies, AWS managed policies, Customer managed policies, Permissions boundaries   
+   - Authentication ("Who") = Authentication is where you present your identity (username) and provide verification (password).  
+   - Authorization ("What") = Authorization determines which services and resources the authenticated identity has access to. 
+ 
+   - Users = Users are entities you create in IAM to represent the person or application needing to access your AWS resources.
+     - Root User = The root user is created when you first open your AWS account.
+       - What can only the root user do?
+         - Close your account
+         - Change email address 
+         - Modify your support plan 
+     - User = Individual users are created in IAM and are used for everyday tasks.
+       - What can individual users do?
+         - Launch EC2 instances
+         - Configure databases
+         - Perform administrative tasks 
+         - Access application code
+		 - Don't forget activity performed by users in your account is billed to your account!
+	 - Application = Did you know applications can be users? You'll create a user in IAM so you can generate access keys for an application running on-premises that needs access to your cloud resources.
+	 
+	 - Have you heard of the principle of least privilege? The principle of least privilege involves giving a user the minimum access required to get the job done. 
+	 - Developer = Developers are responsible for building applications.
+     - Project Manager = Project managers are responsible for managing the budget.	 
+	 
+	 - Users in the Real World - Create access keys for an IAM user that needs access to the AWS CLI. The AWS Command Line Interface (CLI) allows you to access resources in your AWS account through a terminal or command window. Access keys are needed when using the CLI and can be generated using IAM.
+	 
+	 - Group = A group is a collection of IAM users that helps you apply common access controls to all group members.
+	   - Adminstrators = Administrators perform administrative tasks such as creating new users.
+       - Developers = Developers use compute and database services to build applications.
+       - Analysts = Analysts run budget and usage reports.
+	   
+	   - Used to group users that perform similar tasks.
+       - Access permissions apply to all members of the group.
+       - Access is assigned using policies and roles.
+ 
+       - Groups in the Real World - Apply the same access controls to a large set of users. Groups save you time by allowing you to apply the same access permissions to more than one user at once. When a user no longer needs access, they can be removed from the group.
+	 - Do not confuse security groups for EC2 with IAM groups. EC2 security groups act as firewalls, while IAM groups are collections of users.
+ 		 
+-> Understanding IAM Permissions
+   - Roles = Roles define access permissions and are temporarily assumed by an IAM user or service.
+     - User takes DevOps Engineer Role and Create code branch in CodeCommit, List pipelines in CodePipeline
+	 - Lambda takes Lambda-Execution Role and List contents of S3 bucket, Query DynamoDB 
+	 - You assume a role to perform a task in a single session.
+     - Assumed by any user or service that needs it.
+     - Access is assigned using policies.
+     - You grant users in one AWS account access to resources in another AWS account.
+	 - Roles in the Real World - Attach a role to an EC2 instance for access to S3. You can attach a role to an instance that provides privileges (e.g., uploading files to S3) to applications running on the instance. Roles help you avoid sharing long-term credentials like access keys and protect your instances from unauthorized access.
+
+   - Policies - You manage permissions for IAM users, groups, and roles by creating a policy document in JSON format and attaching it.
+     - Policies in the Real World. You can limit access to an Amazon S3 bucket to specific users. You can add a bucket access policy directly to an Amazon S3 bucket to grant IAM users access permissions for the bucket and the objects in it.
+	 
+   - IAM Best Practices - There are several recommended best practices for IAM.
+     1. Enable MFA for privileged users. - You should enable multi-factor authentication (MFA) for the root user and other administrative users.
+	 2. Implement strong password policies. - ou should require IAM users to change their passwords after a specified period of time, prevent users from reusing previous passwords, and rotate security credentials regularly.
+	 3. Create individual users instead of using root = You shouldn't use the root user for daily tasks. 
+	 4. Use roles for Amazon EC2 instances = You should use roles for applications that run on EC2 instances instead of long-term credentials like access keys.
+	 
+	- IAM Credential Report = The IAM credential report lists all users in your account and the status of their various credentials.
+	  - Lists all users and status of passwords, access keys, and MFA devices
+	  - Used for auditing and compliance
+   
+</pre></h4>
+</html>

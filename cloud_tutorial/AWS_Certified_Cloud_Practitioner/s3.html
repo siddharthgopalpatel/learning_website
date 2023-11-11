@@ -1,0 +1,103 @@
+<html><h2><u><center>Simple Storage Service </center></u></h2>
+<h4><pre>
+
+-> Companies today need to collect, store, and analyze the data they've accumulated over the years on a massive scale. 
+-> Storage services in the cloud provide a place for companies to store data.
+-> S3 is an object storage service for the cloud that is highly available.
+-> Objects (or files) are stored in buckets (or directories).
+-> Essentially unlimited storage that can hold millions of objects per bucket.
+-> Objects can be public or private.
+-> You can upload objects via the console, the CLI, or programmatically from within code using SDKs. 
+-> You can set security at the bucket level or individual object level using access control lists (ACLs), bucket policies, or access point policies.
+-> You can enable versioning to create multiple versions of your file in order to protect against accidental deletion and to use a previous version.
+-> You can use S3 access logs to track the access to your buckets and objects. 
+-> S3 is a regional service, but bucket names must be globally unique.
+
+-> Data Accessibility
+   - Durability and availability are 2 very different aspects of data accessibility.  
+     1. Durability
+      - Durability is important so your objects are never lost or compromised.
+      - Amazon S3 Standard is designed for 99.999999999% (11 9’s) of durability.   
+     2. Availability
+      - Availability is important so you can access your data quickly when you need it.
+      - Amazon S3 Standard is designed for 99.99% availability. 	
+
+-> S3 Storage Class
+   -> Amazon S3 offers several storage classes designed for different use cases.
+      1. S3 Standard
+         - General-purpose storage
+         - Data stored across multiple Availability Zones
+         - Low latency and high throughput
+         - Durability of 99 999999999%
+         - Availability of 99.99%
+         - Recommended for:
+           - Frequently accessed data 
+
+
+	  2. S3 Intellent-Tiering
+         - Automatically moves your data to the most cost-effective storage class
+         - Automatic cost savings
+         - No retrieval fees
+         - Data stored across multiple Availability Zones
+         - Durability of 99.999999999%
+         - Availability of 99.9%
+         - Recommended for:
+           - Data with unknown or changing access pattern
+
+      3. S3 Standard-Infrequent Access(IA)
+         - Data accessed less frequently but requires rapid access
+         - Data stored across multiple Availability Zones
+         - Cheaper than S3 Standard.
+         - Durability of 99 999999999%
+         - Availability of 99.9%
+         - Recommended for:
+           - Long-lived data
+           - Infrequently accessed
+           - Millisecond access when needed
+
+      4. S3 One Zone-Infrequent Access(IA)
+         - Like S3 Standard-IA but data stored in a single Availability Zone
+         - Costs 20% less than S3 Standard-IA
+         - Data stored in this storage class can be lost
+         - Durability of 99.999999999%
+         - Availability of 99.5%
+         - Availability and durability not essential
+         - Recommended for:
+           - Re-creatable data
+           - Infrequently accessed with millisecond access
+
+      5. S3 Glacier
+         - Long-term data storage and archival for lower costs
+         - Data retrieval takes longer
+         - 3 retrieval options: 1-5 minutes, 3-5 hours, or 5-12 hours
+         - Data stored across multiple Availability Zones
+         - Recommended for:
+           - Long-term backups
+           - Cheaper storage options   
+ 
+      6. S3 Glacier Deep Archive
+         - Like S3 Glacier but longer access times
+         - 2 retrieval options: 12 hours or 48 hours
+         - Cheapest of all S3 options
+         - Data stored across multiple Availability Zones
+         - Durability of 99.999999999%
+         - Recommended for:
+           - Long-term data archival accessed once or twice a year
+           - Retaining data for regulatory compliance requirements
+
+      7. S3 Outposts
+         - Provides object storage on-premises
+         - A single storage class
+         - Store data across multiple devices and servers
+         - Recommended for
+           - Data that needs to be kept local
+           - Demanding application performance needs
+		   
+-> S3 in the Real World. Let's discuss when you would use S3 in the real world.
+   1. Static websites - Deploy static websites to S3 and use CloudFront for global distribution.
+   2. Data Archive - Archive data using Amazon Glacier as a storage option for Amazon S3.
+   3. Analytics systems - Store data in Amazon S3 for use with analytics services like Redshift and Athena.
+   4. Mobile Applications - Mobile application users can upload files to an Amazon S3 bucket.
+
+</pre></h4>
+</html>
