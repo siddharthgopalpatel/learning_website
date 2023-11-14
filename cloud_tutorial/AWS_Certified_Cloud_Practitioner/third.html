@@ -4,7 +4,7 @@
 -> Shared Responsibility Model
    - In the public cloud, there is a shared security responsibility between you and AWS.
      1. AWS Responsibility - Security of the Cloud
-	 2. Your Responsibility - Security in the Cloud
+     2. Your Responsibility - Security in the Cloud
 
    - Security of the Cloud = AWS is responsible for protecting and securing their infrastructure.
      1. AWS Global Infrastructure - AWS is responsible for its global infrastructure elements: Regions, edge locations, and Availability Zones.
@@ -21,7 +21,7 @@
       6. Installed Software - You are responsible for your application code, installed software, and more. You should frequently scan for and patch vulnerabilities in your code.  	  
 	  
     - Who is responsible for what?
-	  1. Firewall Configuration - Your
+      1. Firewall Configuration - Your
       2. Data center security for the physical building - AWS 
       3. Encryption of EBS volumes - Your
       4. Language versions of Lambda - AWS
@@ -57,20 +57,20 @@
 -> Well-Architected Framework = The 6 pillars of the Well-Architected Framework describe design principles and best practices for running workloads in the cloud.
    1. Operational Excellence
       - This pillar focuses on creating applications that effectivily support production workloads 
-	  - Plan for and anticipate failure 
-	  - Deploy smaller, reversible changes 
-	  - Script operations as code 
-	  - Learn from failure and refine
-	  - You can use AWS CodeCommit for version control to enable tracking of code changes and to version-control CloudFormation templates of your infrastructure.
+      - Plan for and anticipate failure 
+      - Deploy smaller, reversible changes 
+      - Script operations as code 
+      - Learn from failure and refine
+      - You can use AWS CodeCommit for version control to enable tracking of code changes and to version-control CloudFormation templates of your infrastructure.
 	  
    2. Security
       - This pillar focues on putting mechanisms in place that help protect your systems and data
-	  - Automate Security tasks
-	  - Encrypt data in transit and at rest 
-	  - Assign only the least privilages required 
-	  - Track who did what and when 
-	  - Ensure security at all application layers 
-	  - You can configure central logging of all actions performed in your account using CloudTrail.
+      - Automate Security tasks
+      - Encrypt data in transit and at rest 
+      - Assign only the least privilages required 
+      - Track who did what and when 
+      - Ensure security at all application layers 
+      - You can configure central logging of all actions performed in your account using CloudTrail.
 	  
    3. Reliability
       - This pillar focues on designing systems that work consistently and recover quickly
@@ -79,15 +79,15 @@
       - Reduce idle resources 
       - Manage change through automation
       - Test recovery procedures
-	  - You can use Multi-AZ deployments for enhanced availability and reliability of RDS databases.
+      - You can use Multi-AZ deployments for enhanced availability and reliability of RDS databases.
 	  
    4. Performance Efficiency
       - This pillar focues on the effective use of computing resources to meet system and business requirments while removing bottelnecks.
-	  - Use serverless architecturs first 
-	  - Use multi-region deployments
-	  - Delegate tasks to a cloud vendor
-	  - Experiment with Virtual resources
-	  - You can use AWS Lambda to run code with zero administration. 
+      - Use serverless architecturs first 
+      - Use multi-region deployments
+      - Delegate tasks to a cloud vendor
+      - Experiment with Virtual resources
+      - You can use AWS Lambda to run code with zero administration. 
 	  
    5. Cost Optimization
       - This pillar focues on delivering optimum and resilient solutions at the least cost of the user.
@@ -95,7 +95,7 @@
       - Implement cloud financial management
       - Measure overall efficiency
       - Pay only for resources your application requires
-	  - You can use S3 Intelligent-Tiering to automatically move your data between access tiers based on your usage patterns.
+      - You can use S3 Intelligent-Tiering to automatically move your data between access tiers based on your usage patterns.
 	  
    6. Sustainnability
       - This pillar focues on environmental imapcts, especially energy consumption and efficiency.
@@ -104,7 +104,7 @@
       - Maximize utilization 
       - Use managed services 
       - Reduce downstream impact 	  
-	  - You can use EC2 Auto Scaling to ensure you are maximizing utilization.
+      - You can use EC2 Auto Scaling to ensure you are maximizing utilization.
 
 -> Understanding IAM Users 
    - Let's discuss why you should control access to your AWS services and resources.
@@ -126,56 +126,151 @@
        - What can only the root user do?
          - Close your account
          - Change email address 
-         - Modify your support plan 
+         - Modify your support plan
+		 
      - User = Individual users are created in IAM and are used for everyday tasks.
        - What can individual users do?
          - Launch EC2 instances
          - Configure databases
          - Perform administrative tasks 
          - Access application code
-		 - Don't forget activity performed by users in your account is billed to your account!
+         - Don't forget activity performed by users in your account is billed to your account!
 	 - Application = Did you know applications can be users? You'll create a user in IAM so you can generate access keys for an application running on-premises that needs access to your cloud resources.
 	 
-	 - Have you heard of the principle of least privilege? The principle of least privilege involves giving a user the minimum access required to get the job done. 
-	 - Developer = Developers are responsible for building applications.
-     - Project Manager = Project managers are responsible for managing the budget.	 
+     - Have you heard of the principle of least privilege? The principle of least privilege involves giving a user the minimum access required to get the job done. 
+       - Developer = Developers are responsible for building applications. 
+       - Project Manager = Project managers are responsible for managing the budget.	 
 	 
-	 - Users in the Real World - Create access keys for an IAM user that needs access to the AWS CLI. The AWS Command Line Interface (CLI) allows you to access resources in your AWS account through a terminal or command window. Access keys are needed when using the CLI and can be generated using IAM.
+     - Users in the Real World - Create access keys for an IAM user that needs access to the AWS CLI. The AWS Command Line Interface (CLI) allows you to access resources in your AWS account through a terminal or command window.
+       Access keys are needed when using the CLI and can be generated using IAM.
 	 
-	 - Group = A group is a collection of IAM users that helps you apply common access controls to all group members.
-	   - Adminstrators = Administrators perform administrative tasks such as creating new users.
+     - Group = A group is a collection of IAM users that helps you apply common access controls to all group members.
+       - Adminstrators = Administrators perform administrative tasks such as creating new users.
        - Developers = Developers use compute and database services to build applications.
        - Analysts = Analysts run budget and usage reports.
 	   
-	   - Used to group users that perform similar tasks.
+       - Used to group users that perform similar tasks.
        - Access permissions apply to all members of the group.
        - Access is assigned using policies and roles.
  
-       - Groups in the Real World - Apply the same access controls to a large set of users. Groups save you time by allowing you to apply the same access permissions to more than one user at once. When a user no longer needs access, they can be removed from the group.
-	 - Do not confuse security groups for EC2 with IAM groups. EC2 security groups act as firewalls, while IAM groups are collections of users.
+       - Groups in the Real World - Apply the same access controls to a large set of users. Groups save you time by allowing you to apply the same access permissions to more than one user at once. When a user no longer needs access, 
+         they can be removed from the group.
+     - Do not confuse security groups for EC2 with IAM groups. EC2 security groups act as firewalls, while IAM groups are collections of users.
  		 
 -> Understanding IAM Permissions
    - Roles = Roles define access permissions and are temporarily assumed by an IAM user or service.
      - User takes DevOps Engineer Role and Create code branch in CodeCommit, List pipelines in CodePipeline
-	 - Lambda takes Lambda-Execution Role and List contents of S3 bucket, Query DynamoDB 
-	 - You assume a role to perform a task in a single session.
+     - Lambda takes Lambda-Execution Role and List contents of S3 bucket, Query DynamoDB 
+     - You assume a role to perform a task in a single session.
      - Assumed by any user or service that needs it.
      - Access is assigned using policies.
      - You grant users in one AWS account access to resources in another AWS account.
-	 - Roles in the Real World - Attach a role to an EC2 instance for access to S3. You can attach a role to an instance that provides privileges (e.g., uploading files to S3) to applications running on the instance. Roles help you avoid sharing long-term credentials like access keys and protect your instances from unauthorized access.
+     - Roles in the Real World - Attach a role to an EC2 instance for access to S3. You can attach a role to an instance that provides privileges (e.g., uploading files to S3) to applications running on the instance. 
+       Roles help you avoid sharing long-term credentials like access keys and protect your instances from unauthorized access.
 
    - Policies - You manage permissions for IAM users, groups, and roles by creating a policy document in JSON format and attaching it.
      - Policies in the Real World. You can limit access to an Amazon S3 bucket to specific users. You can add a bucket access policy directly to an Amazon S3 bucket to grant IAM users access permissions for the bucket and the objects in it.
 	 
    - IAM Best Practices - There are several recommended best practices for IAM.
      1. Enable MFA for privileged users. - You should enable multi-factor authentication (MFA) for the root user and other administrative users.
-	 2. Implement strong password policies. - ou should require IAM users to change their passwords after a specified period of time, prevent users from reusing previous passwords, and rotate security credentials regularly.
-	 3. Create individual users instead of using root = You shouldn't use the root user for daily tasks. 
-	 4. Use roles for Amazon EC2 instances = You should use roles for applications that run on EC2 instances instead of long-term credentials like access keys.
+     2. Implement strong password policies. - You should require IAM users to change their passwords after a specified period of time, prevent users from reusing previous passwords, and rotate security credentials regularly.
+     3. Create individual users instead of using root = You shouldn't use the root user for daily tasks. 
+     4. Use roles for Amazon EC2 instances = You should use roles for applications that run on EC2 instances instead of long-term credentials like access keys.
 	 
-	- IAM Credential Report = The IAM credential report lists all users in your account and the status of their various credentials.
-	  - Lists all users and status of passwords, access keys, and MFA devices
-	  - Used for auditing and compliance
+    - IAM Credential Report = The IAM credential report lists all users in your account and the status of their various credentials.
+      - Lists all users and status of passwords, access keys, and MFA devices
+      - Used for auditing and compliance
+	  
+-> Exploring Application Security Services - Let's discuss why you should control access to your AWS services and resources using software-based security tools.
+   - AWS has several software-based security tools available to help you monitor and protect your resources.
+   - What Is a Firewall? Firewalls prevent unauthorized access to your networks by inspecting incoming and outgoing traffic against security rules you've defined. 
+
+   - Web Application Firewall (WAF)
+     -> WAF helps protect your web applications against common web attacks.
+     -> Protects apps against common attack patterns
+     -> Protects against SQL injection
+     -> Protects against cross-site scripting
+     -> WAF in the Real World - Protect your web application from cross-site scripting attacks. You can deploy a web application directly to an EC2 instance and protect it from cross-site scripting attacks using WAF. You can even deploy WAF on CloudFront as part of your CDN solution to block malicious traffic.     	 
    
+   - Distributed Denial of Service (DDoS)
+     - Have you heard about DDoS? A DDoS attack causes a traffic jam on a website or web application in an attempt to cause it to crash.   
+
+   - Shield - Shield is a managed Distributed Denial of Service (DDoS) protection service.
+     - Always-on detection
+     - Shield Standard is free - Provides free protection against common and frequently occurring attacks
+     - Shield Advanced is a paid service - Provides enhanced protections and 24/7 access to AWS experts for a fee  	 
+     - DDoS protection via Shield Advanced is supported on several services. CloudFront, Route53, Elastic Load Balancing, AWS Global Accelerator
+     - Shield in the Real World - Receive real-time notifications of suspected DDoS incidents and assistance from AWS during the attack. Shield Advanced will give you notifications of DDoS attacks via CloudWatch metrics. Additionally, with Shield Advanced, you have 24/7 access to AWS experts to assist during an attack.
+	 
+   - Macie - Macie helps you discover and protect sensitive data.
+     - Uses machine learning
+     - Evaluates S3 environment
+     - Uncovers personally identifiable information (PII) 
+     - Macie in the Real World - Discover passport numbers stored on S3. Macie can be used to find sensitive data like passport numbers, social security numbers, and credit card numbers on S3. 
+	 
+-> Exploring Additional Security Services
+   - Config = Config allows you to assess, audit, and evaluate the configurations of your resources.  
+     - Track configuration changes over time
+     - Delivers configuration history file to S3
+     - Notifications via Simple Notification Service (SNS) of every configuration change
+     - Config in the Real World - Identify system-level configuration changes made to your EC2 instances. Config allows you to record configuration changes within your EC2 instances. You can view network, software, and operating system (OS) configuration changes, system-level updates, and more.
+
+   - GuardDuty = GuardDuty is an intelligent threat detection system that uncovers unauthorized behavior.
+     - Uses machine learning   
+     - Built-in detection for EC2, S3, and IAM 
+     - Reviews CloudTrail, VPC Flow Logs, and DNS logs
+     - GuardDuty in the Real World. Detect unusual API calls in your account. GuardDuty's anomaly detection feature evaluates all API requests in your account and identifies events that are associated with common techniques used by attackers.
+
+   - Inspector = Inspector works with EC2 instances to uncover and report vulnerabilities.
+     - Agent installed on EC2 instance
+     - Reports vulnerabilities found	
+     - Checks access from the internet, remote root login, vulnerable software versions, etc.	
+     - Inspector in the Real World, Identify unintended network access to an EC2 instance via a detailed report of security findings. Inspector has several built-in rules to access your EC2 instances to find vulnerabilities and report them prioritized by level of severity.
+
+   - Artifact = Artifact offers on-demand access to AWS security and compliance reports.
+     - Central repository for compliance reports from third-party auditors
+     - Service Organization Controls (SOC) reports
+     - Payment Card Industry (PCI) reports  
+     - Artifact in the Real World, You need to access AWS's certification for ISO compliance. Artifact provides a central repository for AWS' security and compliance reports via a self-service portal.
+
+   - Cognito = Cognito helps you control access to mobile and web applications. 
+    - Provides authentication and authorization 
+    - Helps you manage users 
+    - Assists with user sign-up and sign-in
+    - Cognito in the Real World. You need to add a social media sign-in to your web application - Cognito provides functionality that allows your users to sign in to your application through social media accounts like Facebook and Google.
+
+-> Utilizing Data Encryption and Secrets Management Services
+   - Data encryption encodes data so it cannot be read by unauthorized users.
+   - Understand the difference between data in flight vs. data at rest
+     - Data in Flight - Data that is moving from one location to another
+     - Data at Rest - Data that is inactive or stored for later use
+	 
+   - Key Management Service (KMS) = KMS allows you to generate and store encryption keys.
+     - Key generator
+     - Store and control keys
+     - AWS manages encryption keys
+     - Automatically enabled for certain services
+     - KMS in the Real World - Create encrypted Amazon EBS volumes. When you create an encrypted Amazon EBS volume, you're able to specify a KMS customer master key.  	 
+	 
+   - CloudHSM = CloudHSM is a hardware security module (HSM) used to generate encryption keys.
+     - Dedicated hardware for security
+     - Generate and manage your own encryption keys
+     - AWS does not have access to your keys
+	 
+   - CloudHSM in the Real World, Meet compliance requirements for data security by using dedicated hardware. CloudHSM allows you to meet corporate, contractual, and regulatory compliance requirements for data security by using dedicated hardware in the cloud.   
+   
+   - Secrets Manager =  Secrets Manager allows you to manage and retrieve secrets (passwords or keys).  
+     - Rotate, manage, and retrieve secrets
+     - Encrypt secrets at rest
+     - Integrates with services like RDS, Redshift, and DocumentDB
+     - Secrets Manager in the Real World - Retrieve database credentials needed for your application code. Secrets Manager allows you to retrieve database credentials with a call to Secrets Manager APIs, removing the need to hardcode sensitive information in plain text within your application code. 
+	 
+
+
+
+  	
+  	 
+  	 
+	 
 </pre></h4>
 </html>
