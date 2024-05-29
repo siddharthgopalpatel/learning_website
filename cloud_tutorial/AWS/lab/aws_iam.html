@@ -1,0 +1,111 @@
+<html><h2><u><center>AWS IAM Lab</center></u></h2>
+<h4><pre>
+
+<h3><u>Lab 1 - MFA =></u></h3> 
+1. Go to Google Playstore -> Search Google Autheticator -> Install -> You will get chance to scan QR code -> Go to IAM -> security -> MFA -> Get the QR code and scan from
+   phone -> Now you will get 6 digit code on your phone -> Put it on AWS IAM. Now next time when you login, with ID and password you will have to put 6 digit number to get 
+   authenticated.
+
+<h3><u>Lab 2 - How to create IAM User and assign policies =></u></h3>
+
+Note: 
+- There are three ways we can put policies/permissions to user - Add user to group, copy permission from existing user and attach existing policies directly.
+- You can customize the account alias.
+- You can create maximum 10 IAM user at one single shot.
+
+1. Go to IAM -> Go to USER -> Add users(username=test, give suitable access type, console password and Require password reset) -> Permissions -> Attach existing policies 
+   directly (ec2readonlyaccess) -> Tags (name=IAM user) -> Review -> Create user.
+2. Download the csv file and get all the details. Copy the URL and login as created IAM user -> Create your new password -> Login and explore(ec2, s3, vpc etc).
+3. To add additional permission to IAM user -> select it ->  Add permission (AmazonS3FullAccess) -> Review -> Add permission.
+4. Check if user can do s3 work or not.
+5. Go to Group -> create new group (Group Name=Developer) -> Next Step -> Attach Policy (Ec2readonlyaccess) -> Next Step -> create Group. 
+6. Add the existing user to the group and check now the policies applied to user and group. 
+
+<h3><u>Lab 3 - How to create IAM Group,Inline Policy and Billing Dashboard =></u></h3>
+
+Inline Policy - These policies you create manually like create volume or create image from volume from EC2. It can be applied on user and group.
+Note: To make IAM user access the billing, give the billing permission and active Activate IAM Access my account from root user.
+
+1. Go to IAM -> Go to USER (username=test & sidd, give suitable access type, console password and Require password reset) -> Permissions -> Attach existing policies 
+   directly (ec2readonlyaccess) -> Tags (name=IAM user) -> Review -> Create user.
+2. Download the csv file and get all the details. 
+3. Go to Group -> create new group (Group Name=S3Team) -> Next Step -> Attach Policy (no policiy) -> Next Step -> create Group. Select the group -> Permission -> 
+   Attach Policy (s3fullaccess) -> Attach Policy. Go to User -> select the user and add users to group.
+4. Select the user ->  check now the policies applied to user and group. 
+5. Copy the URL and login as created IAM user -> Create your new password -> Login and explore(ec2, s3, vpc etc).
+6. Select any user -> Permission -> Add inline Policy (service=ec2, actions=copy snapshot and copy image). Explore it from your own. 
+7. Select user -> security credentials (use this to reset existing user password or access key).
+
+<h3><u>Lab 4 - Cross Account access using IAM Role =></u></h3>
+ 
+Steps to do:
+1. Login into A account. 
+2. Create one group and then create two IAM users in it (user1 and user2).
+3. Attach policy to the group (EC2readonlyaccess).
+4. Login to second account(B).
+5. Create one s3 bucket.
+6. Create a role -> Another AWS account -> Insert AccountID of A -> Attach policy -> S3 readonlyaccess -> Role Name -> S3read.
+7. Now login back to A account -> Click Group -> Permission -> Incline Policy -> Select -> AWS security Token Service -> Assume role -> Click on Add statement ->
+   Apply Policy. (Users in Account A will login to Account B using STS/temporary credential)
+8. Now login to IAM user1.
+9. Switch Role -> Now check whether you are able to see the bucket of another account or not.
+10. Repeat step 8 and 9 with user2.
+11. Now login to B account -> Role -> trusted relationship -> edit -> Paste ARN of user1 -> Update Policy.
+12. Now login back again in user1 -> Switch role -> test s3 bucket.
+13. Now login as user2 -> Switch role -> You will get error.
+
+Note: There are four type of trusted Entity (role): AWS Service, Another AWS Account, Web Identity, SAML 2.0 Federation.   
+
+Lab
+Note: Note down the account ID and IAM user link of both the account.
+
+1. Login into A account. 
+2. Go to IAM -> Click on Group -> Create one group(Agroup) -> Attach policy to the group (EC2readonlyaccess) and then create two IAM users in it (user1 and user2).
+3. Login to second account(B) and Create one s3 bucket.
+4. Now go to IAM -> Create a role -> Another AWS account -> Insert AccountID of A -> Permissions -> Attach policy(S3readonlyaccess) ->  Tags -> Review -> 
+   Role Name(S3read) -> Create role.
+5. Now login back to A account -> Click Group -> Permission -> Incline Policy -> Select -> Policy Generator(Effect=Allow, AWS Service=sts, Actions=AssumeRole, 
+   Amazon Resource Name{ARN}=*) -> Click on Add statement -> Next Step -> Apply Policy. (User in Account A will login to Account B using STS/temporary credential)
+6. Now login to IAM user1 -> Click on Account -> Switch Role(Account=B account,Role=s3read) -> Switch role.
+7. Now check whether you are able to see the bucket of another account or not.
+8. Repeat step 6 and 7 with user2.
+9. Now login to B account -> go to IAM Role-> select s3read role -> trusted relationship -> edit -> Paste ARN of user1 -> Update Trust Policy.
+11. Now login back again in user1 -> Switch role -> test s3 bucket.
+12. Now login as user2 -> Switch role -> You will get error.
+
+<h3><u>Lab 5 - How to connect windows server to AWS AD Connector =></u></h3>
+
+Active Directory: 
+
+Step:
+1. Create one windows server 2012 R2 base
+2. Change its password and then install AD DS in ADD Role and Features
+3. Now, create one forest i.e. guftgu.in
+4. Now, go to Server Manager -> Tools -> DNS -> Reverse lookup zone
+5. Now -> DNS -> Forward Lookup Zone -> Update associated pointer -> Apply.
+6. Now in ehternet setting -> Enter private IP of server in preffered DNS server
+7. NOw, click on server manager -> Tools -> AD users and computers. Create two users "Madan" and "Vikas". Give Password - india@123.
+8. Now, go to AWS Management Console, search 'Directory Services' -> AD connector.
+9. Directory DNS Name - guftgu.in, DNS IP addrsss - private IP of AD server, username=Administrator, Password=Same as AD server password.
+10. Go to IAM -> Role -> Directory Services -> EC2FullAccess -> Create Role.
+11. Create one more role for Billing.
+12. Add user Madan & Vikas to above role.
+13. Copy the URL and paste in incognito tab.
+
+Lab:
+1. Create one windows server 2012 R2 base
+2. Change its password and then install AD DS in ADD Role and Features
+3. Now, create one forest i.e. guftgu.in
+4. Now, go to Server Manager -> Tools -> DNS -> Reverse lookup zone
+5. Now -> DNS -> Forward Lookup Zone -> Update associated pointer -> Apply.
+6. Now in ehternet setting -> Enter private IP of server in preffered DNS server
+7. NOw, click on server manager -> Tools -> AD users and computers. Create two users "Madan" and "Vikas". Give Password - india@123.
+8. Now, go to AWS Management Console, search 'Directory Services' -> AD connector.
+9. Directory DNS Name - guftgu.in, DNS IP addrsss - private IP of AD server, username=Administrator, Password=Same as AD server password.
+10. Go to IAM -> Role -> Directory Services -> EC2FullAccess -> Create Role.
+11. Create one more role for Billing.
+12. Add user Madan & Vikas to above role.
+13. Copy the URL and paste in incognito tab.
+
+</pre></h4>
+</html>

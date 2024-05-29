@@ -1,0 +1,78 @@
+<html><h2><u><center>AWS S3 Labs </center></u></h2>
+<h4><pre>
+
+<h3><u>Lab 1 - S3 Bucket Creation LAB =></u></h3> 
+
+1. Click on S3, notice that region changed to "Global" -> click on create bucket (Bucket_name=any unique name, Region=Any, ACL=enabled, Don't block the public access) ->  create bucket.
+2. Click on Bucket to open -> click on Upload -> Add files (select any file to upload) -> Upload.
+3. Click on the file and select open, notice the URL of it -> scrol down and copy the link and paste in the another tab (It will get access denied). To fix this, go to Permission of the file -> 
+   ACL (Everyone public access READ,READ) . Copy the link and paste in another tab and try now. 
+4. Upload any text file -> Open the file -> copy the url -> make it public and paste the url on the new tab. 
+5. Update the file -> upload the updated file -> Open the file again -> copy the url and paste in the another tab. You will get access denied again, make it public. You will get the updated one,
+   not the old one. 
+6. Empty the bucket and delete it. 
+
+<h3><u>Lab 2 - S3 Bucket Creation using CLI =></u></h3> 
+
+1. Install the awscli and run aws configure to configure the aws cli.
+2. Run the commands
+aws s3 ls
+aws s3 mb s3://bucket_name
+Go to the dir which you want to synchronize with s3
+aws s3 sync . s3://bucket_name
+Now go the dir and remove everything. 
+aws s3 sync s3://bucket_name .
+aws s3 rb s3://bucket_name
+
+++++++++++++++++++++++++++++++++
+aws s3 ls
+aws s3 mb s3://bucket_name
+aws s3api put-object --bucket my-s3-cli-bucket --key dir-1/aws.png --body aws.png
+aws s3 cp test-file s3://hirw-test-bucket/new-folder/test-file
+aws s3 ls
+aws s3 ls s3://bucket_name
+aws s3 ls s3://bucket_name/folder-name/
+aws s3 rm s3://bucket_name/folder-name/file-name
+aws s3 rm s3://bucket_name/folder --recursive
+aws s3 rb s3://bucket_name --force
+
+===========================
+S3 Versioning
+
+1. Click on S3, notice that region changed to "Global" -> click on create bucket (Bucket_name=any unique name, Region=Any, ACL=enabled, Don't block the public access) ->  create bucket.
+2. Click on Bucket to open -> click on Upload (select any file to upload) -> Upload.
+3. Click on the file and select open, notice the URL of it -> scrol down and copy the link and paste in the another tab (It will get access denied). To fix this, go to Permission of the file -> 
+   ACL (Everyone public access READ,READ) . Copy the link and paste in another tab and try now. 
+4. Click on bucket -> properties ->  versioning -> Enable Versioning -> Save.
+5. Update the file -> upload the updated file -> Open the file again -> copy the url and paste in the another tab. You will get access denied again, make it public. You will get the updated one,
+   not the old one. 
+6. Select the file -> see the latest version and toggle around the version. 
+7. Delete the file and make the bucket empty -> Now go to version show -> Select the delete marker file -> Delete -> Verify the file is available now.   
+8. Empty the bucket and delete it. 
+
+=====================
+S3 Cross Region Replication
+Search the definiation of CRR. 
+If you're doing CRR, you have to enable the versioning. If you will not do it, you cann't do CRR.
+
+1. Click on S3, notice that region changed to "Global" -> click on create bucket (Bucket_name=any unique name, Region=Any), enable the versioning ->  create bucket. Verify the versioning.
+2. Click on S3, notice that region changed to "Global" -> click on create bucket (Bucket_name=any unique name, Region=Different from first), enable the versioning ->  create bucket. Verify the versioning.
+3. Click on Bucket1 to open -> click on Upload (select any file to upload) -> Upload. Verify, if we're getting this file on second bucket.
+4. Select one bucket -> Management -> Replication Rule ->Create Replication rule (Rule Name=crr1, status=enabled, set resource = entire bucket, Destination Bucket=Bucket2, IAM Role = Create new role) -> Save.
+Note: Exisiting file and folder won't replicate, it will start doing replication now. 
+5. Verify both the bucket, go to bucket1 -> upload another file -> go to bucket2 and check if it is got sync with bucket1. 
+6. Go to bucket2 -> upload another file -> go to bucket1 and check if it is got sync with bucket2. (No it will not).
+As you have mentioned the replication rule source and destination. 
+=========================
+AWS S3 Object Lifecycle Management
+
+#Lifecycle Management usually get implemnted on all the bucket, not on individual object. 
+
+1. Click on S3, notice that region changed to "Global" -> click on create bucket (Bucket_name=any unique name, Region=Any, untick Block all public access) ->  create bucket.
+2. Click on Bucket to open -> click on Upload (select any file to upload) -> Upload.
+3. Click on the Bucket to open, click on management -> select lifecycle -> Create lifecycle rule (rule name=lifecycle, rule scope=Apply to all, stroage class transition{current version (transition to standard IA after 30), (transition to oneone IA after 60), (transition to Glacier after 180)},
+   {previous version (transition to standard IA after 30), (transition to oneone IA after 60), (transition to Glacier Deep archieve after 180)}) -> Next.
+   Expiration (Previous version delete after 365 days, check other options as well.) -> Save. 
+   
+</pre></h4>
+</html>
