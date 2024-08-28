@@ -1,0 +1,116 @@
+<html><u><center><h2>Apache Web Server</h2></center></u>
+<h4><pre>
+
+<h3>What is Apache Web Server?</h3>
+
+
+-> Apache Web Server (usually called just Apache) is an open-source web server developed by the Apache Software Foundation. 
+-> Apache is the most popular web server software on the Internet, it is estimated that 50% of all active websites use Apache as their web server.
+-> The Apache project was launched in 1995 and was based on an older web server software called NCSA HTTPd after work on the NCSA code stalled. 
+-> Apache played a key role in the initial growth of the World Wide Web, quickly overtaking NCSA HTTPd as the dominant HTTP server, and has remained most popular 
+   since April 1996. 
+-> In 2009, it became the first web server software to serve more than 100 million websites.
+
+-> The software is free and open-source, licensed under the Apache License that allows the user of the software the freedom to use the software for any purpose, to distribute it, to modify it, and to distribute modified versions of the software.
+-> Apache is a process-based, modular, open-source web server application designed to establish a new thread for each connection occurring simultaneously. 
+-> It runs on various operating systems including Linux, Windows, and macOS
+-> Apache support many features and its functionality can be extended using compiled modules. Here are the major features:
+   - A very robust web server that can handle large volumes of traffic.
+   - One Apache installation can serve many different Web sites using virtual hosts.
+   - Configurable error messages.
+   - Supported by several graphical user interfaces (e.g. ApacheConf).
+   - Supports password and digital certificate authentication.
+   - Supports load balancing across multiple servers.
+-> Although Apache can be used in many ways (e.g. as a proxy server or a load balancer), it is commonly used as a web server. 
+==============================================================   
+   
+<h3>How to install the Apache web server (CentOS / Ubuntu Linux Installation)</h3>
+
+In this example we will show how to install the Apache web server in CentOS 7.2 and Ubuntu 14.04.3 using the command line. 
+
+1. Installing Apache and utilities
+Perhaps the first thing that we need to note is that the package that includes Apache has different names in CentOS (httpd) and Ubuntu (apache2). 
+The good news is that in both cases, the package is included in the repositories that are configured when the operating system is installed. For that reason, 
+you do not need to make any modifications to the repositories in order to install Apache.
+
+In addition, we will install an extra package named apache2-utils and httpd-tools in Ubuntu and CentOS, respectively. This package includes tools that will be 
+useful to benchmark Apache, manage basic and digest authentication to web pages, and resolve IP addresses to host names in the logs, among other things.
+
+However, before you proceed please keep in mind that installing packages require administrative privileges, so you will need to run the following commands either as root or using sudo. 
+With that in mind, let us proceed with the installation.
+
+In CentOS, type
+
+sudo yum update && sudo yum install httpd httpd-tools -y
+and press Enter.
+
+In Ubuntu, do
+
+sudo apt-get update && sudo apt-get install apache2 apache2-utils -y
+The package management system (yum or apt-get) will take care of installing all necessary dependencies required by the web server.
+
+2. Checking running status of Apache
+Once the installation completes, we need to check whether the web server has been automatically started. Typically, that is the case in Ubuntu but not in CentOS.
+
+To check the running status of Apache in Ubuntu, type
+
+service apache2 status
+
+In case if it is stopped state, type below command to start apache.
+sudo service apache2 start 
+
+By now, you can safely ignore the AH00558 error message as it refers to an aspect of the web server configuration that we will cover in the next tutorial of the Apache series.
+
+
+In CentOS, you will use systemctl (the system and service manager tool) to verify the status of Apache:
+
+systemctl status httpd
+
+In case if it is stopped state, type below command to start apache.
+sudo systemctl start httpd
+
+Last but not least, we need to ensure that the web server is started automatically the next time the system boots. 
+In Ubuntu, the installation process by default will configure it to start after a reboot whereas in CentOS, you will need to start it by hand:
+
+
+systemctl start httpd
+and enable it for future reboots:
+
+
+sudo systemctl enable httpd
+This ensures that Apache will be started by systemd each time the machine boots.
+
+In Ubuntu, you can also get more information about Apache (web traffic statistics, server load and uptime, percentage of CPU usage, number of requests currently being processed, to name a few examples) using
+
+apachectl status
+
+sudo apt update && sudo apt install w3m
+sudo service apache2 restart
+In CentOS this command is aliased to
+
+systemctl status httpd
+so you will not get more details than those shown in Fig. 2).
+
+3. Serving your first website with Apache
+After you have successfully installed Apache and got it running, it is time to look into serving web pages. 
+To see Apache in action for the first time, launch a web browser and point it to the IP address of the machine where Apache is running, as shown in Fig. 3 (192.168.0.29 is a CentOS and 192.168.0.30 is Ubuntu).
+
+
+If you cannot see the test page after starting Apache in CentOS and your web browser says it can’t establish a connection to the web server, please check the following:
+
+- Did you misspell the IP address in the browser’s URL bar?
+- Check the secarity group?
+
+Get the code from: https://www.systemcodegeeks.com/web-servers/apache/how-to-install-the-apache-web-server/
+
+Next, feel free to create other subdirectories under /var/www/html and more html pages, and hyperlinks between them.
+
+Congratulations! You have already taken your first step towards mastering Apache.
+
+4. Wrapping up
+In this tutorial we have explained how to install Apache, the most used server used by websites and Internet-facing computers, in CentOS 7 and Ubuntu 14.04. In addition, we showed you how to replace the default test page with a custom one.
+
+In the next articles of this series, we will discuss in greater depth the capabilities of Apache. Stay tuned.  
+
+</pre></h4>
+</html>

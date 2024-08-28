@@ -1,44 +1,96 @@
-<html><u><center><h2>Apache</h2></center></u>
+<html><u><center><h2>Web Server</h2></center></u>
 <h4><pre>
-<h3>What is Apache HTTP Server?</h3>
--> Apache HTTP Server (usually called just Apache) is an open-source web server developed by the Apache Software Foundation. 
--> Apache is the most popular web server software on the Internet, it is estimated that 50% of all active websites use Apache as their web server.
--> The Apache project was launched in 1995 and was based on an older web server software called NCSA HTTPd. 
--> The software is free and open-source, licensed under the Apache License that allows the user of the software the freedom to use the software for any purpose, to distribute it, to modify it, and to distribute modified versions of the software.
--> Apache HTTP Server is cross-platform. It is available for a number of operating systems, including:
-   - Windows
-   - OS X
-   - Linux
-   - Unix
-   - FreeBSD
-   - Solaris
--> Apache support many features and its functionality can be extended using compiled modules. Here are the major features:
-   - A very robust web server that can handle large volumes of traffic.
-   - One Apache installation can serve many different Web sites using virtual hosts.
-   - Configurable error messages.
-   - Supported by several graphical user interfaces (e.g. ApacheConf).
-   - Supports password and digital certificate authentication.
-   - Supports load balancing across multiple servers.
+
+Before we jump to the definition, let me tell you a small story. Imagine a bustling town where people love to send messages to get what they need. 
+In this town, there’s a giant castle(think of it as Web Server). This castle is full of amazing things like books, music, videos, and pictures.
+In the town, everyone lives in little house(think of it as Clients). When someone from a Client house wants something from the castle, they don’t go there themselves.
+Instead, they send a messenger bird(think of it as HTTP/HTTPS) with a letter describing what they want. The Castle has guards who are very organized. 
+They know exactly where everything is kept. When the bird arrives with a request, the guards read the letter, find the item, and send it back with the bird. 
+The bird then flies back to the Client house and delivers the item.
+
+Now, to make sure everything runs smoothly, the people in the Client houses and gurds from the Castle speak the same language, this is the "HTTP/HTTPS protocol." It’s 
+like a set of rules they follow so that the requests and deliveries are always clear and correct. For example, the people in the Client houses might ask for a specific 
+picture by saying, “Please send me the picture called ‘sunset.jpg’.” The guards in the castle understand this perfectly because they follow the same rules.
+Sometimes, the castle is really busy with lots of birds flying in and out. But the guards are really good at their jobs, so they handle everything quickly. 
+If people from Client house asks for something the castle doesn’t have, the guards politely send back a message saying, “Sorry, we don’t have that.”
+
+In this way, the Castle serves all the requests from Client houses in the town, and the birds make sure everyone gets what they need. This whole system is called 
+"client-server architecture," where the people from Client houses ask for things, and the guards from Castle provides them.
+
+So, whenever you’re browsing the internet, think of it like living in a Client house and sending out HTTP/HTTPS birds to Web Server Castles all over the world to 
+get the things you want to see or do. 
+
+Now to understand differnece between HTTP and HTTPS, imagine you have two special birds that deliver messages: one is named "HTTP," and the other is "HTTPS."
+HTTP is a fast bird that carries your message to a guards, but anyone who sees this bird can read the message. It’s like sending a postcard where everyone who 
+handles it can see what you wrote.
+
+Now, HTTPS is a super special bird. It also delivers messages, but it wears a shiny, secret shield. This shield makes sure that no one else can read the message 
+except guards. It’s like sending a locked treasure chest, and the guards has the key to open it.
+
+So, when you want to send something important or secret, you use HTTPS, the bird with the shield, to keep your message safe.
+
+Now, with that it will be easy to understand the Web Server Concepts.
 
 <h3>What is a web server?</h3>   
 
-<img src="pic/pic1.PNG" alt="HTML5 Icon" style="width:1000px;height:300px;">
-
--> Although Apache can be used in many ways (e.g. as a proxy server or a load balancer), it is commonly used as a web server. 
--> A web server is a software with a primary function to store, process and deliver web pages to clients. 
+-> A web server is a software with a primary function to store(like web pages, applications, images and videos), process and deliver web pages to clients. 
 -> The protocol used to deliver web pages is HTTP (Hypertext Transfer Protocol).
 -> HTTP is a client-server protocol, a client (usually a web browser) requests a resource (a web page) from a web server. 
 -> The web server responds with the requested web page.
--> As you can see in the picture above, the client wants to access http://google.com and points the browser to the URL http://google.com (this is an example of an HTTP Request message). 
--> The web server (running Apache or a similar web server software) hosting http://google.com receives the request and responds with the content of the web page (an HTTP response message).
+-> As you can see in the picture above, the client wants to access http://google.com and points the browser to the URL http://google.com (this is an example of an 
+   HTTP Request message). 
+-> The web server (running Apache or a similar web server software) hosting http://google.com receives the request and responds with the content of the web page 
+   (an HTTP response message).
 -> Web servers usually use a well-known TCP port 80. If the port is not specified in a URL, browsers will use this port when sending HTTP request. 
 -> For example, you will get the same result when requesting http://google.com and http://google.com:80.
+-> When you enter a URL into your browser, you're asking the web server to send your browser the page you're after.
+-> The main job of a web server is to display website content. If a web server isn't properly functioning, website visitors cannot access the content they're looking for, which is why 
+   maintaining a stable web server environment is crucial for online businesses.
+-> If a web server is not exposed to the public and is used internally, then it is called Intranet Server. 
 
-<h3>Install Apache on Ubuntu</h3>
--> Apache HTTP Server is usually installed on a Linux distribution, although it has been ported to other operating systems as well. 
--> First, update the packages on your Ubuntu installation by running <mark>sudo apt-get update && sudo apt-get upgrade</mark> command.
--> After the upgrade process finishes, run the <mark>sudo apt-get install apache2 -y</mark> command to install Apache.
--> Apache should automatically start. To verify that, run the <mark>service apache2 status</mark> command.
--> To verify that Apache web server is working, go to your browser and simply type localhost in the address bar. You should get the Apache2 Ubuntu Default Page.  
+<h3>how the process of requesting a web page works</h3>
+
+Firsty, you enter a URL for example http://google.com:80 in your browser like Google Chrome or Firefox. It can be HTTP or HTTPS. Each time you navigate to a webpage using its URL, 
+you’re “requesting” files from that site’s web server. Every server will have both a designated IP address and domain name or URL. These two pieces of data refer to the same thing, 
+but in different languages. Domain names, or URLs, are word-based and designed to allow human users to remember and find a website easily. The corresponding IP address is the unique 
+digital address for the site’s server. It is expressed in numerical digits only, the language used by computers to speak to one another.
+
+ A DNS server identifies the URL’s corresponding IP address, and converts it to IP address. With the underlying 
+IP address established, the Google server can be identified, and your request is sent. The Google server intercepts the request. It fetches the requested web page and returns it to your browser.
+Web servers use HTTP or HTTPS protocols to communicate. The server can either accept or deny a request from a web user.
+
+Any computer can be turned into a web server by installing server software and connecting the machine to the internet. To handle web traffic at acceptable speeds, web servers combine 
+high-capacity storage with high-speed processing units.
+Web servers typically run on Linux or Unix-based systems and Windows operating systems.
+
+<h3>Static server vs. dynamic server</h3>
+Web servers deliver two types of content: static and dynamic.
+
+Static web server
+A static web server is used for websites with static content – in other words, content that doesn’t change. A good example of a static website is a blog: the content of each page stays the 
+same over time.
+
+Consequently, a static web server returns the exact same web page every it receives that page’s query. A blog article is an example of static web content: when an Internet user requests the page, it will always return the same page with the same data. Note, however, that some blog posts or other mostly-static articles do have small interactive elements on the page, such as a field for posting comments. Static web content typically loads more quickly because all of the content on the page is cached as is and doesn’t need to change.
+
+Dynamic web server
+A dynamic web server is configured to deal with dynamic content. This is content that changes based on user behavior.
+
+Many websites, such as ecommerce platforms, host dynamic elements. For instance, once a visitor has purchased a specific item, the site may be configured to propose similar articles.
+
+Thus, a dynamic server must be equipped to serve up content that’s constantly changing. This requires a plugin or a connection with an application server to provide the data for each new request.
+
+Dynamic servers often take longer to provide content and answer requests because responding to individual requests adds an extra step.
+
+
+<h3>Different Types of Web Servers</h3>
+There are several types of web servers available, each with its own strengths and weaknesses. The most common types include Apache, Microsoft Internet Information Services (IIS), and Nginx. 
+
+Apache is the most widely used web server software. Developed and maintained by Apache Software Foundation, Apache is an open-source software available for free.
+
+IIS is a web server software package designed for Windows Server and is used for hosting websites and other content on the web. 
+
+Nginx is another popular open-source web server that also serves as a reverse proxy, HTTP cache, and load balancer.
+ 
+https://www.webopedia.com/definitions/web-server/ 
 </pre></h4>
 </html>
