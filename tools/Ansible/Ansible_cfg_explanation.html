@@ -1,0 +1,98 @@
+<html><h3><u>ansible.cfg Explanation</u></h3>
+<h4><pre>
+Run the following command on ansible server.
+ansible all -m shell -a 'df -h'
+Note: Please ignore the command details. The important thing is that df -h has been executed.
+Note: The df command retrieves the usage status of the disks on the server
+
+Now we can get disk usage information from three nodes. But how were these three nodes determined? Some of you may be wondering where that information is set in Ansible. 
+
+We'll go over the settings. If you run the ansible command with the --version option, it will output some basic information about the execution environment. This includes the version and the Python version you are using. 
+
+ansible --version
+ansible 2.9.6
+  config file = /etc/ansible/ansible.cfg
+  configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3/dist-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 3.8.10 (default, Jul 29 2024, 17:02:10) [GCC 9.4.0]
+
+Note: Output content may vary depending on the environment
+
+Here we will focus on the following line.
+
+config file = /etc/ansible/ansible.cfg
+
+This shows the path to the Ansible configuration file that will be loaded. This file is a configuration file to control the basic behavior of Ansible.
+
+Let's check out what this contains about inventory. Run the following command on the terminal.
+
+
+ubuntu@ansibleserver:~$ grep '#inventory  ' /etc/ansible/ansible.cfg
+#inventory      = /etc/ansible/hosts
+
+Note: This is the default value to ansible. It will be used by default, regardless of if it is commented out. 
+
+This is a setting related to the "inventory" where Ansible decides which nodes to run the automation on.
+
+Let's see what is there /etc/ansible/hosts file. 
+ubuntu@ansibleserver:~$ cat /etc/ansible/hosts
+[server]
+node01
+node02
+node03
+
+So, from here ansible is deciding where to run the command to, which is called inventory. 
+
+Now run the command as mentioned below:
+
+ubuntu@ansibleserver:~$ cp /etc/ansible/ansible.cfg .
+
+Make sure you got ansible.cfg file in the current directory.
+ubuntu@ansibleserver:~$ ls -ltr ansible.cfg
+-rw-r--r-- 1 ubuntu ubuntu 20016 Sep 20 01:56 ansible.cfg
+
+Now re-run the ansible --version command as mentioned below. 
+ubuntu@ansibleserver:~$ ansible --version
+ansible 2.9.6
+  config file = /home/ubuntu/ansible.cfg
+  configured module search path = ['/home/ubuntu/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
+  ansible python module location = /usr/lib/python3/dist-packages/ansible
+  executable location = /usr/bin/ansible
+  python version = 3.8.10 (default, Jul 29 2024, 17:02:10) [GCC 9.4.0]
+
+See, the file location changed to /home/ubuntu/ansible.cfg. How did this happen?
+
+Ansible Configuration File Precedence Order
+Ansible uses a specific precedence order to determine which configuration file (ansible.cfg) to use for its operations. Here is the order in which Ansible searches for the configuration file:
+
+1. The path given by the environment variable ANSIBLE_CONFIG: Firstly, Ansible will look at the configuration file specified by the ANSIBLE_CONFIG environment variable if it is defined.
+2. Current Directory: Ansible then looks for the configuration file in the current directory where the command is executed (./ansible.cfg).
+3. Home Directory: If not found in the current directory, Ansible then searches for the configuration file in the home directory of the user executing the command (~/.ansible.cfg).
+4. System-wide Configuration: Lastly, if none of the above are found, Ansible will fall back to the system-wide configuration file located at /etc/ansible/ansible.cfg.
+
+So, Ansible searched the environment variable, then looked at the home directory and it found the configuration file. Hence showed in the ansible --version command.
+
+
+Different ansible.cfg File Locations and Their Significance
+1. Environment Variable ($ANSIBLE_CONFIG):
+Significance: Users can specify a custom path to an ansible.cfg file by setting the ANSIBLE_CONFIG environment variable. This gives users precise control over the configuration file used by Ansible commands.
+Use Case: Essential for scenarios where configurations need to be dynamically switched or when using multiple configuration files for different environments or workflows.
+
+2. Current Directory (./ansible.cfg):
+Significance: This configuration file is the first one that Ansible tries to load. Having an ansible.cfg in the current directory allows for project-specific configurations.
+Use Case: Ideal for managing configurations at a project level, ensuring that the settings are localized and not affecting other projects.
+ 
+
+3. Home Directory (~/.ansible.cfg):
+Significance: If the configuration file is not found in the current directory, Ansible will look for it in the home directory of the user running the command. This allows for user-specific configurations.
+Use Case: Useful when different users on the same system need different Ansible configurations. It provides user-level customization without affecting global settings.
+ 
+4. System-wide Configuration (/etc/ansible/ansible.cfg):
+Significance: This is the system-wide configuration file used when no other files are found. It acts as a fallback and contains the default settings used by all Ansible commands system-wide.
+Use Case: Suitable for defining global configurations that apply system-wide, ensuring consistency across all projects and users on the system.
+
+Rememeber to remove ansible.cfg file to avoid any conflict with the original configuration.
+rm -rf ansible.cfg
+
+More details about the Configuration file can be found here. https://docs.ansible.com/ansible/latest/reference_appendices/config.html#the-configuration-file

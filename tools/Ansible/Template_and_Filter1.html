@@ -1,0 +1,101 @@
+<html><h3><u>Subset of Playbook to deploy jinja2 template</u></h3>
+<h4><pre>
+=================================================================
+Playbook to deploy jinja2 template
+
+You have been using Ansible and have decided to work with the templating tool that comes with it. You are going to use Jinja2 to stamp when activities and deployments happen on your servers.
+
+Your team wants to also verify that certain conditions exist when the deployments occur. You figure out how to use Jinja2 for that task.
+
+Create a Jinja2 template file called template.j2 to stamp values on each of the hosts as you execute the playbook.
+cat template.j2
+This is an auto generated file by ansible at {{ ansible_date_time.date }} {{ ansible_date_time.time }}.
+
+Hostname: {{ ansible_nodename }}
+System: {{ ansible_os_family }}
+Proc: {{ ansible_processor_count }}
+
+Create a deploy playbook called template.yml to push the template template.j2 over to all servers as the file template.txt. Verify the file is populated with values as expected.
+
+
+
+cat template.yml 
+---
+- name: Start of Jinja2 Template Push
+  hosts: server
+  vars:
+  gather_facts: True
+  become: False
+  tasks:
+
+    - name: Copy template over to all hosts
+      template:
+        src: template.j2
+        dest: "template.txt"
+		
+ansible-playbook template.yml
+		
+ansible server -m shell -a 'cat template.txt'
+		
+==========================================
+
+Create a playbook to deploy a jinja2 report
+
+You have been using Ansible and have decided to work with the templating tool that comes with it. You are going to use Jinja2 to stamp a report back to your ansible node letting you know how the 
+run went on all of the individual servers. 
+After you complete this testing you expect to run this against hundreds of nodes and need to know the nodes that it did or didn't complete on.
+
+Create a playbook called template.yml to check the uptime of all servers.
+
+Create a Jinja2 template file to deploy the report.txt report upon execution of the playbook.
+
+Report back unreachable servers and servers that have been up longer than a day to report.txt on the server of execution.
+
+cat template.j2 
+This is a system Validation at {{ ansible_date_time.time }} on {{ ansible_date_time.date }}
+
+Unreachable systems:
+----------------------------------------------
+{% for host in ansible_play_hosts_all %}
+{% if host not in ansible_play_hosts %}
+{{ host }}
+{% endif  %}
+{% endfor %}
+
+Hosts who have been up longer than a day:
+----------------------------------------------
+{% for host in ansible_play_hosts_all %}
+{% if hostvars[host].uptime is defined %}
+{% if 'day' in hostvars[host].uptime.stdout %}
+ {{ hostvars[host].ansible_hostname }} - has not rebooted today
+{% endif %}
+{% endif %}
+{% endfor %}
+
+cat template.yml 
+---
+- name: Start of Jinja2 Template Push
+  hosts: server
+  vars:
+  gather_facts: True
+  become: False
+  tasks:
+
+    - name: Get information for uptime on all systems
+      shell: uptime
+      register: uptime
+
+    - name: Report out to just main server
+      template:
+        src: template.j2
+        dest: "report.{{ansible_date_time.iso8601_basic_short}}.txt"
+      run_once: yes
+      delegate_to: localhost
+	  
+ansible-playbook template.yml
+
+Manual verify for all
+
+cat report.*.txt
+</pre></h4>
+</html>

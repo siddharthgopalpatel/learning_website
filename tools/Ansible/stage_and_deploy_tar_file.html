@@ -1,0 +1,69 @@
+<html><h3><u>Playbook to stage and deploy tar file</u></h3>
+<h4><pre>
+Create a playbook to stage and deploy an application
+
+Let's assume you're developing an application which just echo some lines in an interval of 5 seconds
+
+Create folder
+mkdir deploy
+
+Create a file inside it
+vi deploy/deployer.sh 
+#!/bin/bash
+
+echo "I would be deploying some stuff."
+
+sleep 5
+
+echo "I would be deploying some more stuff."
+
+Let's tar the folder 
+tar -cvzf deploy.tar.gz deploy
+
+Get sha1 checksum of the archive. (Check why checksum is different)
+
+ubuntu@ansibleserver:~$ sha1sum deploy.tar.gz
+0cb7d3743ff5bbd340e8111a495be5f787acd59d  deploy.tar.gz
+
+Create a deploy playbook called deploy.yml to push the file deploy.tar.gz over to the /home/ubuntu directory on all servers, unpackage it, and run the installer.sh.
+Make sure that the playbook runs to completion and sets the environment as you need it
+
+ubuntu@ansibleserver:~$ cat deploy.yml
+---
+- name: Start of Deployer playbook
+  hosts: server
+  gather_facts: True
+  become: False
+  tasks:
+
+    - name: Copy deploy.tar.gz over at {{ ansible_date_time.iso8601_basic_short }}
+      copy:
+        src: deploy.tar.gz
+        dest: deploy.tar.gz
+        checksum: 0cb7d3743ff5bbd340e8111a495be5f787acd59d  ## Paste your checksum here
+
+    - name: Untar the deployer
+      unarchive:
+        src: deploy.tar.gz
+        dest: .
+        remote_src: yes
+
+    - name: Make the installer script executable
+      file:
+        path: deploy/deployer.sh
+        mode: '0755'
+
+    - name: Run the installer and register the output
+      shell: deploy/deployer.sh
+      register: installer_output
+
+    - name: Debug and show the variable installer_output
+      debug:
+        var: installer_output
+
+		
+Run Playbook and verify that everything pushed correctly
+
+ansible-playbook deploy.yml
+</pre></h4>
+</html>

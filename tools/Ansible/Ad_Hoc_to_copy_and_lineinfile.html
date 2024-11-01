@@ -1,0 +1,57 @@
+<html><h3>Ad Hoc to copy and lineinfile</h3>
+<pre><h4>
+You decide to practice more of the ad hoc mode and deploy a configuration file that you need in your environment. You find that there's a value that needs to change on different servers, so you 
+figure out how to do that task.
+
+Check the content of configuration file.
+cat ansible/configfile.cfg
+var1=000000
+var2=True
+var3=False
+
+
+Create a directory on your servers for deployments named deployment
+ansible server -m file -a 'path=deployment state=directory'
+
+Confirm it using below command.
+ubuntu@ansibleserver:~$ ansible server -m shell -a 'ls -ltr | grep deployment'
+node03 | CHANGED | rc=0 >>
+drwxrwxr-x 2 ubuntu ubuntu 4096 Sep 13 18:50 deployment
+node01 | CHANGED | rc=0 >>
+drwxrwxr-x 2 ubuntu ubuntu 4096 Sep 13 18:50 deployment
+node02 | CHANGED | rc=0 >>
+drwxrwxr-x 2 ubuntu ubuntu 4096 Sep 13 18:50 deployment
+
+
+Copy over your configfile.cfg to that directory
+ansible server -m copy -a 'src=ansible/configfile.cfg dest=deployment'
+
+Confirm it using below command.
+ubuntu@ansibleserver:~$ ansible server -m shell -a 'ls -ltr deployment/configfile.cfg'
+node01 | CHANGED | rc=0 >>
+-rw-rw-r-- 1 ubuntu ubuntu 33 Sep 13 18:51 deployment/configfile.cfg
+node03 | CHANGED | rc=0 >>
+-rw-rw-r-- 1 ubuntu ubuntu 33 Sep 13 18:51 deployment/configfile.cfg
+node02 | CHANGED | rc=0 >>
+-rw-rw-r-- 1 ubuntu ubuntu 33 Sep 13 18:51 deployment/configfile.cfg
+
+Check the content of var1 value in configfile.cfg file using below command.
+ubuntu@ansibleserver:~$ ansible server -m shell -a 'cat deployment/configfile.cfg | grep var1'
+
+Change the values of var1 to equal 111111 only 
+Let's fix a bad configuration line from 000000 to 111111 in the config file in deployment/configfile.cfg with the lineinfile module
+
+ansible server -m lineinfile -a "path=deployment/configfile.cfg regexp='^var1' line='var1=111111'"
+Quick verification that it looks good on all servers
+
+ubuntu@ansibleserver:~$ ansible server -m shell -a 'cat deployment/configfile.cfg | grep var1'
+node01 | CHANGED | rc=0 >>
+var1=111111
+node03 | CHANGED | rc=0 >>
+var1=111111
+node02 | CHANGED | rc=0 >>
+var1=111111
+
+</h4>
+</pre>
+</html>

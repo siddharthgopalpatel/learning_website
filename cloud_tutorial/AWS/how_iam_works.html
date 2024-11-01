@@ -1,0 +1,64 @@
+<h3><u>How IAM works?</u></h3>
+https://docs.aws.amazon.com/IAM/latest/UserGuide/intro-structure.html
+1. Principal
+2. Request
+3. Authentication
+4. Authorization
+5. Actions/Operations
+6. Resources
+
+<u>1. Principal </u>
+-> A principal is a person or application that can make a request for an action or operation on AWS resources.
+-> Your administrative IAM user is your first principal.
+-> You can allow users and services to assume a role.
+-> IAM users, Roles, Federated users and applications are all AWS principals.
+<mark>-> You can support federated users or programmatic access to allow an application to access your AWS account.</mark>
+
+<u>2. Request </u>
+-> When a principal tries to use AWS management console, the AWS API or the AWS CLI, that principal sends a request to AWS.
+-> The request include the following information - Actions, Resources, Principal, Environment Data, Resource Data. 
+-> Actions, that the principal wants to perform.
+-> Resources, upon which the actions are performed.
+-> Principal information, including the environment from which the request was made.
+-> Request Context
+   - Before AWS can evaluate and authorize a request, AWS gathers the request information.
+   - Principal (the Requester), which is determined based on the authorization data.
+   - This include the aggregate permissions that the associated with that principal.
+   - Environment data, such as IP address, User agent, SSL enabled status or time of the day.
+   - Resource data, or data related to the resource that is being requested.
+   
+<u>3. Authentication </u>
+-> A principal sending a request must be authenticated (signed into AWS) to send a request to AWS.
+-> Some AWS services, like AWS S3, allow request from anonymous users, they are exception to the role.
+-> To authenticate from the console as root user, you must sign-in with your username and password.
+-> To authenticate from the API to CLI, you must provide your access key and secret key.
+-> Even if you are root user and accessing the AWS from CLI, you need to have access key and secret key.
+-> You might also be required to provide additional security information like MFA ( eg -> google authenticator )
+
+<u>4. Authorization </u>
+-> To authorize request, IAM uses value from the request context to check for matching policies and determine whether to allow or deny the request.
+-> IAM policies are stored in IAM as JSON documents and specify the permissions that are allowed or denied.
+-> By default, only the AWS root user has access to all the resources in that account. 
+-> User (identity) based Policies, specify permission allowed/denied for principals.
+-> Resource based Policies, specify permission allowed/ denied for resources. Popular for granting cross account permissions.
+-> IAM checks each policy that matches the context of your request.
+-> If a single policy includes a denied action, IAM denies the entire request and stop evaluating. This is called Explicit Deny.
+-> The evaluation logic follows these rules -
+   - By default, all request are denied (implicit deny).
+   - An explicit allow overrides this default.
+   - An explicit deny overrides any allows.
+   
+<u>5. Action </u>
+-> Actions are defined by a service, and are the things that you can do to a resource, such as viewing, creating, editing and deleting that resource.
+-> IAM supports approx. 40 actions for a user resource including create user, delete user etc.
+-> Any actions or resources that are not explicitly allowed are denied by default.
+-> After your request has been authenticated and authorized, AWS approves the actions in your request.   
+
+<u>6. Resource </u>
+-> A resource is an entity that exist within a service.
+-> Examples are EC2 instances, S3 bucket, IAM users, Dynamo DB table.
+-> Each AWS service defines a set of actions that can be performed on each resource.
+-> After AWS approves the actions on your request, those actions can be performed on the related resource within your account.
+-> If you create a request to perform an unrelated action on resource, that request is denied.
+-> When you provide permissions using an identity/User based policy in IAM, then you provide permissions to access resources only within the same account.   
+-> When you have to create/edit/delete resource from some other account, you apply for resource based policy. Example is cross-account-permission.  

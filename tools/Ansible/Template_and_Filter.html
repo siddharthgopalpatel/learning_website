@@ -1,0 +1,166 @@
+<html><h3><u>Template and Filter</u></h3>
+<h4><pre>
+Ansible has a template feature that allows dynamic file creation. We are using jinja2 as the template engine.
+
+Templates are a very versatile feature and can be used in a variety of situations. It is possible to dynamically generate and distribute configuration files for applications, and to create reports based on the information collected from each node.
+
+<u>Jinja2</u>
+To use a template, two elements are required.
+
+template file: a file with an embedded jinja2-style representation, typically with the j2 extension appended.
+template module: similar to the copy module. If the template file is specified in src and the destination is specified in dest, when the template file is copied, the jinja2 part is processed before copying the file.
+Let's create the actual template.
+
+Please create a file templates/index.html.j2 and edit its contents to be as follows. This file will be the jinja2 template file.
+
+&lt;html&gt;&lt;body&gt;
+&lt;h1&gt;This server is running on {{ inventory_hostname }}.&lt;/h1&gt;
+
+{% if LANG == "Hindi" %}
+     Namaste!!!
+{% else %}
+     Hello!
+{% endif %}
+&lt;/body&gt;&lt;/html&gt;
+
+At first glance, this file looks like a simple HTML file, but there are parts enclosed in {{ }} and {% %}. These parts correspond to the Jinja2 expressions that are expanded by the template engine.
+
+Evaluate the variables in {{ }} and embed the values in the brackets.
+Control statements can be embedded in {% %}.
+Before the detailed explanation, let's first create template_playbook.yml and try to run the template. Please edit template_playbook.yml as follows.
+
+---
+- name: using template
+  hosts: all
+  become: yes
+  tasks:
+    - name: install apache2
+      apt:
+        name: apache2
+        state: latest
+
+    - name: start & enabled apache2
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Put index.html from template
+      template:
+        src: templates/index.html.j2
+        dest: /var/www/html/index.html
+		
+template: template module is called
+Now let's try to run this playbook.
+
+
+ansible-playbook template_playbook.yml -e 'LANG=Hindi'
+
+PLAY [using template] *********************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************
+ok: [node02]
+ok: [node01]
+ok: [node03]
+
+TASK [install apache2] ********************************************************************************************************************************************************************************************
+ok: [node03]
+ok: [node01]
+ok: [node02]
+
+TASK [start & enabled apache2] ************************************************************************************************************************************************************************************
+ok: [node01]
+ok: [node03]
+ok: [node02]
+
+TASK [Put index.html from template] *******************************************************************************************************************************************************************************
+changed: [node01]
+changed: [node02]
+changed: [node03]
+
+PLAY RECAP ********************************************************************************************************************************************************************************************************
+node01                     : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+node02                     : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+node03                     : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+Let's confirm what the result is. Please run the following command.
+
+ansible node01 -m uri -a 'url=http://localhost/ return_content=yes'
+
+This command uses the uri module, a module that issues HTTP requests. This module is used to access http://localhost/ from each node to retrieve the content.
+
+node01 | SUCCESS => {
+    (snip)
+    "content": "&lt;html&gt;&lt;body&gt;\n&lt;h1&gt;This server is running on node01.&lt;/h1&gt;\n\n     Namaste!!!\n&lt;/body&gt;&lt;/html&gt;\n\n",
+    (snip)
+    "url": "http://localhost/"
+}
+node02 | SUCCESS => {
+    (snip)
+    "content": "&lt;html&gt;&lt;body&gt;\n&lt;h1&gt;This server is running on node02.&lt;/h1&gt;\n\n     Namaste!!!\n&lt;/body&gt;&lt;/html&gt;\n\n",
+    (snip)
+    "status": 200,
+    "url": "http://localhost/"
+}
+node03 | SUCCESS => {
+    (snip)
+    "content": "&lt;html&gt;&lt;body&gt;\n&lt;h1&gt;This server is running on node03.&lt;/h1&gt;\n\n     Namaste!!!\n&lt;/body&gt;&lt;/html&gt;\n\n",
+    (snip)
+    "status": 200,
+    "url": "http://localhost/"
+}
+
+The content key contains the content of the retrieved index.html . Checking this content, we can see that the {{ inventory_hostname }} part in the template file is replaced with the hostname, and the {% if LANG == "Hindi" %} part is "Namaste!!!
+
+Now, let's change the condition and confirm what happens if LANG == "Hindi" is not valid.
+
+ansible-playbook template_playbook.yml -e 'LANG=EN'
+
+ansible all -m uri -a 'url=http://localhost/ return_content=yes'
+
+In the next execution, you should see that "Hello!". Access node01,2,3 with a browser and see how the site works.
+
+By using templates in this way, it is possible to generate files dynamically. This feature has a very wide range of applications and can be used in various situations such as automatic generation of configuration files and configuration reports.
+
+<u>Filter</u>
+One of the features of Jinja2 is filter . This can be used to expand variables with {{ }}, and allows for simple processing of variable values. This feature is also available in the playbook.
+
+To use a filter, use the format {{ var_name | filter_name }}. Let's check some examples.
+
+default filter
+This is a filter that sets the default value of a variable if it does not set any value.
+
+ansible node01 -m debug -a 'msg={{ hoge | default("abc") }}'
+
+ubuntu@ansibleserver:~$ ansible node01 -m debug -a 'msg={{ hoge | default("abc") }}'
+node01 | SUCCESS => {
+    "msg": "abc"
+}
+
+
+upper/lower filter
+This filter converts strings to uppercase/lowercase.
+
+ubuntu@ansibleserver:~$ ansible node01 -e 'str=abc' -m debug -a 'msg="{{ str | upper }}"'
+node01 | SUCCESS => {
+    "msg": "ABC"
+}
+
+min/max filter
+This filter extract the minimum and maximum values from a list.
+
+ubuntu@ansibleserver:~$ ansible node01 -m debug -a 'msg="{{ [5, 1, 10] | min }}"'
+node01 | SUCCESS => {
+    "msg": "1"
+}
+
+
+ubuntu@ansibleserver:~$ ansible node01 -m debug -a 'msg="{{ [5, 1, 10] | max }}"'
+node01 | SUCCESS => {
+    "msg": "10"
+}
+
+There are many other filters implemented, so you can use them according to your situation to make it easier to create a playbook.
+</pre></h4>
+</html>

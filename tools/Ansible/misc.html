@@ -212,4 +212,497 @@ ansible-playbook main.yml --tags=api
 
 ================
 
+
+========================================
+Playbook execution to push MOTD to all servers
+
+Your team has had mistakes because users don't know what server they've jumped into, specifically DEV or PROD environments. You have decided to push a message of the day file (MOTD) to all servers to help them know what systems they are on.
+
+MOTD stands for Message of the Day, which is a message that is displayed to a user when they log in to a computer system or network. MOTDs are often used to inform users of important information or upcoming events
+
+Verify your hosts file and motd_push.yaml file
+
+Push the motd messages to all servers based on the new variables assigned in the hosts file.
+
+cat hosts
+[server]
+node01 env=prod
+node02 env=dev
+node03 env=test
+
+
+controlplane $ cat dev_motd 
+ .----------------.  .----------------.  .----------------.
+| .--------------. || .--------------. || .--------------. |
+| |  ________    | || |  _________   | || | ____   ____  | |
+| | |_   ___ `.  | || | |_   ___  |  | || ||_  _| |_  _| | |
+| |   | |   `. \ | || |   | |_  \_|  | || |  \ \   / /   | |
+| |   | |    | | | || |   |  _|  _   | || |   \ \ / /    | |
+| |  _| |___.' / | || |  _| |___/ |  | || |    \ ' /     | |
+| | |________.'  | || | |_________|  | || |     \_/      | |
+| |              | || |              | || |              | |
+| '--------------' || '--------------' || '--------------' |
+ '----------------'  '----------------'  '----------------'
+ 
+controlplane $ cat prod_motd 
+.----------------.  .----------------.  .----------------.  .----------------.
+| .--------------. || .--------------. || .--------------. || .--------------. |
+| |   ______     | || |  _______     | || |     ____     | || |  ________    | |
+| |  |_   __ \   | || | |_   __ \    | || |   .'    `.   | || | |_   ___ `.  | |
+| |    | |__) |  | || |   | |__) |   | || |  /  .--.  \  | || |   | |   `. \ | |
+| |    |  ___/   | || |   |  __ /    | || |  | |    | |  | || |   | |    | | | |
+| |   _| |_      | || |  _| |  \ \_  | || |  \  `--'  /  | || |  _| |___.' / | |
+| |  |_____|     | || | |____| |___| | || |   `.____.'   | || | |________.'  | |
+| |              | || |              | || |              | || |              | |
+| '--------------' || '--------------' || '--------------' || '--------------' |
+'----------------'  '----------------'  '----------------'  '----------------'
+
+
+
+controlplane $ cat motd_push.yaml
+---
+- name: MOTD Push
+  hosts: server
+  vars:
+  gather_facts: True
+  become: True
+  tasks:
+
+  - name: Debug env variables
+    debug:
+      var: env
+
+  - name: Push over the file if prod
+    copy:
+      src: prod_motd
+      dest: "/etc/motd"
+    when: '"prod" in env'
+
+  - name: Push over the file if dev
+    copy:
+      src: dev_motd
+      dest: "/etc/motd"
+    when: '"dev" in env'
+	
+Note: There are variables now assigned to each of the servers (env)
+
+Run the Playbook push the MOTD
+
+ansible-playbook -i hosts motd_push.yaml
+Run an adhoc command to check all the MOTD on all servers
+
+ansible server -i hosts -m shell -a 'cat /etc/motd'
+Manually check by logging into node01
+
+ssh node01 'cat /etc/motd'
+
+===============================
+Playbook execution to create users
+
+Your engineering team needs to push service accounts for new users and teams to some of your systems. You have decided to do that in Ansible.
+
+Verify your /root/hosts file, and /root/user_create.yaml files. You may note that the hosts file has variables set that we will be using to push the correct files in our first playbook.
+
+Push the user prod_engineer to the prod servers and the dev_engineer user to the dev servers.
+
+controlplane $ cat hosts 
+[server]
+node01 env=prod
+node02 env=dev
+node03 env=test
+
+cat user_create.yaml
+Note: This will push users to the servers
+
+ubuntu@ansibleserver:~$ cat user_create.yaml
+---
+- name: User push to environment servers
+  hosts: server
+  vars:
+  gather_facts: True
+  become: True
+  tasks:
+
+  - name: Debug env variables just to see them
+    debug:
+      var: env
+
+  - name: Create the prod_engineer user
+    user:
+      name: prod_engineer
+      comment: Prod engineer
+    when: '"prod" in env'
+
+  - name: Create the dev_engineer user and give root group
+    user:
+      name: dev_engineer
+      group: root
+      comment: Dev engineer
+    when: '"dev" in env'
+
+  - name: Create the test_engineer user and give root group
+    user:
+      name: test_engineer
+      group: root
+      comment: Test engineer
+    when: '"test" in env'
+
+	
+Run the Playbook push the users.
+ansible-playbook -i hosts user_create.yaml
+Run an ad hoc command to verify users were added and place in groups.
+
+ansible server -i hosts -m shell -a "tail -1 /etc/passwd"
+ansible server -i hosts -m shell -a "ls -ltr /home"	
+
+Verify your user_key_add.yaml file. You may note that the hosts file has variables set that we will be using to push the correct files in our first playbook.
+
+Modify and generate keys for the users.
+
+cat user_key_add.yaml
+Note: This will generate keys for the existing users.
+
+ubuntu@ansibleserver:~$ cat user_key_add.yaml
+---
+
+- name: User push to environment servers
+  hosts: server
+  vars:
+  gather_facts: True
+  become: True
+  tasks:
+
+  - name: Debug env variables just to see them
+    debug:
+      var: env
+
+  - name: Create the prod_engineer user
+    user:
+      name: prod_engineer
+      comment: Prod engineer
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      ssh_key_file: .ssh/id_rsa
+    when: '"prod" in env'
+
+  - name: Create the dev_engineer user and give root group
+    user:
+      name: dev_engineer
+      comment: Dev engineer
+      groups: root
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      ssh_key_file: .ssh/id_rsa
+    when: '"dev" in env'
+
+  - name: Create the test_engineer user and give root admin
+    user:
+      name: test_engineer
+      comment: Test engineer
+      groups: root
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      ssh_key_file: .ssh/id_rsa
+    when: '"test" in env'
+
+
+Run the Playbook push the users.
+
+ansible-playbook -i hosts user_key_add.yaml
+Run an ad hoc command to verify keys were added to the users.
+
+ansible server -i hosts -m shell -a "ls /home/*engineer/.ssh" -b
+
+================================
+Playbook execution update packages
+
+Your team has been tasked to update all servers in the environment to maintain compliance with your GRC (Governance, Risk, and Compliance) Security team. You also need to configure some new servers for software in the environment.
+
+Verify your hosts file
+controlplane $ cat hosts 
+[server]
+node01 node_type=db
+node02 node_type=web
+node03 node_type=app
+
+
+and packages_update.yaml files. You may note that the hosts file has variables set that we will be using to push the correct files in our first playbook. Update all the packages to the newest version
+Note: This will update all current packages on the server, it may take 5 minutes or more to do that. 
+Run the Playbook update all the packages.
+
+cat packages_update.yaml
+controlplane $ cat packages_update.yaml 
+---
+- name: Upgrade Packages
+  hosts: server
+  vars:
+  gather_facts: True
+  become: True
+  tasks:
+
+  - name: Upgrade all packages to the latest version
+    apt:
+      name: "*"
+      state: latest
+
+ansible-playbook -i hosts packages_update.yaml
+
+controlplane $ cat packages_install.yaml 
+---
+- name: Package install for environment
+  hosts: server
+  vars:
+  gather_facts: True
+  become: True
+  tasks:
+
+  - name: Debug env variables just to see them
+    debug:
+      var: node_type
+
+  - name: Install apache2 on the web server
+    apt:
+      pkg: 
+      - apache2
+      - php
+      state: present
+    when: '"web" in node_type'
+
+  - name: Install mariadb on the web server
+    apt:
+      pkg: 
+      - mariadb-server
+      - mariadb-client
+      state: present
+    when: '"db" in node_type'
+
+ansible-playbook -i hosts packages_install.yaml
+
+
+Verify your packages_install.yaml file. You may note that the hosts file has variables set that we will be using to install packages on the right servers.
+
+
+
+Run it again to see that nothing has to change. This demonstrates idempotency, where the result of the previous run is the same in subsequent runs.
+
+==================================
+
+Create a playbook to push apache environment
+
+https://killercoda.com/het-tanis/course/Ansible-Labs/16-Ansible-Web-Server-Env-Deploy
+
+controlplane $ cat hosts 
+[servers]
+controlplane env=prod app=db
+node01 env=dev app=web
+
+[webservers]
+node01 env=dev app=web
+==============================================
+Playbook execution remove security violations
+
+Lab Activities
+You cleaned up the golden image over in lab Updating Golden Image. Now your team needs you to deploy that change to all the active systems.
+
+Verify your /root/hosts file, /root/remove_packages.j2 and /root/remove_packages.yaml files.
+
+Remove the bzip2 and containerd packages from all servers to ensure that old software is no longer on your systems and to stop developer abuse of containerd on all systems.
+
+
+Solution
+cat /root/hosts
+cat /root/remove_packages.yaml
+You may want to remove the commented debug variables before you run this. What are the individual tasks attempting to do with this playbook?
+
+Now that we've reviewed the playbook, let's look at the Jinja2 template that will be stamped to this server at the end of the execution.
+
+cat /root/remove_packages.j2
+What are the variables being used? what are the expected outcomes?
+
+Run the playbook to see the removal of packages from all servers.
+
+ansible-playbook -i /root/hosts /root/remove_packages.yaml
+Did the playbook execute with no issues? If it did not, run it again and see what the output is.
+
+Verify the output of the reports that you've run.
+
+for report in $(ls /root/*report*.txt); do echo "checking $report"; cat $report; done
+Are the output reports what you expected? Why or why not?
+
+controlplane $ cat /root/hosts
+[servers]
+controlplane
+node01
+
+controlplane $ cat /root/remove_packages.yaml
+---
+
+- name: Package removal for environment
+  hosts: servers
+  vars:
+  gather_facts: True
+  become: True
+  tasks:
+
+  - name: Remove Apps for security reasons
+    apt:
+      pkg: 
+      - containerd
+      - bzip2
+      purge: yes
+      state: absent
+    register: removed_apps
+
+  # - name: Debug Removed Apps
+  #   debug:
+  #     var: removed_apps
+      
+  - name: Verify that the packages were removed
+    shell: "dpkg -l | grep -i {{item}}"
+    loop:
+      - bzip2
+      - containerd
+    failed_when: false
+    register: verify_apps
+
+ # - name: Debug Removed Apps
+ #   debug:
+ #     var: verify_apps
+
+  - name: Report out all removals to just main server
+    template:
+      src: /root/remove_packages.j2
+      dest: "/root/remove_packages_report.{{ansible_date_time.iso8601_basic_short}}.txt"
+    run_once: yes
+    delegate_to: localhost
+	
+controlplane $ cat /root/remove_packages.yaml
+---
+
+- name: Package removal for environment
+  hosts: servers
+  vars:
+  gather_facts: True
+  become: True
+  tasks:
+
+  - name: Remove Apps for security reasons
+    apt:
+      pkg: 
+      - containerd
+      - bzip2
+      purge: yes
+      state: absent
+    register: removed_apps
+
+  # - name: Debug Removed Apps
+  #   debug:
+  #     var: removed_apps
+      
+  - name: Verify that the packages were removed
+    shell: "dpkg -l | grep -i {{item}}"
+    loop:
+      - bzip2
+      - containerd
+    failed_when: false
+    register: verify_apps
+
+ # - name: Debug Removed Apps
+ #   debug:
+ #     var: verify_apps
+
+  - name: Report out all removals to just main server
+    template:
+      src: /root/remove_packages.j2
+      dest: "/root/remove_packages_report.{{ansible_date_time.iso8601_basic_short}}.txt"
+    run_once: yes
+    delegate_to: localhost
+=======================================
+=======================================
+Generate CSV report 
+https://killercoda.com/het-tanis/course/Ansible-Labs/19-Ansible-csv-report
+========================================
+Create a playbook to push web and database environment.
+
+Lab Activities
+Your team has a deployment of a web server and database environment. They want to secure the environment so that only the ports that should be exposed are exposed on the correct servers. 
+You have researched and found that UFW can do this and you can configure it with Ansible in a playbook.
+
+Setup the servers to expose the correct port numbers.
+
+Web Server - Port 22, 80
+DB Server - Port 22, 3306
+
+Make sure that you can connect to those servers on the exposed ports.
+
+You may try to complete this activity yourself, or you may find the answers in the Solution below.
+
+Check your hosts file, cat hosts
+ubuntu@ansibleserver:~$ cat hosts
+[server]
+node01 node_type=db
+node02 node_type=web
+node03 node_type=app
+
+
+Check on the environment deployer, or compare it to what you tried to write. How do they compare? How do they differ?
+
+---
+- name: Package install for environment
+  hosts: server
+  vars:
+  gather_facts: True
+  become: True
+  tasks:
+
+  - name: Debug env variables just to see them
+    debug:
+      var: node_type
+
+  - name: Install apache2 on the web server
+    apt:
+      pkg:
+      - apache2
+      - php
+      state: present
+    when: '"web" in node_type'
+
+  - name: starting the apache2 on web server
+    service:
+            name: apache2
+            state: started
+    when: '"web" in node_type'
+
+  - name: Install mariadb on the DB server
+    apt:
+      pkg:
+      - mariadb-server
+      - mariadb-client
+      state: present
+    when: '"db" in node_type'
+
+  - name: starting the mariadb on DB server
+    service:
+            name: mariadb
+            state: started
+    when: '"web" in node_type'
+
+Execute the packages_install.yaml to set up your web and db environments.
+
+Run against the [server] host group
+
+ansible-playbook -i hosts packages_install.yaml
+When this executes, do you notice that it skips servers? Why is it doing this, and is it expected?
+
+Verify that you have all the expected ports open on both servers
+sudo apt-get update && sudo apt-get install netcat -y
+
+timeout 3 nc -vz node01 3306
+timeout 3 nc -vz node01 22
+timeout 3 nc -vz node02 80
+timeout 3 nc -vz node02 22
+
+If this has all worked, you've completed this part of the lab and are ready to move on.
+
+
 </pre></h4></html>

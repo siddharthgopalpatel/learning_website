@@ -1,62 +1,165 @@
 <html><h2><u><center>Ansible Intallation and setup steps</u></center></h2>
 <pre><h4>
-<u><h3>1. Installation steps for Amazon Linux</u></h3>
 
-1. Go to AWS account -> Create 3 EC2 instances in same AZ.
+<h3><u>Installing Ansible Docker way - Installation steps on ubuntu in Docker environment</u></h3>
+Why Docker: 
+We'll install Ansible in Docker containers and practice there. So, in future if you want to create ansible environment you don't have to go through any configurations or setup, just run one command and you should be good.
+Once you're done, delete the container using one command. 
 
-2. Take access of all the machines via CLI(eg. putty  etc.). 
+Step 1. Get a ubuntu server. You can create EC2 instance on AWS. 
+Step 2. Add Docker's official GPG key using below command. 
+sudo apt-get update
+sudo apt-get install ca-certificates curl -y
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-3. Now go inside ansible server and download ansible package (For Amazon Linux).
-<mark>=> wget http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm </mark> 
+Step 3. Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
 
-4. Check the downloaded package after running ls commmand.
+Step 4. Install the latest Docker version
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
-5. yum install epel-release-latest-7.noarch.rpm -y
+Step 5. Install docker-compose package using below command. 
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
-6. yum update -y
+Step 6. Create docker-compose.yml file and paste the below content inside the file.
+services:
+  ansibleserver:                                    ## Ansible Controller Node
+    image: siddharthpatel1/ansiblenode:v2
+    container_name: ansibleserver
+    hostname: ansibleserver
+    restart: unless-stopped
+    ports:
+      - "22"
+    tty: true
+    networks:
+      ansible_network:
+        ipv4_address: 172.18.0.2
 
-7. Have to install all the packages one by one
-<mark>=> yum install git python python-level python-pip openssl ansible -y</mark>
+  node01:                                           ## Managed Node 1
+    image: siddharthpatel1/ubuntuhost:v2
+    container_name: node01
+    hostname: node01
+    restart: unless-stopped
+    ports:
+      - "22"
+      - "80:80"
+      - "443:443"
+    tty: true
+    networks:
+      ansible_network:
+        ipv4_address: 172.18.0.3
+    depends_on:
+      - ansibleserver
 
-8. Go to hosts file and paste private ip of all the nodes
+  node02:                                           ## Managed Node 2
+    image: siddharthpatel1/ubuntuhost:v2
+    container_name: node02
+    hostname: node02
+    restart: unless-stopped
+    ports:
+      - "22"
+      - "81:80"
+      - "444:443"
+    tty: true
+    networks:
+      ansible_network:
+        ipv4_address: 172.18.0.4
+    depends_on:
+      - ansibleserver
 
-9. Now the hosts file is only working after updating the ansible configuration file,
-<mark=> uncomment below mentioned lines 
-a. inventory = /etc/ansible/hosts
-b. sudo-user = root </mark>
+  node03:                                           ## Managed Node 3
+    image: siddharthpatel1/ubuntuhost:v2
+    container_name: node03
+    hostname: node03
+    restart: unless-stopped
+    ports:
+      - "22"
+      - "82:80"
+      - "445:443"
+    tty: true
+    networks:
+      ansible_network:
+        ipv4_address: 172.18.0.5
+    depends_on:
+      - ansibleserver
 
-10. Now create one user, in all the three instances.
-<mark>=> adduser ansible</mark>
+  node04:                                           ## Managed Node 4
+    image: ubuntu:20.04
+    container_name: node04
+    hostname: node04
+    restart: unless-stopped
+    ports:
+      - "22"
+      - "83:80"
+      - "446:443"
+    tty: true
+    networks:
+      ansible_network:
+        ipv4_address: 172.18.0.6
+    depends_on:
+      - ansibleserver
 
-11. Set password the created user
-<mark>=> passwd ansible</mark>
+networks:
+  ansible_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1
 
-12. This ansible user doesn't have sudo priviledge right now, if you want to give sudo priviledge to ansible user
-<mark>=> visudo
-=> root ALL = (ALL) ALL
-=> ansible ALL = (ALL) NOPASSED:ALL </mark>
 
-14. Now do this thing in other nodes also. To test, Go to ansible server and try to install httpd package as a ansible user.
-<mark>=> [ansible@ip] sudo yum install htppd -y</mark>
+Step 7. Run sudo docker compose up -d from current directory.
+Step 8: Login to Controller node using sudo docker exec -it ansibleserver /bin/bash
+Step 9. Check the ansible version installed
+ansible --version
+Step 10. Clone the GitLab repository if you need all the playbooks, codes, inventory. But I would recommend to write by yourself for practice.
+git clone https://gitlab.com/meghachandsingh/ansible.git
+Step 11. Copy the ssh config file, so that it should not ask about server identity confirmation when you log in first time.
+cp ansible/config ~/.ssh/config
 
-15. Now to establish connection b/w ansible server and node do some changes in sshd-config file and restart sshd service.
+Step 12. Check the connections and ip address using ssh command on all the nodes - 
 
-16. At the last generate the ssh keys on ansible server and copy the public key on all the nodes.
+for node in node01 node02 node03
+do
+        ip=$(ssh ${node} 'hostname -i')
+        echo "${node} => ${ip}"
+done
 
-<h3><u>2. Installation steps on RHEL 8</u></h3>
+Step 13. Run the ansible command to check the connection. 
+ansible all -m ping 
 
-yum install python3 -y
-alternatives --set python /usr/bin/python3
-yum -y install python3-pip
-useradd ansible
-passwd ansible
-echo "ansible ALL = (ALL) NOPASSWD:ALL" >> /etc/sudoers
-su - ansible
-pip3 install ansible --user
+At this time you shold see below message. 
 
-<h3><u>3. Installation steps on ubuntu in Docker environment</u></h3>
-<p class="w3-medium">Get the git repository <a href="https://github.com/siddharthpatel1993/ansible_practice" target="_blank"> here</a></p>
-cd ansible_practice && docker-compose up -d
-Once it is done, then execute docker exec -it ansibleserver /bin/bash
-And you're in Ansible server, execute Ansible commands now.
+ubuntu@ansibleserver:~$ ansible all -m ping
+node01 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+node03 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+node02 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+==================================
+
 </pre></h4></html>

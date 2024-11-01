@@ -1,45 +1,168 @@
 <html><h3>Ansible Ad-hoc Commands</h3>
 <h4><pre>
-=> Ad-hoc Commands are commands which can be run individually to perform quick functions.
-=> These ad-hoc commands are not used for configuration Management and deployment, because these commands are of one time usage.
-=> The ansible ad-hoc commands uses the /usr/bin/ansible command line tool to automate a single task.
-=> If you run ansible ad-hoc command without module command, it will always shows changed because you're not using ansible module.
-=> If you don't pass module in ad-hoc commands, then ansible takes command module by default.
-=> Command module is not idempotent, whereas all the module in ansible is idempotent. {check this fact}
-=> We use the adhoc command to check on the resources, logs, in the case of debug, restart the server, manager user or group, rebooting the server and maintaining cron jobs etc.
-=> Ansible command module doesn't handle pipe or redirections. You can use shell module to do the same task.
+=> Ad-hoc Commands are commands that can be run individually to perform quick functions.
+=> These ad-hoc commands are not used for configuration Management and deployment, because these commands are of one-time usage.
+=> The ansible ad-hoc commands use the /usr/bin/ansible command line tool to automate a single task.
+=> If you run an ansible ad-hoc command without the module command, it will always show changed because you're not using the ansible module.
+=> If you don't pass the module in ad-hoc commands, then Ansible takes the command module by default.
+=> We use the ad-hoc command to check on the resources and logs, in the case of debugging, restarting the server, manager user or group, rebooting the server and maintaining cron jobs, etc.
+=> The Ansible command module doesn't handle pipe or redirections. You can use the shell module to do the same task.
 => >, | => used in playbook on command module
-=> ansible-inventory --list -i inventory
 
-<u><h3>Some arguments which can be used in adhoc commands or playbook</h3></u>
+In this section, You will learn about the Module which is the important element in Ansible, and the Ad-hoc command to run the module.
 
-<u>-b/--become =></u> is become, change the user to sudo or root. 
+What is a Module?
 
-<u>-k/--ask-become-pass/--ask-pass/-K =></u>
 
-check below:
-ansible -i inventory example -m ping -u centos --ask-pass
--K/--ask-pass
+List of modules
+Modules are managed in the form of `collection', and each collection contains multiple related modules. 
 
-Some ad-hoc commands - 
-1. ansible demo -a "ls"
-2. ansible demo[0:4] -a "touch file"
-3. ansible all -a "touch file4"
-4. ansible demo -a "sudo yum install httpd -y" or ansible demo -ba "yum install httpd -y"
-5. ansible demo -ba "yum remove httpd -y"
+You can see what modules are available in your environment with the ansible-doc command. This command lists installed modules.
+ansible-doc -l
+Note: Proceed with f, return with b, end with q.
+
+Count the number of modules the ansible has in the installed version
+ansible-doc -l | wc -l
+
+Read the documentation on the setup module (may have to hit q to exit)
+
+ansible-doc -s setup
+Read the documentation on the copy module (may have to hit q to exit)
+
+ansible-doc -s copy
+
+Note: Proceed with f, return with b, end with q.
+The module documentation describes the parameters given to the module, the return values after the module is executed, and examples of actual usage.
+
+Ad-hoc command
+You can call only one of these modules from Ansible to make Ansible do small things. This method is called the Ad-hoc command.
+
+The command format is as follows:
+
+$ ansible all -m module_name -a 'parameters'
+-m module_name: Specifies the module name.
+-a parameters: Specifies the parameters to be passed to the module. In some cases, it can be optional.
+
+Let's take advantage of the Ad-hoc command to get some modules working.
+
+ping
+Let's run the ping module. This is a module that determines whether Ansible can "communicate as Ansible" to the node it is working on (which is different from the ICMP used in the network). 
+Ping module parameters are optional.
+
+ansible all -m ping
+
+
+shell - This executes arbitrary commands on the node and retrieves the results.
+
+ansible all -m shell -a 'hostname'
+
+Get kernel information
+ansible all -m shell -a 'uname -a'
+
+Get a date
+ansible all -m shell -a 'date'
+
+Get disk usage
+ansible all -m shell -a 'df -h'
+
+Extract specific information from installed packages
+ansible all -m shell -a 'apt list --installed 2>/dev/null |grep bash'
+
+apt
+apt is the module that performs package operations. Try installing a new package using this module.
+Install the apache2 package. First, verify that apache2 is not installed in your environment.
+
+ubuntu@ansibleserver:~$ ansible node01 -m shell -a 'which apache2'
+node01 | FAILED | rc=1 >>
+non-zero return code
+
+This command should fail because the apache2 does not exist.
+
+Then, install apache2 using the apt module.
+ansible node01 -b -m apt -a 'name=apache2 state=latest'
+
+
+-b/--become: become option. This is an option to operate on the node you are connecting to as root privileges. This option is added because installing the package requires root privileges. Otherwise, this command will fail.
+
+If you check the apache2 package again, it should succeed because the package is installed this time.
+
+ubuntu@ansibleserver:~$ ansible node01 -m shell -a 'which apache2'
+node01 | CHANGED | rc=0 >>
+/usr/sbin/apache2
+
+
+setup (Ad Hoc to gather data)
+The setup module gives so much information you can use during playbook execution.
+ansible server -m setup
+
+Cut that output down a bit so you can just check the host distribution information.
+
+ansible server -m setup -a 'filter=ansible_distribution'
+
+Cut that output down a bit so you can just check the host time information.
+
+ansible server -m setup -a 'filter=ansible_date_time'
 
 <u><h3>Forks and Parallelization</h3></u>
-1. If you run the same adhoc command multiple times, it will not run in the sequential order on the group mentioned in the inventory. 
-2. There would be a chance that group mentioned in the inventory file will get executed randomly.
-3. This is because, Ansible by default runs in the parallel nature i.e. by default it uses 5 forks.
-4. You can change the behaviour by mentioning -f in adhoc commands.
-5. If you mention -f 1, then it will run in sequential manner. It will run on the one server and wait for it to respond and then it will execute the command on another one.
-Example -> ansible server -m ping -f 1
-6. If you have lot of servers then you can fork 100, to get the result or finish the task fastly.
+1. If you run the same ad-hoc command multiple times, it will not run in the sequential order on the group mentioned in the inventory. 
+2. There would be a chance that the group mentioned in the inventory file will get executed randomly.
+3. This is because Ansible by default runs in a parallel nature i.e. by default it uses 5 forks.
+4. You can change the behavior by mentioning -f in ad-hoc commands.
+5. If you mention -f 1, then it will run sequentially. It will run on the one server and wait for it to respond and then it will execute the command on another one.
 
-<u><h3>Setup module</h3></u>
-1. This command will give all the details that it will see on the host servers.
-2. It is helpful if you want to run playbook based on some criteria or you want to put the template.
+In the example below we didn't use fork so the node result came randomly i.e. node03, node01 and then node02
+ubuntu@ansibleserver:~$ ansible all -m ping
+node03 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+node01 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+node02 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+
+In the examplew below you can see all the three nodes came in other i.e. node01, node02 and then node03.
+Example -> ansible server -m ping -f 1
+
+ubuntu@ansibleserver:~$ ansible server -m ping -f 1
+node01 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+node02 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+node03 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+
+
+6. If you have a lot of servers then you can fork 100, to get the result or finish the task fast.
 
 </h4>
 </pre></html>

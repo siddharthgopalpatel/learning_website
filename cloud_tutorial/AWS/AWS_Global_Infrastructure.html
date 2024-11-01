@@ -1,0 +1,39 @@
+<html><h2><u><center>AWS Global Infrastructure</center></u></h2>
+<h4><pre>
+-> AWS global infrastructure is split between regions and availability zones. At the time of writing, <mark>there's 34 regions and 108 availability zones.</mark> The number of regions
+   and availability zones will keep changing, it’s important to understand the difference between regions and availability zones. 
+
+<h3><u>Availability Zones (AZs) -</u></h3>
+-> Availability Zones (AZs) consist of one or more physically separated data centers, each with redundant power, networking, and connectivity, housed in separate facilities.
+-> Think of an availability zone as a data center. If you haven't worked in tech before, if you've never been to a data center, you might be wondering what a data center is. 
+-> A data center is simply a building that's filled with servers. That's all it is. It's a building with rows and rows of servers. They're all inside data halls and you have 
+   multiple data halls per data center depending on the data center architecture.
+-> Now, an availability zone may have several different data centers, but because they're close together, they will be counted as one availability zone. So it doesn't 
+   necessarily mean it's just one data center. They will be close enough together to be grouped into one availability zone. 
+
+<h3><u>Region -</u></h3>   
+-> Region is simply a location. So it could be London, Cape Town, Sydney, Northern Virginia, etc. It's just a physical location. 
+-> Each region consists of two or more availability zones. So in this region, we've got three availability zones, we've got availability zone A, availability zone  B, and 
+   availability zone C. 
+
+Pic of AZ within Region
+
+<h3><u>How does AWS group Regions?</u></h3> 
+-> AWS logically groups its Regions into geographic locations. Regions are fully independent and isolated, what does it mean is if one Region is impacted, the others will 
+   not be impacted. Regions are isolated, and resources aren't automatically replicated across them.
+-> So if you check <a href="https://aws.amazon.com/about-aws/global-infrastructure/regions_az/">Regions and Availability Zones</a> on AWS page, you can see here, we've got all the different regions inside North America. 
+-> You can click on different tabs and see it inside South America, Europe and the Middle East and Asia Pacific etc. So there are regions and availability zones everywhere. 
+-> So if we go over to North America, we can scroll down here and we can see that US East (Northern Virginia) Region. So this has six availability zones in it and it was 
+  launched in 2006.
+
+<h3><u>Edge Locations</u></h3> 
+-> An edge location is basically just endpoints for AWS that are used for caching content. Typically this consists of things like cloudfront, which is Amazon's Content 
+   delivery network(CDN), which we're going to learn about a little bit later on in the course. 
+-> Essentially all you need to know that there are many more edge locations than there are regions. Currently there are over <mark>215 edge locations</mark> around the world. 
+
+</h4>
+</pre></html>
+
+
+
+

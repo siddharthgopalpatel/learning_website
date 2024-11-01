@@ -1,21 +1,118 @@
 <html><h3><u>Loops</u></h3>
 <h4><pre>
-Sometimes you want to repeat a task multiple times. In computer programming this is called loops. Common Ansible loops include changing ownership on
-several files and/or directories with the file module, creating multiple users with user module, and repeating a polling step untill certain result
-is reached.
+Used to perform specific tasks repeatedly. For example, let's look at a playbook that creates three OS users: apple , orange , pineapple . The user module is available to add users, so you can write a playbook like the one below.
 
 ---
-- hosts: server
-  user: ansible
+- name: add three users individually
+  hosts: node01
   become: yes
-  connection: ssh
   tasks:
-          - name: add list of users in my nodes
-            user: name='{{item}}' state=present
-            with_items:
-                    - dadu
-                    - papa
-                    - mummy
-                    - nidhi
+    - name: add apple user
+      user:
+        name: apple
+        state: present
+
+    - name: add orange user
+      user:
+        name: orange
+        state: present
+
+    - name: add pineapple user
+      user:
+        name: pineapple
+        state: present
+		
+This playbook works to add three users exactly as intended. However, this method is redundant because the same description repeated over and over again. If the specifications of the user module change, the way parameters are given, 
+or if you want to change user information, you must edit each task.
+
+The loop clause can be used for this kind of repeated process.
+
+Edit loop_playbook.yml as follows.
+---
+- name: add users by loop
+  hosts: node01
+  become: yes
+  vars:
+    user_list:
+      - apple
+      - orange
+      - pineapple
+  tasks:
+    - name: add a user
+      user:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ user_list }}"
+
+
+vars: user_list -> Define the variable user_list to define a list with three elements: apple, orange, and pineapple.
+loop: "{{ user_list }}" -> Add a loop clause to the task and give a list to parameters, the task will be repeated for only a number of elements.
+name: "{{ item }}" -> An item variable is a variable that is only available in a loop and contains the retrieved variables. In other words, the first loop is apple and the second loop is orange.
+
+Execute loop_playbook.yml
+ansible-playbook loop_playbook.yml
+
+PLAY [add users by loop] ******************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [add a user] *************************************************************************************************************************************************************************************************
+changed: [node01] => (item=apple)
+changed: [node01] => (item=orange)
+changed: [node01] => (item=pineapple)
+
+PLAY RECAP ********************************************************************************************************************************************************************************************************
+node01                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+Let's see if the user really added. If the playbook is written correctly, the user should have been created in node01.
+
+ansible node01 -b -m shell -a 'cat /etc/passwd'
+
+(omit)
+apple:x:1001:1001::/home/apple:/bin/bash
+orange:x:1002:1002::/home/orange:/bin/bash
+pineapple:x:1003:1003::/home/pineapple:/bin/bash
+Note: /etc/passwd file contains user information on Linux.
+
+Suppose you want to add more users of mango', peach'. In that case, please edit the playbook and try again. 
+If the execution results are as follows, it means the playbook is described correctly. You'll be able to see that the idempotent operation.
+
+ansible-playbook loop_playbook.yml
+---
+- name: add users by loop
+  hosts: node01
+  become: yes
+  vars:
+    user_list:
+      - apple
+      - orange
+      - pineapple
+      - mango
+      - peach
+  tasks:
+    - name: add a user
+      user:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ user_list }}"
+
+PLAY [add users by loop] ******************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [add a user] *************************************************************************************************************************************************************************************************
+ok: [node01] => (item=apple)
+ok: [node01] => (item=orange)
+ok: [node01] => (item=pineapple)
+changed: [node01] => (item=mango)
+changed: [node01] => (item=peach)
+
+PLAY RECAP ********************************************************************************************************************************************************************************************************
+node01                     : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+Although the simplest loops have been introduced here, official documentation shows how to loop in various cases. Please use it differently depending on the situation.
 					
 </pre></h4></html>

@@ -1,0 +1,138 @@
+<html><h3><u>Ansible Lint</u></h3>
+<h4><pre>
+Coding Conventions
+Ansible has a high degree of freedom in coding and can write playbooks in various ways. However, there are cases where this degree of freedom can cause problems. That happens when the team proceeds with automation.
+
+When an individual creates a playbook at will, some people add name to the task, but others do not. As such, when there is an imbalance in content for each individual, the cost of ensuring quality increases.
+
+Therefore, the team needs coding conventions. By creating rules, teams can write code in common, leading to equalization of skills and lower review costs. However, on the other hand, it is also necessary to check 
+whether it complies with the terms and conditions.
+
+Therefore, Ansible provides a way to verify compliance with the terms and conditions automatically, so we will learn how to use them.
+
+<u>Ansible Lint</u>
+Ansible offers a program called ansible-lint(https://github.com/ansible/ansible-lint). This can be done by a static analysis of the playbook to check if there are any violations of the rules. By default, 
+the rules you check are commonly used, and you can define your own rules.
+
+Before we proceed let's check if ansible-lint is installed by using the below command.
+sudo apt list --installed 2>/dev/null | grep ansible-lint
+
+If it is not installed, install it using the below command.
+sudo apt-get update && sudo apt-get install ansible-lint -y
+
+We are preparing the following 2 playbooks as samples.
+
+lint_ok_playbook.yml
+---
+- hosts: node01
+  gather_facts: false
+  tasks:
+    - name: get process list
+      shell: |
+        set -o pipefail
+        ps -ef | grep -v grep
+      args:
+              executable: /bin/bash
+      changed_when: false
+      register: ret
+
+    - name: print vars
+      debug: var=ret
+
+	  
+lint_ng_playbook.yml
+---
+- hosts: node01
+  gather_facts: no
+  tasks:
+    - shell: |
+        set -o pipefail
+        ps -ef | grep -v grep
+      args:
+              executable: /bin/bash
+      changed_when: no
+      register: ret
+
+    - debug: var=ret
+	
+Both of these playbooks can run correctly and print the output ps -ef. Please do two things as a test.
+
+ansible-playbook lint_ok_playbook.yml
+
+ansible-playbook lint_ng_playbook.yml
+
+Both should have been successful. Now, let's apply ansible-lint to these 2 playbooks.
+
+ansible-lint lint_ok_playbook.yml
+
+This will end normally.
+
+Note: A warning may appear, but please ignore it.
+ansible-lint lint_ng_playbook.yml
+
+Example Error 
+
+ubuntu@ansibleserver:~$ ansible-lint lint_ng_playbook.yml
+[502] All tasks should be named
+lint_ng_playbook.yml:5
+Task/Handler: shell executable=/bin/bash __line__=9 __file__=lint_ng_playbook.yml set -o pipefail
+ps -ef | grep -v grep
+
+Note: If you see any additional error than above, this is because there is a slight difference in the check for each version of the Lint. Newer versions tend to be more stringent.
+
+The error is `All tasks should be named', which shows that all tasks violate the terms and conditions of 'need to keep their names'.
+
+Let's see which rules ansible-lint checks by default. Execute the following command:
+
+ansible-lint -L
+
+You can see that several conventions are defined by default. These terms and conditions are tagged so that you can specify tags to apply and exclude them altogether.
+
+To confirm the tag list, execute the following:
+
+ansible-lint -T
+
+You can exclude the tag you want to exclude by using the -x option. Run the line exclude for the rule so that 'lint_ng_playbook.yml' becomes OK as a test. 
+Check the error, check the tag of the rule that is violating, and specify it following -x.
+ansible-lint -x readability lint_ng_playbook.yml
+
+Note: -x can be used multiple times in a single command. For example ansible-lint -x unnamed-task -x yaml
+Next, modify the playbook so that `lint_ng_playbook.yml' does not fail without using rule exclusion. When modified, run the following to check the results.
+
+ubuntu@ansibleserver:~$ cat lint_ng_playbook.yml
+---
+- hosts: node01
+  gather_facts: no
+  tasks:
+    - name: get process list
+      shell: |
+        set -o pipefail
+        ps -ef | grep -v grep
+      args:
+              executable: /bin/bash
+      changed_when: no
+      register: ret
+
+    - name: print vars
+      debug: var=ret
+
+
+ansible-lint lint_ng_playbook.yml
+
+Define non-standard rules
+In addition to standard checks, you can define rules specific to projects and organizations.
+
+Custom rules are defined in Python, and rules can be easily created by inheriting a class called AnsibleLintRule.
+
+For more information, please check this sample. https://github.com/ansible/ansible-lint/blob/main/examples/rules/task_has_tag.py
+
+The following will be defined in the independent rules.
+
+Prevent prohibited operations (commands) from entering the playbook
+For example, if you have a bug in your router's firm and you want to prohibit a command that causes the switch to hang when you execute the command.
+Risky commands that can cause problems with other commands.
+Additional Check Tools
+A more general LINT tool, YAMLLint(https://github.com/adrienverge/yamllint), is available to check variable naming conventions and wording for `name1. Use it as needed.
+
+</pre></h4>
+</html>

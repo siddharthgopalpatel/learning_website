@@ -1,5 +1,78 @@
 <html><h3><u>Vault</u></h3>
 <h4><pre>
+
+Your team has decided they need to more securely keep their secret information, instead of just passing values at the command line. You know that Ansible Vault can be used to securely store variables.
+
+ubuntu $ cat variables.yaml 
+---
+- name: Variable output testing
+  hosts: localhost
+  vars:
+  gather_facts: True
+  become: False
+  tasks:
+
+    - name: Debug variables to view contents
+      debug:
+        msg: "{{ item }} is in variable list"
+      loop:
+        - "{{ username }}"
+        - "{{ password }}"
+		
+Verify the functionality of the variables.yaml file by executing and giving extra-vars as needed.
+
+ansible-playbook variables.yaml --extra-vars "username=user1 password=somestrongpassword"
+
+Create a vault using Ansible. You will be asked to give a password, make sure you remember it.
+
+ansible-vault create vault.yaml
+Add the following information:
+
+username: user1
+password: somestrongpassword
+Verify that you cannot read the file.
+
+cat vault.yaml
+View the vault with ansible-vault command. You will have to add in the password
+
+ansible-vault view vault.yaml
+
+Run the playbook vault_variables.yaml to see ansible run and use the vault variables.
+ubuntu $ cat vault_variables.yaml 
+---
+- name: Variable output testing
+  hosts: localhost
+  vars:
+  vars_files:
+    - vault.yaml
+  gather_facts: True
+  become: False
+  tasks:
+
+    - name: Debug variables to view contents
+      debug:
+        msg: "{{ item }}"
+      loop:
+        - "Your Username is {{ username }}"
+        - "Your Password is {{ password }}"
+
+Solution
+Run the Playbook variables.yaml. (You will have to put in your vault password)
+
+ansible-playbook --ask-vault-pass vault_variables.yaml
+If we were using tower, we'd store credentials securely in there and it wouldn't matter. But, as it is we have an option to keep a password file. We can use that to decrypt the vault.
+
+echo <your password> > .passfile
+Make sure it's readable only by your user.
+
+chmod 400 .passfile
+Run the ansible playbook and consume that password file to decrypt the vault
+
+ansible-playbook --vault-password-file=.passfile vault_variables.yaml
+
+Check the current CI/CD for this work. Get an example. 
+
+
 Ansible allows keeping sensitive data such as passwords or keys in encrypted files, rather than a plain text in your playbooks.
 
 => Creating a new encrypted playbook
@@ -16,5 +89,7 @@ Ansible allows keeping sensitive data such as passwords or keys in encrypted fil
    
 => To decrypt an encrypted playbook
    <mark>ansible-vault decrypt target.yml</mark>
+   
+   
 </pre></h4>
 </html>

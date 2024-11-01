@@ -1,0 +1,206 @@
+<html><h3><u>Blocks and Error Handling</u></h3>
+<h4><pre>
+You can group a set of tasks in a playbook and apply when and ingore_errors to them together. This is where block comes in. block also has an error handling feature that allows you to use rescue for errors within a block or always to run regardless of errors.
+
+block
+A playbook using block can be written as the following.
+
+Edit the block_playbook.yml
+
+---
+- name: using block statement
+  hosts: node01
+  become: yes
+  tasks:
+    - name: Install, configure, and start Apache
+      block:
+        - name: install apache2
+          apt:
+            name: apache2
+            state: latest
+
+        - name: start & enabled apache
+          service:
+            name: apache2
+            state: started
+            enabled: yes
+
+        - name: copy index.html
+          copy:
+            src: index.html
+            dest: /var/www/html/
+      when:
+        - exec_block == 'yes'
+
+block: when: -> Here, three tasks are grouped together with a block , and a condition is added with a when . The block part is executed together when exec_block == 'yes' is fulfilled.
+Let's see what the difference is in the results of running block_playbook.yml with -e 'exec_block=no' and yes .
+
+
+The first case is when the condition is not fulfilled.
+
+ansible-playbook block_playbook.yml -e 'exec_block=no'
+
+PLAY [using block statement] **************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [install apache2] ********************************************************************************************************************************************************************************************
+skipping: [node01]
+
+TASK [start & enabled apache] *************************************************************************************************************************************************************************************
+skipping: [node01]
+
+TASK [copy index.html] ********************************************************************************************************************************************************************************************
+skipping: [node01]
+
+PLAY RECAP ********************************************************************************************************************************************************************************************************
+node01                     : ok=1    changed=0    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0
+
+You can see that the three tasks are skipped together. Next is the case where the condition is fulfilled.
+
+ansible-playbook block_playbook.yml -e 'exec_block=yes'
+
+PLAY [using block statement] **************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [install apache2] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [start & enabled apache] *************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [copy index.html] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+PLAY RECAP ********************************************************************************************************************************************************************************************************
+node01                     : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+You can see that there are three tasks running, grouped by block .
+
+In this way, related tasks can be grouped together and controlled together using when and so on.
+
+The keywords that can be used for block are listed in Playbook Keywords.
+
+<u>rescue, always</u>
+block will allow you to use rescue and always .
+
+Create rescue_playbook.yml as follows.
+
+---
+- name: using block, rescue, always statement
+  hosts: node01
+  become: yes
+  tasks:
+    - block:
+        - name: block task
+          debug:
+            msg: "message from block"
+
+        - name: check error flag in block
+          assert:
+            that:
+              - error_flag == 'no'
+
+      rescue:
+        - name: rescue task
+          debug:
+            msg: "message from rescue"
+
+        - name: check error flag in rescue
+          assert:
+            that:
+              - error_flag == 'no'
+
+      always:
+        - name: always task
+          debug:
+            msg: "message from always"
+			
+block : Describes the main processing.
+assert : The module for checking. If the condition given by that is fulfilled, it will be ok , if not, it will be failed .
+rescue : Run if an error occurs inside a block .
+always : Always execute the process you want to execute.
+
+This playbook will exit normally if the value of the error_flag variable is no , otherwise it will fail.
+
+Let's run it to check the result. First, set error_flag=no to exit normally.
+
+ansible-playbook rescue_playbook.yml -e 'error_flag=no'
+
+PLAY [using block, rescue, always statement] **********************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [block task] *************************************************************************************************************************************************************************************************
+ok: [node01] => {
+    "msg": "message from block"
+}
+
+TASK [check error flag in block] **********************************************************************************************************************************************************************************
+ok: [node01] => {
+    "changed": false,
+    "msg": "All assertions passed"
+}
+
+TASK [always task] ************************************************************************************************************************************************************************************************
+ok: [node01] => {
+    "msg": "message from always"
+}
+
+PLAY RECAP ********************************************************************************************************************************************************************************************************
+node01                     : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+In this case, the task in block is executed, and then the task in always is executed.
+
+Next, let's check the case when an error occurs.
+
+ansible-playbook rescue_playbook.yml -e 'error_flag=yes'
+
+PLAY [using block, rescue, always statement] **********************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [block task] *************************************************************************************************************************************************************************************************
+ok: [node01] => {
+    "msg": "message from block"
+}
+
+TASK [check error flag in block] **********************************************************************************************************************************************************************************
+fatal: [node01]: FAILED! => {
+    "assertion": "error_flag == 'no'",
+    "changed": false,
+    "evaluated_to": false,
+    "msg": "Assertion failed"
+}
+
+TASK [rescue task] ************************************************************************************************************************************************************************************************
+ok: [node01] => {
+    "msg": "message from rescue"
+}
+
+TASK [check error flag in rescue] *********************************************************************************************************************************************************************************
+fatal: [node01]: FAILED! => {
+    "assertion": "error_flag == 'no'",
+    "changed": false,
+    "evaluated_to": false,
+    "msg": "Assertion failed"
+}
+
+TASK [always task] ************************************************************************************************************************************************************************************************
+ok: [node01] => {
+    "msg": "message from always"
+}
+
+PLAY RECAP ********************************************************************************************************************************************************************************************************
+node01                     : ok=4    changed=0    unreachable=0    failed=1    skipped=0    rescued=1    ignored=0
+
+Here, the block task is executed first, but an error occurs. Because of the error, the rescue process is invoked. In addition, an error occurs in rescue , but the playbook is not stopped and always is executed.
+
+As you can see, using block , rescue , and always makes it possible to handle errors in the playbook. A typical usage scenario is to use rescue to recover from failures and always to notify the status.
+</pre></h4>
+</html>

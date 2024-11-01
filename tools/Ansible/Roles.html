@@ -1,56 +1,248 @@
 <html><h3><u>Roles</u></h3>
 <h4><pre>
-=> We can use two techniques for reusing set of tasks :- <mark>includes and roles.</mark>
+So far, we have listed modules directly on the playbook. The automation using Ansible is possible in this way, but when you actually use Ansible, you often want to reuse previous operations. Copying and pasting 
+previous codes at that time is not efficient, but when you call the entire other playbook, most of them do not work well because the group name written in hosts: and the inventory do not match. What appears there
+is the idea of Role.
 
-=> Roles are good for organising tasks and encapsulating data needed to accomplish those task.
+Automation can be partized in various units of work to make reusable parts. Role is completely separated from the inventory and can be called and used in various playbooks. This method of developing and managing 
+playbooks is called best practice(https://docs.ansible.com/ansible/latest/tips_tricks/ansible_tips_tricks.html) in Ansible.
 
-=> We can organise playbooks into directory structure called roles.
+Note: A module is a component of the tasks that occur frequently in the infrastructure, but a role is a component that summarizes the steps that occur frequently in your organization or project.
 
-=> Adding more and more functionality to the playbooks will make it diffcult to maintain in a single file.
+<u>Role Structure</u>
+Role places files in the directory in a predetermined configuration. Then, the directory can be called from Ansible as Role .
 
-=> Roles contains directory for <u>Default, files, Handlers, Meta, Templates, Tasks, Vars etc.</u>
+The representative role structure is listed below.
 
-Explanation of the directories in a role :-
+site.yml        # Invoking playbook
+roles/          # Ansible determines that the Role is stored in the Role directory of the same layer as the Playbook.     
+  your_role/    # A directory that stores a role called your_role. (Directory name = role name)
+    tasks/      #
+      main.yml  #  Describe the tasks you want to perform in the role.
+    handlers/   #
+      main.yml  #  Write a handler to use within the role.
+    templates/  #
+      ntp.conf.j2  # Describe the template used in the role.
+    files/      #
+      bar.txt   #  Place the files to be used in the role.
+      foo.sh    #
+    defaults/   #
+      main.yml  #  List the variables and default values used in the role.
+  your_2nd_role/   # The role is called your_2nd_role.
 
-<mark><u>Default</u></mark> => It stores the data about role/application default variables. For eg. if you want to run to port 80 or 8080 then variables needs to define in this path. 
+When creating a directory structure as described above, site.yml can call roles as follows:
 
-<mark><u>Files</u></mark> => It contains files need to be transferred to the remote VM (static files)
-
-<mark><u>Handlers</u></mark> => They are triggers or task. We can segregate all the handlers required in Playbook.
-
-<mark><u>Meta</u></mark> => This directory contain files that establish roles dependencies eg-> Author Name, Supported platform, dependencies if any.
-
-<mark><u>Tasks</u></mark> => It contains all the tasks that is normally in the playbook. Eg -> Installing packages and copies files etc.
-
-<mark><u>Vars</u></mark> => Variables for the role can be specified in the directory and used in your configuration files. Both Vars and default stores variables.
-</h4></pre>
-<h3><u>Structure of the role</u>:-</h3>
-
-<img src="picture/roles_pic.png" alt="HTML5 Icon" style="width:500px;height:300px;">
-<h4><pre>
-[ansible@ip-172-31-25-10 ~]$ tree
-.
-└── playbook
-    ├── master.yml
-    └── roles
-        └── myrole
-            └── tasks
-                └── main.yml
-
-4 directories, 2 files
-
-[ansible@ip-172-31-25-10 ~]$ cat playbook/master.yml
 ---
-- name: Work starts from here
-  hosts: server
-  become: yes
-  user: ansible
-  connection: ssh
-  roles:
-          - myrole
+- hosts: all
+  tasks:
+  - import_role:
+      name: your_role
 
-[ansible@ip-172-31-25-10 ~]$ cat playbook/roles/myrole/tasks/main.yml
-- name: Install apache
-  yum: pkg=httpd state=latest
+  - include_role:
+      name: your_2nd_role
+
+In this way, processing can be called simply by specifying the name of the role using a module called import_role, include_role .Both modules call roles, and the differences are as follows.
+
+import_role => Load roles before running playbook（pre-read）
+include_role => Roles are loaded when performing tasks (post-read)
+Note: You don't have to be aware of the distinction between the two at this time. Basically, using import_role is safer and simpler.include_role is used to describe complex operations, such as dynamically 
+changing the role called by operation.
+The procedure part is partized as Role and managed separately from the automation object, and Playbook manages which role to apply sequentially to which host group.
+
+Create Role
+It's not difficult to actually write a role. It's just dividing the processing you've written so far into a set directory.
+
+In this exercise, we create a web_setup role to set up a web server. It becomes the following directory structure.
+
+role_playbook.yml     # Playbook that actually calls the role
+roles
+└── web_setup              # Role name
+    ├── defaults
+    │   └── main.yml       # Store default values of variables
+    ├── files
+    │   └── apache2.conf     # Store files to be distributed
+    ├── handlers
+    │   └── main.yml       # Define handler
+    ├── tasks
+    │   └── main.yml       # Describe task
+    └── templates
+        └── index.html.j2  # Place template files
+Create each file.
+
+Create Task File
+mkdir -p roles/web_setup/tasks/
+Edit roles/web_setup/tasks/main.yml
+
+---
+- name: install apache2
+  apt:
+    name: apache2
+    state: latest
+
+- name: start & enabled apache2
+  service:
+    name: apache2
+    state: started
+    enabled: yes
+
+- name: Put index.html from template
+  template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+
+- name: Copy Apache configuration file
+  copy:
+    src: apache2.conf
+    dest: /etc/apache2/conf/
+  notify:
+    - restart_apache
+
+Place only the tasks you want to perform in the tasks directory. Also, there is no need to write the play part in the role, so we will list only the tasks. 
+The templates, files directory in the role can be referenced only by the file name in the module without explicitly specifying a path. For this reason, only the file name is described in src 
+of the copy and template modules.
+
+Create handler file
+mkdir -p roles/web_setup/handlers/
+Edit roles/web_setup/handlers/main.yml
+
+---
+- name: restart_apache
+  service:
+    name: apache2
+    state: restarted
+
+Place only the processing you want to call as a handler in the handlers directory.
+
+Create Default Variables
+mkdir -p roles/web_setup/defaults/
+Edit roles/web_setup/defaults/main.yml
+
+---
+LANG: Hindi
+
+In defaults , place the default value of the variable to be used within this Role. The Role default variable has a low overwrite priority, so you can overwrite and run it on the called Playbook side. 
+Also, be careful not to duplicate variable names because this variable can be referenced from the entire Playbook when Role is called.
+
+Note: In general, variable names used in Role are often given Role names as prefixes.
+
+Edit template file
+mkdir -p roles/web_setup/templates/
+Edit roles/web_setup/templates/index.html.j2
+
+&lt;html&gt;&lt;body&gt;
+&lt;h1&gt;This server is running on {{ inventory_hostname }}.&lt;/h1&gt;
+
+{% if LANG == "Hindi" %}
+     Namaste!
+{% else %}
+     Hello!
+{% endif %}
+&lt;/body&gt;&lt;/html&gt;
+
+In templates , place the template file used by the template module. Files placed here will be accessible only by file name from a specific module called in Role.
+
+Create distribution file
+mkdir -p roles/web_setup/files/
+Edit roles/web_setup/files/apache2.conf
+
+This file is retrieved from the server side. Please edit the file after executing the command as follows to retrieve the file.
+
+cd roles/web_setup
+
+ansible node01 -b -m yum -a 'name=apache2 state=latest'
+
+ansible node01 -m fetch -a 'src=/etc/apache2/apache2.conf dest=files/apache2.conf flat=yes'
+
+Verify that the file has been retrieved.
+
+ls -l files/
+
+Edit the contents of the file. Depending on how the exercise progresses, it may have already been edited, so please leave it as it is.
+
+ServerAdmin root@localhost
+      ↓
+ServerAdmin centos_role@localhost
+
+In files , place files that Role uses for distribution, etc. This directory is also accessible only by filename from within Role to specific modules.
+
+Create playbook
+Edit role_playbook.yml
+
+Create a playbook that actually calls the role.
+
+---
+- name: using role
+  hosts: web
+  become: yes
+  tasks:
+    - import_role:
+        name: web_setup
+
+Review all
+Verify the role you created.
+
+tree roles
+
+The necessary files are ready if they are structured as follows.
+
+roles
+└── web_setup
+    ├── defaults
+    │   └── main.yml
+    ├── files
+    │   └── apache2.conf
+    ├── handlers
+    │   └── main.yml
+    ├── tasks
+    │   └── main.yml
+    └── templates
+        └── index.html.j2
+
+Executing
+Run the created playbook.
+
+ansible-playbook role_playbook.yml
+
+PLAY [using role] *************************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************
+ok: [node02]
+ok: [node03]
+ok: [node01]
+
+TASK [web_setup : install apache2] ********************************************************************************************************************************************************************************
+ok: [node02]
+ok: [node01]
+ok: [node03]
+
+TASK [web_setup : start & enabled apache2] ************************************************************************************************************************************************************************
+ok: [node03]
+ok: [node01]
+ok: [node02]
+
+TASK [web_setup : Put index.html from template] *******************************************************************************************************************************************************************
+ok: [node02]
+ok: [node01]
+ok: [node03]
+
+TASK [web_setup : Copy Apache configuration file] *****************************************************************************************************************************************************************
+changed: [node02]
+changed: [node01]
+changed: [node03]
+
+RUNNING HANDLER [web_setup : restart_apache] **********************************************************************************************************************************************************************
+changed: [node01]
+changed: [node02]
+changed: [node03]
+
+PLAY RECAP ********************************************************************************************************************************************************************************************************
+node01                     : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+node02                     : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+node03                     : ok=6    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+The use of roles dramatically improves automation reuse. This is because tasks and inventory are completely separate. However, if you proceed with Role and Playbook at will, your description style will be 
+shattered and management will be difficult.
+
+Therefore, by establishing a certain rule called best practice, the outlook for where and what is defined will be improved, and other members will be able to reuse the role with confidence.
 
 </h4></pre></html>

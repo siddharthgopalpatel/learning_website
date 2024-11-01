@@ -1,0 +1,254 @@
+<html><h3><u>Test Automation, Report Generation</u></h3>
+<h4><pre>
+Ansible can also be used to automate testing and verification tasks. In particular, automating various verification tasks, such as large-scale tests and small but repetitive tests, can be very effective.
+
+In this section, we will see how to create a playbook to run tests.
+
+Commonly used modules for testing
+First, let's take a look at some modules that are often used in testing. Of course, many other modules can be used to write automated tests.
+
+shell module =>  Executes an arbitrary command and collects the results.
+uri module => Issues an HTTP method to an arbitrary URL.
+*_command module => This module mainly issues arbitrary commands to network devices and collects the results.
+*_facts/info module =>This module is primarily used to retrieve information about the environment.
+assert module => Evaluates a conditional expression and returns ok if it is true.
+fail module => Evaluates a conditional expression and returns failed if it is true.
+template module => Used to output the test results.
+validate_argument_spec module => Used to validate role parameters.
+
+Note: When testing an environment that has been built or modified with Ansible using Ansible itself, it is recommended to use a different module than the one used to build it. 
+For example, you can use the shell module to check a file distributed using the copy module.
+
+<u>How to write tests</u>
+A common pattern for testing with Ansible is to get information with shell, *_command, and *_facts, and then judge the result with assert and fail.
+
+Sample
+
+- name: get command AAA result
+  shell: exec AAA
+  register: ret_AAA
+
+- name: check AAA result
+  assert:
+    that:
+      - ret_AAA.rc == 0
+Normally, when the playbook encounters an error, it will stop at the task that caused the error. This is not a problem for configuration, but for testing, the test will also stop in the middle. 
+The test must run to the end whether an error occurs or not, and we need to be able to know how many of the total test items succeeded or failed. 
+
+Sample
+
+- ignore_errors: yes
+  block:
+  - name: get command AAA result
+    shell: exec AAA
+    register: ret_AAA
+
+  - name: get command BBB result
+    shell: exec BBB
+    register: ret_BBB
+
+  - name: get command CCC result
+    shell: exec CCC
+    register: ret_CCC
+
+- name: check test results
+  assert:
+    that: "{{ item.failed == false }}"
+  loop:
+    - "{{ ret_AAA }}"
+    - "{{ ret_BBB }}"
+    - "{{ ret_CCC }}"
+In the above sample, the results are judged in a batch loop. This method is convenient, but it is necessary to output information so that the register side can make decisions easily. 
+If you want to set up complex conditions, you may need to write as follows.
+
+- name: check test results
+  assert:
+    that:
+      - ret_AAA.rc == 0                     # Determine the return value
+      - ret_BBB.stdout.find("string") != -1 # Output results contain string
+      - ret_CCC.stdout.find("string") == -1 # Output results does not contain strings
+In the that argument of assert, passing a condition as an array will be treated as an AND condition
+
+<u>Create a test</u>
+Let's actually create a test. As a simple example, we will assume that we have a server with an apache2 server installed and running. Specifically, we will test against a server that has run the following.
+
+ansible node01 -b -m apt -a 'name=apache2 state=present'
+
+ansible node01 -b -m service -a 'name=apache2 state=started enabled=yes'
+
+To test the above, we will perform the following checks.
+
+Package apache2 is installed.
+Process apache2 is present (running)
+The service apache2 should be automatically started (enabled)
+Edit the file testing_assert_playbook.yml as follows.
+
+---
+- name: Test with assert
+  hosts: node01
+  become: yes
+  gather_facts: no
+  tasks:
+    - ignore_errors: yes
+      block:
+        - name: Is the apache2 package installed?
+          shell: apt list --installed 2>/dev/null | grep -e '^apache2'
+          register: ret_apache2_pkg
+
+        - name: check apache2 processes is running
+          shell: ps -ef | grep -v grep | grep apache2
+          register: ret_apache2_proc
+
+        - name: Is apache2 service enabled?
+          shell: systemctl is-enabled apache2
+          register: ret_apache2_enabled
+
+    - block:
+        - name: Assert results
+          assert:
+            that:
+              - ret_apache2_pkg.rc == 0
+              - ret_apache2_proc.rc == 0
+              - ret_apache2_enabled.rc == 0
+			  
+In the first block, we run the necessary test codes under ignore_errors and register the results of each.
+In the second block, we check the results with the assert module. Normally, the block here is unnecessary, but we will write it for the next exercise. Execute the playbook
+
+ansible-playbook testing_assert_playbook.yml
+
+This Playbook should finish successfully.
+
+The next step is to generate an error in the test. We purposely stop apache2 and then run the test.
+
+ansible node01 -b -m service -a 'name=apache2 state=stopped enabled=yes'
+
+ansible-playbook testing_assert_playbook.yml
+
+This time the test should have failed, because apache2 is not running, and the check with assert failed.
+
+Create a report of the test results.
+The next step is to output the test results as a report. It is common to use the template module, but here we will use the copy module and the jinja2 style notation to create a report.
+
+Edit the previous file testing_assert_playbook.yml as follows. The following always will be the added part.
+
+---
+- name: Test with assert
+  hosts: node01
+  become: yes
+  gather_facts: no
+  tasks:
+    - ignore_errors: yes
+      block:
+        - name: Is the apache2 package installed?
+          shell: apt list --installed 2>/dev/null | grep -e '^apache2'
+          register: ret_apache2_pkg
+
+        - name: check apache2 processes is running
+          shell: ps -ef | grep -v grep | grep apache2
+          register: ret_apache2_proc
+
+        - name: Is apache2 service enabled?
+          shell: systemctl is-enabled apache2
+          register: ret_apache2_enabled
+
+    - block:
+        - name: Assert results
+          assert:
+            that:
+              - ret_apache2_pkg.rc == 0
+              - ret_apache2_proc.rc == 0
+              - ret_apache2_enabled.rc == 0
+
+      always:
+        - name: build report
+          copy:
+            content: |
+              # Test Reports
+              ---
+              | test | result |
+              | ---- | ------ |
+              {% for i in results %}
+              | {{ i.cmd | regex_replace(query, '&#124;') }} | {{ i.rc }} |
+              {% endfor %}
+            dest: result_report_{{ inventory_hostname }}.md
+          vars:
+            results:
+              - "{{ ret_apache2_pkg }}"
+              - "{{ ret_apache2_proc }}"
+              - "{{ ret_apache2_enabled }}"
+            query: "\\|"
+          delegate_to: localhost
+
+		  
+The added always will generate a report of the test results. This way, the report will be generated even if the assert fails.
+In this report, Jinja2 is used directly in the content parameter of the copy module to create a file in Markdown format.
+The regex_replace filter replaces a string with a regular expression.
+Here, | in the command is replaced with &#124;. This is because | is a delimiter when outputting the results in a table format, so the | in the command is replaced with another expression (&#124; ).
+Try to run the test with a successful pattern. Restart apache2 for this.
+
+ansible node01 -b -m service -a 'name=apache2 state=started enabled=yes'
+
+ansible-playbook testing_assert_playbook.yml
+
+This test should be successful. Check the contents of the report file result_report_node01.md that should have been created.
+
+Next, let's check the report by failing the test. Stop the apache2 process and then run the test.
+
+ansible node01 -b -m service -a 'name=apache2 state=stopped enabled=yes'
+
+ansible-playbook testing_assert_playbook.yml
+
+Check how the test reports have changed.
+
+Create configuration report
+In the previous example, we have output the test results, but it is also possible to automatically generate configuration reports in the same way, and there are many examples of this being used in practice. 
+In this section, we will try to generate a simple server configuration report.
+
+Create the file reporting_playbook.yml as follows.
+
+---
+- name: Report with Ansible
+  hosts: all
+  gather_facts: true
+  tasks:
+  - name: build report
+    copy:
+      content: |
+        # Server Configuration Reports: {{ inventory_hostname }}
+        ---
+        | name | value  |
+        | ---- | ------ |
+        {% for key, value in ansible_env.items() %}
+        | {{ key }} | {{ value }} |
+        {% endfor %}
+      dest: /tmp/setting_report_{{ inventory_hostname }}.md
+    delegate_to: localhost
+
+  - name: concatenate reports
+    assemble:
+      src: /tmp
+      regexp: 'setting\_report\_*'
+      dest: setting_report.md
+      delimiter: "\n"
+    run_once: true
+    delegate_to: localhost
+
+
+gather_facts: true => Let setup run before running the playbook so that we can make use of the results.
+{% for key, value in ansible_env.items() %} => This time, we are retrieving settings related to the environment.
+To check the ansible_env.items variable, run the following.
+ansible node01 -m setup -a 'filter=ansible_env.items'
+assemble module: A module to combine files.
+run_once: true If this option is specified, only one host will be executed even if there are multiple hosts. This is because the join operation should be executed only once.
+
+ansible-playbook reporting_playbook.yml
+
+When you run it, a file setting_report.md will be created in the working directory, and you can check the contents.
+
+The report output here can be converted from HTML format to PDF using pandoc(https://pandoc.org/), so it can be submitted as a report if you make it look a little better.
+
+A testing tool (framework) called molecule(https://github.com/ansible/molecule) is also available for systematically executing tests like this one. In addition, molecule can be used to execute 
+tests in a unified manner for high-quality automation.
+
+</pre></h4>
+</html>

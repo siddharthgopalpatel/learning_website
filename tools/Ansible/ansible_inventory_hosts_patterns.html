@@ -1,109 +1,113 @@
 <html><h2><u><center>Ansible Inventory and Host Patterns</center></u></h2>
 <pre><h4>
 <h3><u>Ansible Inventory -</u></h3>
--> Ansible can work with multiple systems in your infrastructure at the same time.
--> In order to work with multiple servers, Ansible needs to establish connectivity to those servers.
--> This is done with SSH for Linux and PowerShell remoting for windows that would make Ansible agentless.
+-> Ansible can work simultaneously with multiple systems in your infrastructure.
+-> To work with multiple servers, Ansible needs to establish connectivity to those servers.
+-> This is done with SSH for Linux and PowerShell remoting for Windows which would make Ansible agentless.
 -> Agentless means you don't need to install any additional software on the Target machines to be able to work with Ansible.
 -> One of the major disadvantages of the other automation tools is that you need to install and configure agents on the target machines before you can invoke any kind of 
    automation.
--> Now the information about these target systems is stored in an file called inventory file.
+-> Now the information about these target systems is stored in an inventory file.
 -> <mark>If you don't create a new inventory file Ansible uses its default inventory file located at /etc/ansible/hosts.</mark>
--> The inventory file is an INI like format. But it can be YAML and other. 
--> Its simply number of servers listed one after the others.
--> You can define group of groups.
--> You can also the the alias name to any server listed in inventory file.
--> You can create host and inventory file based on your project under project directory, the global one would be /etc/ansible location.
+-> The inventory file is an INI-like format. But it can be YAML and others. 
+-> It's simply several servers listed one after the others.
+-> You can define a group of groups.
+-> You can also give an alias name to any server listed in the inventory file.
+-> You can create a host and inventory file based on your project under the project directory, the global one would be /etc/ansible location.
 
-<h3><u>There are couple of ways you can write the inventory file. Some of the methods are mentioned below:- </u></h3>
+Let's take a look at the contents of the file.
 
-<u>Case 1 -</u>
+cat ansible/hosts1
+[server]
+node01 ansible_host=172.18.0.3
+node02 ansible_host=172.18.0.4
+node03 ansible_host=172.18.0.5
 
-1. You can enter the name of the group within a pair of square brackets and define the list of servers as the part of that group in the lines below.
-2. You can have multiple such groups defined in a single inventory file, this is so because you can target a group of servers for any ansible playbook to configure all of them 
-   at once.
-3. Finally, you can also have a group of groups.
-4. In order to define a group of groups follow the same pattern as group creation except in this case you must add a colon followed by the keyword childern to the parent 
-   group's name.
-5. In this case, I would like to create a group named all_servers that contains all servers in the group ubuntuhost and amazonhost.
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=~/.ssh/id_rsa
 
-Example :-
+This inventory is written in the form of an ini file. It also supports other formats such as YAML and Dynamic Inventory which dynamically configure the inventory with scripts. 
+For more details, please check How to build your inventory. https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html
 
-[ubuntuhost]
-ansible_practice_ubuntuhost_1
-ansible_practice_ubuntuhost_2
+This inventory file is described by the following rules.
 
-[amazonhost]
-ansible_practice_amazonlinuxhost_1
-ansible_practice_amazonlinuxhost_2
+Information is described by one node per line, such as node01 and node02.
+A node line consists of the identifier of the node (node01) and host variable(s) to be given to the node (i.e. ansible_host=xxxx).
+You can also specify an IP address or FQDN at node01 place.
+You can create a group of hosts like a server.
+You can use any group name. For example [web] [app] [db] is used to group the system
+In [all:vars], group variables are defined for the group all.
+All is a special group, a group that points to all nodes described in the inventory.
+The ansible_user, ansible_ssh_private_key_file given here is a special variable that points to the username and SSH private key path used to login to each node.
 
-[all_server:children]
-ubuntuhost
-amazonhost
+A magic variable represented by ansible_xxxx , which contains special values that control Ansible's behavior and environment information that Ansible will automatically retrieve. 
+Details are explained in the variables section.
+https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html
 
-[all_server:vars]
-ansible_ssh_user=normaluser
-ansible_ssh_pass=normaluser123
+Let's try to run Ansible against nodes defined using inventory. Please run the following command.
 
-<u> Case 2 -</u>
-Let's take a look at the different version of the inventory file. 
+ansible server -i ansible/hosts1 -m ping -o
 
-1. For example, I have a list of servers named ubuntuhost(1/2) and amazonhost(1/2) as shown in the following example.
-2. However, I would like to refer to these servers in ansible using alias such as host1, host2, host3 and host4.
-3. I could deal this by adding an alias for each server at the beginning of the line and assinging the address of the server to ansible_host parameter. 
+node02 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
+node03 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
+node01 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
 
-Example:- 
+The meanings of the options for this command are as follows.
 
-host1 ansible_ssh_host=ansible_practice_ubuntuhost_1 ansible_ssh_user=normaluser ansible_ssh_pass=normaluser123 
-host2 ansible_ssh_host=ansible_practice_ubuntuhost_2 ansible_ssh_user=normaluser ansible_ssh_pass=normaluser123
+server : Specifies a group in the inventory.
+-i hosts1 : Specifies the inventory file to use.
+-m ping : Runs the module ping . Details about the module are described later.
+-o : Summarize the output into one line per node.
 
-host3 ansible_ssh_host=ansible_practice_amazonlinuxhost_1 ansible_ssh_user=normaluser ansible_ssh_pass=normaluser123
-host4 ansible_ssh_host=ansible_practice_amazonlinuxhost_2 ansible_ssh_user=normaluser ansible_ssh_pass=normaluser123
-    
-<u><h3>A brief explanation of each parameter is mentioned below:-</u></h3>
+If you want to use default inventory in our case /etc/ansible/hosts, you can omit -i  as follows.
+ansible server -m ping -o
 
-<u>a. Ansible_host -</u> It is an inventory parameter used to specify FQDN or IP address of a server.
+node02 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
+node01 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
+node03 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
 
-<u>b. Ansible_connection -</u> It defines how ansible connects to the target server. This is how we define a target host we wish to connect to in a Linux or a windows host.
-                               You could also set it to localhost to indicare that you would like to work with localhost and not connet to nay remote host.
-			       If you don't have multiple remote servers to play around with, you can simply start with localhost into an inventory file.	 
+It is also possible to specify the node name instead of the group name.
+ansible node01 -m ping -o
 
-Example :- ansible_connection: ssh/winrm/localhost
+node01 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
 
-<u>c. Ansible_port -</u> It defines which port to connect to. By default, it is set to 22 for SSH. But if you need to change that for some reason you can set it differently using 
-                         ansible_port parameter.
+It is also possible to specify multiple nodes.
+ansible node01,node02 -m ping -o
 
-Example:- ansible_port: 22/ 5986
- 
-<u>d. Ansible_user -</u> It defines the user to make remote connections. If you need to change that, define it as shown here.
-  
-Example:- ansible_user: root/ administrator
+node02 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
+node01 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
 
-<u>e. Ansible_ssh_pass -</u> It defines the SSH password for Linux. (Not recommended)
+Let's specify a special group, all . The all group covers all the nodes in the inventory. 
+ansible all -m ping -o
 
-Example:- ansible_ssh_pass: password
+node02 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
+node03 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
+node01 | SUCCESS => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3"},"changed": false,"ping": "pong"}
 
-Note:
-<mark>1. To use the password type inventory, ansible server should sshpass installed and host_key_checking false in ansible.cfg file. </mark>
-2. Using a password with SSH is not a recommended way in a production environment. Use SSH key-based authentication is a better way to establish a connection between multiple 
-   servers.
+In the example so far, Ansible performs some kind of execution (in this case, ping) on the specified group, but it is also possible to check only the target nodes without execution. 
+In this case, use the --list-hosts option.
 
-<h3><u>Ansible Host Patterns-</u></h3>
+ansible server --list-hosts
+  hosts (3):
+    node01
+    node02
+    node03
 
-=> you can put --limit on adhoc command to limit to one or two servers
-=> "all" pattern refers to all the machines in an inventory
+ansible node02 --list-hosts
+  hosts (1):
+    node02
 
-=> ansible all --list-hosts
-=> ansible [group-name] --list-hosts
-=> ansible [group-name][0] --list-hosts 
 
-groupname[0] -> picks first machine of group
-groupname[1] -> picks second machine of group
-groupname[-1] -> picks last machine of the group
-groupname[0:1] -> picks first two machine in the group
-groupname[2:5] -> picks 3,4,5 and 6 machine in the group
 
-Group separated by a colon can be used to use hosts from multiple groups
-=> groupname1:groupname2
+view the inventory with ansible-inventory to see the host groups.
+ansible-inventory --list
+
+To see that in graph output use this command.
+ansible-inventory --graph
+
+To see that in yaml output.
+ansible-inventory --list -y
+Which of those output were most useful to you? Which of them do you think you'd like to see or use for your environments?
 </pre></h4>
 </html>

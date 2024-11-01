@@ -1,25 +1,138 @@
-<html><h3><u>Condition</u>
+<html><h3><u>Conditional Expression</u>
 <h4><pre>
-=> Whenever we have different different scenarios, we put conditions accoring to scenarios. 
+Ansible's conditional expressions are used to control whether a task is performed under certain conditions. Use the `when' clause in the description of the condition. A typical use is to perform or not perform the following tasks based on the results of a task.
 
-When statement
-Some times you want to skip a particular command on particular node.
+Let's write the following when_playbook.yml .
 
 ---
-- name: conditional playbook
-  hosts: server
-  user: ansible
+- name: start apache2 if it's stopped
+  hosts: node01
   become: yes
-  connection: ssh
   tasks:
-          - name: Install apache pkg for debian family
-            command: apt-get -y install apache2
-            when: ansible_os_family == "Debian"
+    - name: install apache2
+      apt:
+        name: apache2
+        state: latest
 
-          - name: Install apache pkg for redhat
-            yum:
-                    name: httpd
-                    state: present
-            when: ansible_os_family == "RedHat"
+    - name: check apache2 processes is running
+      shell: ps -ef | grep apache2 | grep -v grep
+      register: ret
+      ignore_errors: yes
+      changed_when: no
+
+    - name: print return value
+      debug:
+        var: ret
+
+    - name: start apahce2 (apache2 is stopped)
+      service:
+        name: apache2
+        state: started
+      when:
+        - ret.rc == 1
+
+
+This playbook checks the startup status of the apache2 process and starts if it does not exist.
+
+register: ret -> The results of ps -ef | grep apache2 are stored here.
+ignore_errors: yes -> The option to ignore errors that occur in the task. This command fails if a process is not found, so if you do not add this option, the task stops here.
+changed_when: no -> Describe the conditions under which this task becomes changed . Normally, the shell module always returns changed , but you can specify the conditions that will be changed .
+Set no here always returns 'ok'. This method is often used to execute commands that do not affect the OS (because commands that do not change anything return changed ), as it only executes the ps-ef command this time.
+when: Write the conditions here in the list format. If multiple conditions are given as a list, it becomes an AND condition.
+- ret.rc == 1 is comparing the value of rc which is the return value of shell module. The return value of the command line is stored in rc . In other words, if the process cannot be found with ps -ef | grep apache2, an error occurs and 1 is stored here.
+
+Stop httpd before running the playbook.(There may be warning, but please ignore it.)
+ansible node01 -b -m shell -a 'service apache2 stop'
+
+Execute when_playbook.yml
+
+ansible-playbook when_playbook.yml
+
+PLAY [start apache2 if it's stopped] ******************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [install apache2] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [check apache2 processes is running] *************************************************************************************************************************************************************************
+fatal: [node01]: FAILED! => {"changed": false, "cmd": "ps -ef | grep apache2 | grep -v grep", "delta": "0:00:00.010178", "end": "2024-10-31 16:45:40.142657", "msg": "non-zero return code", "rc": 1, "start": "2024-10-31 16:45:40.132479", "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []}
+...ignoring
+
+TASK [print return value] *****************************************************************************************************************************************************************************************
+ok: [node01] => {
+    "ret": {
+        "changed": false,
+        "cmd": "ps -ef | grep apache2 | grep -v grep",
+        "delta": "0:00:00.010178",
+        "end": "2024-10-31 16:45:40.142657",
+        "failed": true,
+        "msg": "non-zero return code",
+        "rc": 1,
+        "start": "2024-10-31 16:45:40.132479",
+        "stderr": "",
+        "stderr_lines": [],
+        "stdout": "",
+        "stdout_lines": []
+    }
+}
+
+TASK [start apahce2 (apache2 is stopped)] *************************************************************************************************************************************************************************
+changed: [node01]
+
+PLAY RECAP ********************************************************************************************************************************************************************************************************
+node01                     : ok=5    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=1
+
+Here, the apache2 startup task is running because it meets the conditions of ret.rc == 1 .
+
+Now, when_playbook.yml again. Now apache2 is up status.
+
+ansible-playbook when_playbook.yml
+
+PLAY [start apache2 if it's stopped] ******************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [install apache2] ********************************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [check apache2 processes is running] *************************************************************************************************************************************************************************
+ok: [node01]
+
+TASK [print return value] *****************************************************************************************************************************************************************************************
+ok: [node01] => {
+    "ret": {
+        "changed": false,
+        "cmd": "ps -ef | grep apache2 | grep -v grep",
+        "delta": "0:00:00.007306",
+        "end": "2024-10-31 16:48:37.267506",
+        "failed": false,
+        "rc": 0,
+        "start": "2024-10-31 16:48:37.260200",
+        "stderr": "",
+        "stderr_lines": [],
+        "stdout": "root        3362       1  0 16:45 ?        00:00:00 /usr/sbin/apache2 -k start\nwww-data    3363    3362  0 16:45 ?        00:00:00 /usr/sbin/apache2 -k start\nwww-data    3365    3362  0 16:45 ?        00:00:00 /usr/sbin/apache2 -k start",
+        "stdout_lines": [
+            "root        3362       1  0 16:45 ?        00:00:00 /usr/sbin/apache2 -k start",
+            "www-data    3363    3362  0 16:45 ?        00:00:00 /usr/sbin/apache2 -k start",
+            "www-data    3365    3362  0 16:45 ?        00:00:00 /usr/sbin/apache2 -k start"
+        ]
+    }
+}
+
+TASK [start apahce2 (apache2 is stopped)] *************************************************************************************************************************************************************************
+skipping: [node01]
+
+PLAY RECAP ********************************************************************************************************************************************************************************************************
+node01                     : ok=4    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
+
+In this run, the value of ret.rc is 0 , so it does not match the condition and becomes skipping .
+
+More information, such as how to describe the conditions, is provided in the official document.
+
+You can use conditional expressions to control the processing according to the situation. However, if you specify too complex conditions, debugging and maintenance can be difficult. It is important to standardize the environment 
+to prevent conditional branching as much as possible.
 
 </pre></h4></html>

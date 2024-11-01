@@ -1,16 +1,13 @@
 <html><h2><u><center>AWS Storage</center></u></h2>
 <h4><pre>
--> AWS offers a complete range of cloud storage services to support both application and archival compliance requirements.
--> Select from objects, file and block storage services as well as cloud data migration options to start designing the foundation of your cloud IT environment.
 
-There are five types of Storage -
-1. Simple Storage Service (S3) {Object level Storage, access it from any where}
-2. Elastic File System (EFS) {Used for updation or patches for multiple servers in different region or AZ from one common place(common place is EFS), Linux based}
-3. Elastic Block Storage (EBS) {Used as root or non-root storage on EC2 instance}
-4. Glacier {Used for old data which is rarely used and to keep the data for long time with little latency on access. Now it is part of S3}
-5. Snowball
+There are three types of Storage - Object storage, File storage, Block storage
+1. Object storage 
+File storage
+Block storage
 
-<h3><u>Difference b/w Block Storage and Object Storage</u></h3>
+
+
 <u>Block Storage</u>
 -> Block Storage is suitable for transactional databases, random read/write loads and structured database storage.
 -> Block Storage divides the data to be stored in evenly sized blocks (data chunck) for instance, a file can be split into evenly sized blocks before it is stored.
@@ -28,7 +25,36 @@ Example -> EBS
 -> The object Global Unique ID, is a unique identifier for the object (can be the object name itself) and it must be unique such that it can be retrieved disregarding
    where it is physical storage location is.
 -> Object storage cannot be mounted as drive
+access it from any where
 
 Example -> Dropbox, AWS S3   
+
+
+
+
+2. Elastic File System (EFS) {Used for updation or patches for multiple servers in different region or AZ from one common place(common place is EFS), Linux based}
+
+Let's imagine three different kinds of toy boxes where you keep your toys: a bookshelf, a chest of drawers, and a big toy bin. Each of these toy boxes represents a type of storage in AWS: File Storage, Block Storage, and Object Storage.
+
+1. File Storage (Bookshelf)
+Example: Imagine a bookshelf with different shelves and books neatly arranged by title and author. You can quickly find a specific book because everything is organized with names and folders.
+
+How it works in AWS: File storage works like this bookshelf. It stores files in a structure with folders and subfolders, making it easy to locate and organize files just like finding a book on a shelf. AWS's EFS (Elastic File System) is an example of this. It’s great when you need to share files between different computers, just like sharing books with friends.
+
+2. Block Storage (Chest of Drawers)
+Example: Now, think of a chest of drawers. Each drawer is like a block, and inside each drawer, you might keep different things like socks, shirts, or pants. But you don’t care exactly where in the drawer each item is; you just know that it’s in a particular drawer.
+
+How it works in AWS: Block storage breaks data into chunks (blocks) and stores them separately. It’s like putting your toys in different drawers without worrying about how they are arranged inside. AWS's EBS (Elastic Block Store) is an example of this. It’s like a hard drive where you can store data that applications need to access quickly, just like grabbing socks from a drawer.
+
+3. Object Storage (Toy Bin)
+Example: Finally, think of a big toy bin where you throw all your toys in together. You don’t have specific shelves or drawers, but you might label each toy with a tag, like “blue truck” or “red ball,” to find it later.
+
+How it works in AWS: Object storage is like this toy bin. It stores data as objects in a flat structure, and each object has a unique ID or tag to help you find it. AWS's S3 (Simple Storage Service) is an example of this. It’s perfect for storing lots of different files like photos, videos, or documents, just like tossing all your toys into the bin.
+
+Summary:
+File Storage (Bookshelf): Organized with names and folders, easy to share.
+Block Storage (Chest of Drawers): Data is in chunks, fast access for applications.
+Object Storage (Toy Bin): Stores data as objects with tags, good for large, varied files.
+These different storage types help you organize and access your data based on how you want to store and retrieve it!
 </pre></h4>
 </html>
